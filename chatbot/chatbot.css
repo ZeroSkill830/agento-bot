@@ -130,9 +130,9 @@
   position: fixed;
   bottom: 100px;
   right: var(--chatbot-spacing-lg);
-  width: 600px;
+  width: 400px;
   max-width: calc(100vw - 48px);
-  height: 400px;
+  height: 600px;
   max-height: calc(100vh - 120px);
   background: var(--chatbot-bg);
   border-radius: var(--chatbot-radius-lg);
@@ -146,6 +146,11 @@
   transition: var(--chatbot-transition-bounce);
   font-family: var(--chatbot-font-family);
   border: 1px solid var(--chatbot-border);
+}
+
+/* Disabilita transizioni durante inizializzazione */
+.chatbot-window--no-transition {
+  transition: none !important;
 }
 
 .chatbot-window.chatbot-window--visible {

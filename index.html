@@ -160,6 +160,13 @@
                 Usa i pulsanti qui sotto per testare l'inizializzazione e la gestione del chatbot.
                 Il chatbot è completamente isolato tramite Shadow DOM e non interferisce con gli stili di questa pagina.
             </p>
+            <p class="demo-text">
+                <strong>📋 Istruzioni Test:</strong><br>
+                1. Clicca "Inizializza Chatbot" per attivarlo<br>
+                2. Clicca il pulsante blu che appare in basso a destra<br>
+                3. Scrivi un messaggio e premi Enter o clicca Invia<br>
+                4. Testa su mobile ridimensionando la finestra
+            </p>
             
             <div class="demo-controls">
                 <button class="demo-button" onclick="initChatbot()">
@@ -170,6 +177,9 @@
                 </button>
                 <button class="demo-button secondary" onclick="checkStatus()">
                     ❓ Verifica Stato
+                </button>
+                <button class="demo-button secondary" onclick="testToggle()">
+                    🔄 Test Toggle
                 </button>
                 <button class="demo-button secondary" onclick="testConfigs()">
                     ⚙️ Test Configurazioni
@@ -207,7 +217,7 @@
         <section class="demo-section">
             <h2 class="demo-title">🔧 Informazioni Tecniche</h2>
             <div class="demo-text">
-                <h3>✅ Caratteristiche Implementate (Task 1.1 ✅ + 1.2 ✅)</h3>
+                <h3>✅ Caratteristiche Implementate (Fasi 1✅ + 2✅ + 4✅)</h3>
                 <ul style="margin-left: 2rem; margin-top: 1rem;">
                     <li>📁 Struttura file completa</li>
                     <li>🧩 Architettura modulare JavaScript</li>
@@ -218,13 +228,20 @@
                     <li>🔮 <strong>Shadow DOM implementato e isolato</strong></li>
                     <li>🧪 <strong>Test isolamento stili automatici</strong></li>
                     <li>⚡ <strong>Template e CSS caricamento dinamico</strong></li>
+                    <li>🔘 <strong>Toggle interattivo con animazioni</strong></li>
+                    <li>🖱️ <strong>Event listeners completi (click, keyboard, touch)</strong></li>
+                    <li>💬 <strong>Sistema messaggi funzionante</strong></li>
+                    <li>🤖 <strong>Risposte bot simulate con typing indicator</strong></li>
+                    <li>📱 <strong>Mobile responsive ottimizzato</strong></li>
+                    <li>📐 <strong>Dimensioni corrette: 400x600px desktop</strong></li>
                 </ul>
 
                 <h3 style="margin-top: 2rem;">🔄 Prossimi Step</h3>
                 <ul style="margin-left: 2rem; margin-top: 1rem;">
-                    <li>🔘 Fase 2: Interfaccia utente interattiva (toggle, eventi)</li>
-                    <li>💬 Fase 4: Sistema messaggi</li>
-                    <li>📱 Responsive mobile ottimizzato</li>
+                    <li>🎨 Fase 3: Styling avanzato e dark mode</li>
+                    <li>🔧 Fase 5: Configurazione avanzata</li>
+                    <li>📱 Test dispositivi mobili reali</li>
+                    <li>⚡ API integration esterna</li>
                 </ul>
             </div>
         </section>
@@ -370,6 +387,28 @@
 
             } catch (error) {
                 console.error('❌ Errore durante test isolamento:', error);
+            }
+        }
+
+        /**
+         * 🔄 Test funzionalità toggle
+         */
+        function testToggle() {
+            if (!window.Chatbot || !window.Chatbot.isInitialized) {
+                updateStatus('error', '❌ Chatbot non inizializzato. Inizializzalo prima.');
+                return;
+            }
+
+            try {
+                // Accedi alla funzione toggle tramite debug
+                if (window.Chatbot._debug && window.Chatbot._debug.ui) {
+                    window.Chatbot._debug.ui.toggle();
+                    updateStatus('success', '✅ Toggle chatbot eseguito!');
+                } else {
+                    updateStatus('error', '❌ Funzione toggle non disponibile');
+                }
+            } catch (error) {
+                updateStatus('error', `❌ Errore toggle: ${error.message}`);
             }
         }
 

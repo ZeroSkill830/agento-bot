@@ -17,55 +17,55 @@
 ## 🎨 Fase 2: Interfaccia Utente Base
 
 ### 2.1 Pulsante Toggle
-- [ ] Creare pulsante fisso in basso a destra
-- [ ] Implementare posizionamento CSS (`position: fixed`)
-- [ ] Aggiungere icona chat (SVG inline)
-- [ ] Implementare hover effects e animazioni
+- [x] Creare pulsante fisso in basso a destra
+- [x] Implementare posizionamento CSS (`position: fixed`)
+- [x] Aggiungere icona chat (SVG inline)
+- [x] Implementare hover effects e animazioni
 
 ### 2.2 Finestra Chatbot - Desktop
-- [ ] Container principale 600x400px
-- [ ] Header con titolo e pulsante chiudi
-- [ ] Area messaggi scrollabile
-- [ ] Campo input + pulsante invio
-- [ ] Posizionamento relativo al pulsante toggle
+- [x] Container principale 400x600px
+- [x] Header con titolo e pulsante chiudi
+- [x] Area messaggi scrollabile
+- [x] Campo input + pulsante invio
+- [x] Posizionamento relativo al pulsante toggle
 
 ### 2.3 Design Mobile Responsive
-- [ ] Media query per schermi < 768px
-- [ ] Ridimensionamento a 90% width x 100% height
-- [ ] Ottimizzazione touch per mobile
+- [x] Media query per schermi < 768px
+- [x] Ridimensionamento a 90% width x 100% height
+- [x] Ottimizzazione touch per mobile
 - [ ] Test su dispositivi mobili reali
 
 ## 🎨 Fase 3: Styling e UX
 
 ### 3.1 Sistema di Design
-- [ ] Definire variabili CSS per:
-  - [ ] Colori primari e secondari
-  - [ ] Font-size (sistema scalabile)
-  - [ ] Spacing (8px grid system)
-  - [ ] Border-radius consistenti
-- [ ] Implementare font: Inter, Roboto o system-ui
-- [ ] Creare palette colori accessibile (contrasto WCAG)
+- [x] Definire variabili CSS per:
+  - [x] Colori primari e secondari
+  - [x] Font-size (sistema scalabile)
+  - [x] Spacing (8px grid system)
+  - [x] Border-radius consistenti
+- [x] Implementare font: Inter, Roboto o system-ui
+- [x] Creare palette colori accessibile (contrasto WCAG)
 
 ### 3.2 Componenti UI
-- [ ] Stilizzare header chatbot
-- [ ] Creare bubble messaggi (utente vs bot)
-- [ ] Stilizzare campo input e pulsante
-- [ ] Aggiungere stati di loading/typing
-- [ ] Implementare animazioni smooth
+- [x] Stilizzare header chatbot
+- [x] Creare bubble messaggi (utente vs bot)
+- [x] Stilizzare campo input e pulsante
+- [x] Aggiungere stati di loading/typing
+- [x] Implementare animazioni smooth
 
 ## ⚙️ Fase 4: Logica e Funzionalità
 
 ### 4.1 Gestione Eventi
-- [ ] Event listener per pulsante toggle
-- [ ] Gestione apertura/chiusura chatbot
-- [ ] Submit messaggi (Enter + click)
-- [ ] Gestione focus e accessibilità
+- [x] Event listener per pulsante toggle
+- [x] Gestione apertura/chiusura chatbot
+- [x] Submit messaggi (Enter + click)
+- [x] Gestione focus e accessibilità
 
 ### 4.2 Sistema Messaggi
-- [ ] Classe per gestire array messaggi
-- [ ] Funzioni per aggiungere messaggi utente/bot
-- [ ] Rendering dinamico messaggi nell'UI
-- [ ] Scroll automatico a ultimo messaggio
+- [x] Classe per gestire array messaggi
+- [x] Funzioni per aggiungere messaggi utente/bot
+- [x] Rendering dinamico messaggi nell'UI
+- [x] Scroll automatico a ultimo messaggio
 
 ### 4.3 API Integration Placeholder
 - [ ] Struttura per integrazione API esterna

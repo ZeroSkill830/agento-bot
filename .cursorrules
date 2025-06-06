@@ -38,7 +38,7 @@ window.Chatbot = {
 4. **Non anticipare** fasi future
 
 ## 📱 Specifiche UI Obbligatorie
-- Desktop: 600x400px chatbot window
+- Desktop: 400x600px chatbot window
 - Mobile: 90% width × 100% height
 - Toggle: 60x60px fisso bottom-right
 - Responsive: < 768px = mobile
