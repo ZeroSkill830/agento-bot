@@ -1,0 +1,22 @@
+# Chatbot Web Iniettabile - Regole Cursor
+
+Consulta sempre: rules/cursor_rules.md per le regole complete del progetto.
+
+## Vincoli Tecnici
+- SOLO JavaScript vanilla, HTML, CSS
+- NO framework (React, Vue, Bootstrap, Tailwind)
+- Shadow DOM obbligatorio per isolamento
+- Compatibilità: Chrome, Firefox, Safari, Edge
+
+## Priorità Sviluppo
+1. Consulta task.md per l'ordine delle task
+2. Segui priorità: HIGH → MEDIUM → LOW  
+3. Test immediato dopo ogni implementazione
+4. Mobile-first responsive design
+
+## API Target
+```javascript
+window.Chatbot.init({ language: 'it' });
+```
+
+Obiettivo: chatbot completamente autonomo e iniettabile su qualsiasi sito web. 

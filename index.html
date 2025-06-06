@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Chatbot Iniettabile - Test Site</title>
+    <style>
+        /* 🎨 Stili del sito host di esempio */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+
+        .demo-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .demo-section {
+            background: white;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-title {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .demo-text {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .demo-button:hover {
+            background: #3182ce;
+            transform: translateY(-1px);
+        }
+
+        .demo-button.secondary {
+            background: #718096;
+        }
+
+        .demo-button.secondary:hover {
+            background: #4a5568;
+        }
+
+        .demo-button.danger {
+            background: #e53e3e;
+        }
+
+        .demo-button.danger:hover {
+            background: #c53030;
+        }
+
+        .demo-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .demo-status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+
+        .demo-status.success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .demo-status.error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        .demo-status.info {
+            background: #bee3f8;
+            color: #2c5282;
+            border: 1px solid #90cdf4;
+        }
+
+        .demo-footer {
+            text-align: center;
+            padding: 2rem;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 4rem;
+        }
+
+        /* 📱 Responsive */
+        @media (max-width: 768px) {
+            .demo-controls {
+                flex-direction: column;
+            }
+            
+            .demo-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header della pagina demo -->
+    <header class="demo-header">
+        <h1>🤖 Demo Chatbot Iniettabile</h1>
+        <p>Questa è una pagina di test per simulare l'integrazione del chatbot su un sito web reale</p>
+    </header>
+
+    <div class="demo-container">
+        <!-- Sezione di controllo -->
+        <section class="demo-section">
+            <h2 class="demo-title">🎮 Controlli Demo</h2>
+            <p class="demo-text">
+                Usa i pulsanti qui sotto per testare l'inizializzazione e la gestione del chatbot.
+                Il chatbot è completamente isolato tramite Shadow DOM e non interferisce con gli stili di questa pagina.
+            </p>
+            
+            <div class="demo-controls">
+                <button class="demo-button" onclick="initChatbot()">
+                    🚀 Inizializza Chatbot
+                </button>
+                <button class="demo-button secondary" onclick="destroyChatbot()">
+                    🗑️ Rimuovi Chatbot
+                </button>
+                <button class="demo-button secondary" onclick="checkStatus()">
+                    ❓ Verifica Stato
+                </button>
+                <button class="demo-button secondary" onclick="testConfigs()">
+                    ⚙️ Test Configurazioni
+                </button>
+            </div>
+
+            <div id="demo-status" class="demo-status info">
+                📊 Stato: Chatbot non ancora caricato. Clicca "Inizializza Chatbot" per iniziare.
+            </div>
+        </section>
+
+        <!-- Sezione codice di esempio -->
+        <section class="demo-section">
+            <h2 class="demo-title">📝 Codice di Integrazione</h2>
+            <p class="demo-text">
+                Ecco come integrare il chatbot sul tuo sito web:
+            </p>
+
+            <div class="demo-code">
+&lt;!-- 1. Includi lo script del chatbot --&gt;
+&lt;script src="chatbot/chatbot.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. Inizializza il chatbot --&gt;
+&lt;script&gt;
+  window.Chatbot.init({
+    language: 'it',
+    position: 'bottom-right',
+    theme: 'light'
+  });
+&lt;/script&gt;
+            </div>
+        </section>
+
+        <!-- Sezione informazioni tecniche -->
+        <section class="demo-section">
+            <h2 class="demo-title">🔧 Informazioni Tecniche</h2>
+            <div class="demo-text">
+                <h3>✅ Caratteristiche Implementate (Task 1.1 ✅ + 1.2 ✅)</h3>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li>📁 Struttura file completa</li>
+                    <li>🧩 Architettura modulare JavaScript</li>
+                    <li>🎨 Sistema di design con CSS Variables</li>
+                    <li>📱 Responsive design mobile-first</li>
+                    <li>♿ Accessibilità WCAG base</li>
+                    <li>🎯 API pubblica window.Chatbot</li>
+                    <li>🔮 <strong>Shadow DOM implementato e isolato</strong></li>
+                    <li>🧪 <strong>Test isolamento stili automatici</strong></li>
+                    <li>⚡ <strong>Template e CSS caricamento dinamico</strong></li>
+                </ul>
+
+                <h3 style="margin-top: 2rem;">🔄 Prossimi Step</h3>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li>🔘 Fase 2: Interfaccia utente interattiva (toggle, eventi)</li>
+                    <li>💬 Fase 4: Sistema messaggi</li>
+                    <li>📱 Responsive mobile ottimizzato</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Sezione contenuto fittizio per test scroll -->
+        <section class="demo-section">
+            <h2 class="demo-title">📄 Contenuto del Sito Web</h2>
+            <p class="demo-text">
+                Questo è contenuto fittizio per simulare un sito web reale. 
+                Il chatbot dovrebbe apparire in basso a destra senza interferire con questo contenuto.
+            </p>
+            <p class="demo-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor 
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+            <p class="demo-text">
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in 
+                culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </section>
+    </div>
+
+    <footer class="demo-footer">
+        <p>🤖 Chatbot Demo Site - Test di integrazione per chatbot iniettabile</p>
+        <p>Questo sito simula un ambiente reale dove il chatbot verrà integrato</p>
+    </footer>
+
+    <!-- 🚀 Caricamento script chatbot -->
+    <script src="chatbot/chatbot.js"></script>
+
+    <!-- 🎮 Script di controllo demo -->
+    <script>
+        /**
+         * 🎯 Script di demo per testare il chatbot
+         */
+
+        // Elementi DOM per il feedback
+        const statusElement = document.getElementById('demo-status');
+
+        /**
+         * 🚀 Inizializza il chatbot con configurazione base
+         */
+        function initChatbot() {
+            try {
+                if (window.Chatbot && !window.Chatbot.isInitialized) {
+                    window.Chatbot.init({
+                        language: 'it'
+                    });
+                    updateStatus('success', '✅ Chatbot inizializzato con successo!');
+                } else if (window.Chatbot && window.Chatbot.isInitialized) {
+                    updateStatus('info', '⚠️ Chatbot già inizializzato');
+                } else {
+                    updateStatus('error', '❌ Script chatbot non caricato');
+                }
+            } catch (error) {
+                updateStatus('error', `❌ Errore inizializzazione: ${error.message}`);
+            }
+        }
+
+        /**
+         * 🗑️ Rimuove il chatbot dalla pagina
+         */
+        function destroyChatbot() {
+            try {
+                if (window.Chatbot && window.Chatbot.isInitialized) {
+                    window.Chatbot.destroy();
+                    updateStatus('success', '✅ Chatbot rimosso con successo!');
+                } else {
+                    updateStatus('info', '⚠️ Chatbot non inizializzato');
+                }
+            } catch (error) {
+                updateStatus('error', `❌ Errore rimozione: ${error.message}`);
+            }
+        }
+
+        /**
+         * ❓ Verifica lo stato del chatbot
+         */
+        function checkStatus() {
+            if (window.Chatbot) {
+                const status = window.Chatbot.isInitialized ? 'Attivo' : 'Non attivo';
+                let message = `📊 Stato chatbot: ${status}`;
+                
+                // Informazioni aggiuntive se inizializzato
+                if (window.Chatbot.isInitialized && window.Chatbot._debug) {
+                    const shadowRoot = window.Chatbot._debug.ui.shadowRoot;
+                    if (shadowRoot) {
+                        const elementsCount = shadowRoot.children.length;
+                        const shadowMode = shadowRoot.mode;
+                        message += ` | Shadow DOM: ${shadowMode} mode, ${elementsCount} elementi`;
+                    }
+                }
+                
+                updateStatus('info', message);
+                
+                // Test isolamento Shadow DOM
+                if (window.Chatbot.isInitialized) {
+                    testShadowDOMIsolation();
+                }
+                
+                // Debug info (solo sviluppo)
+                if (window.Chatbot._debug) {
+                    console.log('🔧 Debug Info:', window.Chatbot._debug);
+                }
+            } else {
+                updateStatus('error', '❌ Script chatbot non caricato');
+            }
+        }
+
+        /**
+         * 🧪 Testa l'isolamento del Shadow DOM
+         */
+        function testShadowDOMIsolation() {
+            try {
+                const shadowRoot = window.Chatbot._debug.ui.shadowRoot;
+                if (!shadowRoot) {
+                    console.warn('⚠️ Shadow DOM non trovato');
+                    return;
+                }
+
+                // Test 1: Verifica che gli elementi del chatbot non siano nel document
+                const globalToggle = document.querySelector('.chatbot-toggle');
+                const shadowToggle = shadowRoot.querySelector('.chatbot-toggle');
+                
+                const isolation1 = !globalToggle && shadowToggle;
+                console.log(`🧪 Test isolamento DOM: ${isolation1 ? 'PASS' : 'FAIL'}`);
+
+                // Test 2: Verifica che i CSS del sito non influenzino il chatbot
+                const toggle = shadowToggle;
+                if (toggle) {
+                    const computedStyle = getComputedStyle(toggle);
+                    const hasOwnStyles = computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)';
+                    console.log(`🧪 Test stili isolati: ${hasOwnStyles ? 'PASS' : 'FAIL'}`);
+                }
+
+                // Test 3: Verifica modalità Shadow DOM
+                const correctMode = shadowRoot.mode === 'open';
+                console.log(`🧪 Test modalità Shadow DOM: ${correctMode ? 'PASS' : 'FAIL'}`);
+
+                console.log('✅ Test isolamento Shadow DOM completati');
+
+            } catch (error) {
+                console.error('❌ Errore durante test isolamento:', error);
+            }
+        }
+
+        /**
+         * ⚙️ Test diverse configurazioni
+         */
+        function testConfigs() {
+            if (window.Chatbot && window.Chatbot.isInitialized) {
+                updateStatus('info', '⚙️ Chatbot già attivo. Rimuovilo prima di testare nuove configurazioni.');
+                return;
+            }
+
+            // Test configurazione avanzata (placeholder per future implementazioni)
+            try {
+                window.Chatbot.init({
+                    language: 'it',
+                    theme: 'light',
+                    position: 'bottom-right'
+                });
+                updateStatus('success', '✅ Configurazione avanzata applicata!');
+            } catch (error) {
+                updateStatus('error', `❌ Errore configurazione: ${error.message}`);
+            }
+        }
+
+        /**
+         * 🎨 Aggiorna il messaggio di stato
+         */
+        function updateStatus(type, message) {
+            statusElement.className = `demo-status ${type}`;
+            statusElement.textContent = message;
+        }
+
+        // 🎬 Auto-inizializzazione quando la pagina è caricata
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatus('info', '📦 Pagina caricata. Script chatbot pronto per l\'uso.');
+        });
+    </script>
+</body>
+</html> 

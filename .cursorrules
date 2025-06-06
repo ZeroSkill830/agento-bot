@@ -1,0 +1,65 @@
+# 🤖 Chatbot Web Iniettabile - Regole Cursor
+
+## 📋 Riferimenti Importanti
+- Consulta sempre: `task.md` per l'ordine delle task e progressi
+- Regole dettagliate: `rules/cursor_rules.md`
+- Segna task completati con [x] in task.md
+
+## 🛠️ Vincoli Tecnici Assoluti
+- SOLO JavaScript vanilla, HTML, CSS
+- NO framework (React, Vue, Bootstrap, Tailwind)
+- Shadow DOM obbligatorio per isolamento
+- Compatibilità: Chrome 80+, Firefox 75+, Safari 13+, Edge 80+
+
+## 📐 Architettura Forzata
+```
+chatbot/
+├── chatbot.js    # Entry point (ChatbotCore, ChatbotUI, ChatbotMessages, ChatbotConfig)
+├── chatbot.html  # Template Shadow DOM
+├── chatbot.css   # Stili isolati (:host variables)
+└── index.html    # Demo page
+```
+
+## 🎯 API Target Obbligatoria
+```javascript
+window.Chatbot = {
+  init(config) { ... },
+  destroy() { ... },
+  isInitialized: boolean
+};
+
+// Uso: window.Chatbot.init({ language: 'it' })
+```
+
+## 🔄 Workflow di Sviluppo
+1. **Segui task.md** nell'ordine esatto (HIGH → MEDIUM → LOW)
+2. **Marca [x]** task completati immediatamente
+3. **Test immediato** dopo ogni implementazione
+4. **Non anticipare** fasi future
+
+## 📱 Specifiche UI Obbligatorie
+- Desktop: 600x400px chatbot window
+- Mobile: 90% width × 100% height
+- Toggle: 60x60px fisso bottom-right
+- Responsive: < 768px = mobile
+
+## 🎨 CSS Requirements
+- CSS Variables per design system
+- Mobile-first responsive
+- WCAG accessibilità base
+- Shadow DOM scope (:host)
+
+## ⚡ Performance Target
+- Load time: < 100ms
+- Bundle size: < 50KB
+- Memory: < 5MB
+- Cross-browser compatibility
+
+## 🚫 Divieti Assoluti
+- Framework JavaScript/CSS
+- Librerie esterne
+- CDN dependencies
+- TypeScript
+- Build tools complessi
+
+ 
