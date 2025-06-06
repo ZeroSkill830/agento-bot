@@ -67,27 +67,37 @@
 - [x] Rendering dinamico messaggi nell'UI
 - [x] Scroll automatico a ultimo messaggio
 
-### 4.3 API Integration Placeholder
-- [ ] Struttura per integrazione API esterna
-- [ ] Gestione risposte asincrone
-- [ ] Loading states durante fetch
-- [ ] Error handling per connessioni fallite
+### 4.3 API Integration
+- [x] Struttura per integrazione API esterna
+- [x] Gestione risposte asincrone
+- [x] Loading states durante fetch
+- [x] Error handling per connessioni fallite
+- [x] Autenticazione automatica all'inizializzazione
+- [x] Fallback con risposte simulate se API non disponibile
+- [x] Endpoint messaggi: `/{clientId}/message` POST
+- [x] Body: `{text, user, client}` con GUID utente auto-generato
+- [x] Supporto clientId configurabile via parametri inizializzazione
 
 ## 🔧 Fase 5: Inizializzazione e Configurazione
 
 ### 5.1 Sistema di Configurazione
-- [ ] Oggetto config con opzioni default
-- [ ] Supporto parametri inizializzazione:
-  - [ ] `language` (default: 'it')
-  - [ ] `position` (bottom-right, bottom-left, etc.)
-  - [ ] `theme` (light, dark, auto)
-  - [ ] `apiEndpoint` per messaggi bot
+- [x] Oggetto config con opzioni default
+- [x] Supporto parametri inizializzazione:
+  - [x] `language` (default: 'it')
+  - [x] `position` (bottom-right, bottom-left, etc.)
+  - [x] `theme` (light, dark, auto)
+  - [x] `apiEndpoint` per messaggi bot
+- [x] **Sistema multilingua completo (IT/EN)**
+  - [x] Selettore di lingua nell'header
+  - [x] Traduzione automatica UI
+  - [x] Campo `language` nelle chiamate API
+  - [x] Aggiornamento dinamico testi
 
 ### 5.2 Entry Point (`window.Chatbot`)
-- [ ] Esportare oggetto globale `window.Chatbot`
-- [ ] Metodo `init(config)` per inizializzazione
-- [ ] Metodo `destroy()` per cleanup
-- [ ] Prevenire inizializzazione multipla
+- [x] Esportare oggetto globale `window.Chatbot`
+- [x] Metodo `init(config)` per inizializzazione
+- [x] Metodo `destroy()` per cleanup
+- [x] Prevenire inizializzazione multipla
 
 ## 🧪 Fase 6: Testing e Compatibilità
 

@@ -94,95 +94,104 @@
          * 📥 Input: Nessuno
          * 📤 Output: HTML template caricato
          */
+        /**
+         * 🎯 Scopo: Carica template HTML hardcoded
+         * 📥 Input: Nessuno
+         * 📤 Output: Template HTML caricato nel Shadow DOM
+         */
         async loadTemplate() {
-            try {
-                const htmlTemplate = `
-                    <!-- Pulsante Toggle Chatbot -->
-                    <button class="chatbot-toggle" aria-label="Apri chat" type="button">
-                        <svg class="chatbot-toggle-icon" viewBox="0 0 24 24">
-                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-                        </svg>
-                    </button>
+            const htmlTemplate = `
+                <!-- Pulsante Toggle Chatbot -->
+                <button class="chatbot-toggle" aria-label="Apri chat" type="button">
+                    <svg class="chatbot-toggle-icon" viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                </button>
 
-                    <!-- Finestra Chatbot -->
-                    <div class="chatbot-window" aria-hidden="true" role="dialog" aria-labelledby="chatbot-title">
-                        <!-- Header -->
-                        <header class="chatbot-header">
-                            <h2 class="chatbot-title" id="chatbot-title">Assistente Virtuale</h2>
-                            <button class="chatbot-close" aria-label="Chiudi chat" type="button">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                </svg>
-                            </button>
-                        </header>
+                <!-- Finestra Chatbot -->
+                <div class="chatbot-window" aria-hidden="true" role="dialog" aria-labelledby="chatbot-title">
+                    <!-- Header -->
+                    <header class="chatbot-header">
+                        <h2 class="chatbot-title" id="chatbot-title">Assistente Virtuale</h2>
+                        <button class="chatbot-close" aria-label="Chiudi chat" type="button">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                            </svg>
+                        </button>
+                    </header>
 
-                        <!-- Area Messaggi -->
-                        <div class="chatbot-messages" role="log" aria-live="polite" aria-label="Cronologia conversazione">
-                            <div class="chatbot-welcome-message chatbot-message chatbot-message--bot">
-                                <div class="chatbot-message-content">
-                                    Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?
-                                </div>
+                    <!-- Area Messaggi -->
+                    <div class="chatbot-messages" role="log" aria-live="polite" aria-label="Cronologia conversazione">
+                        <div class="chatbot-welcome-message chatbot-message chatbot-message--bot">
+                            <div class="chatbot-message-content">
+                                Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?
                             </div>
                         </div>
-
-                        <!-- Indicatore Typing -->
-                        <div class="chatbot-typing" aria-label="L'assistente sta scrivendo">
-                            <div class="chatbot-typing-indicator">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                            <span class="chatbot-typing-text">L'assistente sta scrivendo...</span>
-                        </div>
-
-                        <!-- Area Input -->
-                        <div class="chatbot-input-area">
-                            <form class="chatbot-input-form">
-                                <div class="chatbot-input-container">
-                                    <input 
-                                        type="text" 
-                                        class="chatbot-input" 
-                                        placeholder="Scrivi un messaggio..." 
-                                        autocomplete="off"
-                                        aria-label="Scrivi il tuo messaggio"
-                                        maxlength="500"
-                                    />
-                                    <button 
-                                        type="submit" 
-                                        class="chatbot-send-button" 
-                                        disabled 
-                                        aria-label="Invia messaggio"
-                                    >
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Footer -->
-                        <footer class="chatbot-footer">
-                            <div class="chatbot-powered">Powered by Chatbot v1.0</div>
-                        </footer>
                     </div>
 
-                    <!-- Template per Messaggi Dinamici -->
-                    <template class="chatbot-message-template">
-                        <div class="chatbot-message">
-                            <div class="chatbot-message-content"></div>
-                            <div class="chatbot-message-time"></div>
+                    <!-- Indicatore Typing -->
+                    <div class="chatbot-typing" aria-label="L'assistente sta scrivendo">
+                        <div class="chatbot-typing-indicator">
+                            <span></span>
+                            <span></span>
+                            <span></span>
                         </div>
-                    </template>
-                `;
-                
-                this.shadowRoot.innerHTML = htmlTemplate;
-                console.log('✅ Template HTML caricato nel Shadow DOM');
-                
-            } catch (error) {
-                console.error('❌ Errore caricamento template:', error);
-                throw error;
-            }
+                        <span class="chatbot-typing-text">L'assistente sta scrivendo...</span>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="chatbot-quick-actions">
+                        <button class="chatbot-quick-action" data-text="Organizzate visite?" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/winery/experiences">
+                            Organizzate visite?
+                        </button>
+                        <button class="chatbot-quick-action" data-text="Degustiamo insieme?" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/wine-knowledge/wines">
+                            Degustiamo insieme?
+                        </button>
+                    </div>
+
+                    <!-- Area Input -->
+                    <div class="chatbot-input-area">
+                        <form class="chatbot-input-form">
+                            <div class="chatbot-input-container">
+                                <input 
+                                    type="text" 
+                                    class="chatbot-input" 
+                                    placeholder="Scrivi un messaggio..." 
+                                    autocomplete="off"
+                                    aria-label="Scrivi il tuo messaggio"
+                                    maxlength="500"
+                                />
+                                <button 
+                                    type="submit" 
+                                    class="chatbot-send-button" 
+                                    disabled 
+                                    aria-label="Invia messaggio"
+                                >
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Footer -->
+                    <footer class="chatbot-footer">
+                        <div class="chatbot-powered">Powered by Chatbot v1.0</div>
+                    </footer>
+                </div>
+
+                <!-- Template per Messaggi Dinamici -->
+                <template class="chatbot-message-template">
+                    <div class="chatbot-message">
+                        <div class="chatbot-message-content"></div>
+                        <div class="chatbot-message-time"></div>
+                    </div>
+                </template>
+            `;
+            
+            this.shadowRoot.innerHTML = htmlTemplate;
+            console.log('✅ Template HTML caricato nel Shadow DOM');
         },
 
             /**
@@ -357,6 +366,7 @@
             const form = this.shadowRoot.querySelector('.chatbot-input-form');
             const input = this.shadowRoot.querySelector('.chatbot-input');
             const sendButton = this.shadowRoot.querySelector('.chatbot-send-button');
+            const quickActions = this.shadowRoot.querySelectorAll('.chatbot-quick-action');
 
             // Event listener per pulsante toggle
             if (toggle) {
@@ -392,14 +402,19 @@
             if (input && sendButton) {
                 input.addEventListener('input', () => {
                     const hasText = input.value.trim().length > 0;
-                    sendButton.disabled = !hasText;
+                    const botNotWaiting = !ChatbotMessages.isWaitingForBotResponse;
+                    sendButton.disabled = !(hasText && botNotWaiting);
                 });
 
                 // Gestione Enter key
                 input.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
-                        if (input.value.trim()) {
+                        const hasText = input.value.trim().length > 0;
+                        const botNotWaiting = !ChatbotMessages.isWaitingForBotResponse;
+                        
+                        // Invia solo se c'è testo E il bot non sta rispondendo
+                        if (hasText && botNotWaiting) {
                             this.handleMessageSubmit();
                         }
                     }
@@ -423,6 +438,20 @@
                 }
             });
 
+            // Event listeners per quick actions
+            if (quickActions) {
+                quickActions.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const text = button.getAttribute('data-text');
+                        const apiUrl = button.getAttribute('data-api-url');
+                        
+                        if (text && apiUrl) {
+                            this.handleQuickAction(text, apiUrl);
+                        }
+                    });
+                });
+            }
+
             console.log('✅ Event listeners configurati');
         },
 
@@ -443,17 +472,88 @@
             const message = input.value.trim();
             if (!message) return;
 
+            // Disabilita solo il pulsante send durante il processing
+            sendButton.disabled = true;
+
             // Aggiungi messaggio utente
             ChatbotMessages.addMessage(message, 'user');
             
             // Reset input
             input.value = '';
-            sendButton.disabled = true;
             
-            // Simula risposta bot
-            ChatbotMessages.simulateBotResponse();
+            // Ottieni risposta bot (API o fallback)
+            ChatbotMessages.getBotResponse(message);
             
             console.log('📤 Messaggio inviato:', message);
+        },
+
+        /**
+         * 🎯 Scopo: Riabilita il pulsante send dopo risposta bot
+         * 📥 Input: Nessuno
+         * 📤 Output: Pulsante send riabilitato se c'è testo nell'input e bot ha finito
+         */
+        enableInput() {
+            const input = this.shadowRoot.querySelector('.chatbot-input');
+            const sendButton = this.shadowRoot.querySelector('.chatbot-send-button');
+            
+            if (input && sendButton) {
+                // Riabilita il pulsante solo se:
+                // 1. C'è del testo nell'input
+                // 2. Il bot non sta aspettando una risposta
+                const hasText = input.value.trim().length > 0;
+                const botNotWaiting = !ChatbotMessages.isWaitingForBotResponse;
+                sendButton.disabled = !(hasText && botNotWaiting);
+                
+                // Focus sull'input per continuare la conversazione
+                input.focus();
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Gestisce click su quick action
+         * 📥 Input: text (string), apiUrl (string)
+         * 📤 Output: Messaggio inviato con API custom
+         */
+        handleQuickAction(text, apiUrl) {
+            // Verifica che il bot non stia già rispondendo
+            if (ChatbotMessages.isWaitingForBotResponse) {
+                return;
+            }
+
+            // Disabilita le quick actions durante il processing
+            this.disableQuickActions();
+
+            // Aggiungi messaggio utente
+            ChatbotMessages.addMessage(text, 'user');
+            
+            // Ottieni risposta bot usando API custom
+            ChatbotMessages.getBotResponseFromCustomAPI(text, apiUrl);
+            
+            console.log('⚡ Quick action cliccata:', text, 'API:', apiUrl);
+        },
+
+        /**
+         * 🎯 Scopo: Disabilita le quick actions durante il processing
+         * 📥 Input: Nessuno
+         * 📤 Output: Quick actions disabilitate
+         */
+        disableQuickActions() {
+            const quickActions = this.shadowRoot.querySelectorAll('.chatbot-quick-action');
+            quickActions.forEach(button => {
+                button.disabled = true;
+            });
+        },
+
+        /**
+         * 🎯 Scopo: Riabilita le quick actions dopo la risposta
+         * 📥 Input: Nessuno
+         * 📤 Output: Quick actions riabilitate
+         */
+        enableQuickActions() {
+            const quickActions = this.shadowRoot.querySelectorAll('.chatbot-quick-action');
+            quickActions.forEach(button => {
+                button.disabled = false;
+            });
         },
 
         /**
@@ -487,6 +587,7 @@
          * 📝 Proprietà del modulo
          */
         messages: [],
+        isWaitingForBotResponse: false,
         welcomeMessageShown: true,
 
         /**
@@ -555,7 +656,20 @@
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'chatbot-message-content';
-            contentDiv.textContent = message.text;
+
+            console.log(message, 'xxx');
+            
+            // Gestione speciale per wine cards
+            if (message.isWineCards && message.wineCardsHtml) {
+                contentDiv.innerHTML = message.wineCardsHtml;
+            } 
+            // Gestione speciale per experience cards
+            else if (message.isExperienceCards && message.experienceCardsHtml) {
+                contentDiv.innerHTML = message.experienceCardsHtml;
+            } 
+            else {
+                contentDiv.textContent = message.text;
+            }
 
             const timeDiv = document.createElement('div');
             timeDiv.className = 'chatbot-message-time';
@@ -592,30 +706,151 @@
         },
 
         /**
-         * 🎯 Scopo: Simula risposta automatica del bot
-         * 📥 Input: Nessuno
+         * 🎯 Scopo: Ottiene risposta bot (API o fallback)
+         * 📥 Input: userMessage (string) - messaggio dell'utente
          * 📤 Output: Risposta bot dopo delay
          */
-        simulateBotResponse() {
-            const responses = [
-                "Interessante! Potresti dirmi di più?",
-                "Capisco la tua domanda. Lascia che ci pensi...",
-                "Ottima domanda! Ecco cosa penso:",
-                "Perfetto! Sono qui per aiutarti con questo.",
-                "Vedo il punto. La mia risposta è:",
-                "Grazie per la domanda! La mia opinione:",
-                "Molto bene! Ecco la mia risposta:",
-                "Comprendo! Posso aiutarti così:"
-            ];
-
+        async getBotResponse(userMessage) {
+            this.isWaitingForBotResponse = true;
             this.showTypingIndicator();
 
-            setTimeout(() => {
+            try {
+                let botResponse;
+
+                if (ChatbotAPI.isConnected()) {
+                    // Usa API reale
+                    botResponse = await ChatbotAPI.sendMessage(userMessage);
+                } else {
+                    // Fallback con risposte simulate
+                    await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000));
+                    
+                    const responses = [
+                        "Interessante! Potresti dirmi di più?",
+                        "Capisco la tua domanda. Lascia che ci pensi...",
+                        "Ottima domanda! Ecco cosa penso:",
+                        "Perfetto! Sono qui per aiutarti con questo.",
+                        "Vedo il punto. La mia risposta è:",
+                        "Grazie per la domanda! La mia opinione:",
+                        "Molto bene! Ecco la mia risposta:",
+                        "Comprendo! Posso aiutarti così:"
+                    ];
+                    
+                    botResponse = responses[Math.floor(Math.random() * responses.length)];
+                }
+
                 this.hideTypingIndicator();
+                this.addMessage(botResponse, 'bot');
                 
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                this.addMessage(randomResponse, 'bot');
-            }, Math.random() * 2000 + 1000); // 1-3 secondi
+                // Bot ha finito di rispondere
+                this.isWaitingForBotResponse = false;
+                
+                // Riabilita input e quick actions per permettere nuovi messaggi
+                ChatbotUI.enableInput();
+                ChatbotUI.enableQuickActions();
+
+            } catch (error) {
+                console.error('❌ Errore risposta bot:', error);
+                this.hideTypingIndicator();
+                this.addMessage('Scusa, c\'è stato un problema. Riprova più tardi.', 'bot');
+                
+                // Bot ha finito di rispondere (anche in caso di errore)
+                this.isWaitingForBotResponse = false;
+                
+                // Riabilita input e quick actions anche in caso di errore
+                ChatbotUI.enableInput();
+                ChatbotUI.enableQuickActions();
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Ottiene risposta bot da API custom (quick actions)
+         * 📥 Input: userMessage (string), customApiUrl (string)
+         * 📤 Output: Risposta bot aggiunta ai messaggi
+         */
+        async getBotResponseFromCustomAPI(userMessage, customApiUrl) {
+            this.isWaitingForBotResponse = true;
+            this.showTypingIndicator();
+
+            try {
+                let botResponse;
+
+                if (ChatbotAPI.isConnected()) {
+                    // Usa API custom per quick actions
+                    botResponse = await ChatbotAPI.sendMessageToCustomAPI(userMessage, customApiUrl);
+                    console.log('🔄 BotResponse ricevuta:', typeof botResponse, botResponse);
+                    
+                    // Se la risposta contiene vini, gestiscila diversamente
+                    if (typeof botResponse === 'object' && botResponse.type === 'wines') {
+                        console.log('🍷 Gestendo wine cards');
+                        this.hideTypingIndicator();
+                        this.addWineCards(botResponse.data);
+                        
+                        // Bot ha finito di rispondere
+                        this.isWaitingForBotResponse = false;
+                        
+                        // Riabilita input e quick actions
+                        ChatbotUI.enableInput();
+                        ChatbotUI.enableQuickActions();
+                        return;
+                    }
+                    
+                    // Se la risposta contiene esperienze, gestiscila diversamente
+                    if (typeof botResponse === 'object' && botResponse.type === 'experiences') {
+                        console.log('🎯 Gestendo experience cards');
+                        this.hideTypingIndicator();
+                        
+                        // Prima mostra il messaggio di reply
+                        this.addMessage(botResponse.reply, 'bot');
+                        
+                        // Poi mostra le experience cards
+                        this.addExperienceCards(botResponse.data);
+                        
+                        // Bot ha finito di rispondere
+                        this.isWaitingForBotResponse = false;
+                        
+                        // Riabilita input e quick actions
+                        ChatbotUI.enableInput();
+                        ChatbotUI.enableQuickActions();
+                        return;
+                    }
+                    
+                    console.log('📝 Gestendo come messaggio normale');
+                } else {
+                    // Fallback con risposte simulate
+                    await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000));
+                    
+                    const responses = [
+                        "Perfetta domanda! Ecco le informazioni che cerchi:",
+                        "Ottimo interesse! Ti racconto tutto:",
+                        "Fantastico! Sono felice di rispondere:",
+                        "Grande curiosità! Ecco cosa posso dirti:"
+                    ];
+                    
+                    botResponse = responses[Math.floor(Math.random() * responses.length)];
+                }
+
+                this.hideTypingIndicator();
+                this.addMessage(botResponse, 'bot');
+                
+                // Bot ha finito di rispondere
+                this.isWaitingForBotResponse = false;
+                
+                // Riabilita input e quick actions
+                ChatbotUI.enableInput();
+                ChatbotUI.enableQuickActions();
+
+            } catch (error) {
+                console.error('❌ Errore risposta bot da API custom:', error);
+                this.hideTypingIndicator();
+                this.addMessage('Scusa, c\'è stato un problema. Riprova più tardi.', 'bot');
+                
+                // Bot ha finito di rispondere (anche in caso di errore)
+                this.isWaitingForBotResponse = false;
+                
+                // Riabilita input e quick actions anche in caso di errore
+                ChatbotUI.enableInput();
+                ChatbotUI.enableQuickActions();
+            }
         },
 
         /**
@@ -652,6 +887,370 @@
             if (welcomeMessage) {
                 welcomeMessage.remove();
             }
+        },
+
+        /**
+         * 🎯 Scopo: Aggiunge card dei vini ai messaggi
+         * 📥 Input: wines (array di oggetti vino)
+         * 📤 Output: Card vini visualizzate
+         */
+        addWineCards(wines) {
+            if (!wines || !Array.isArray(wines) || wines.length === 0) {
+                this.addMessage('Non ho trovato vini da mostrare.', 'bot');
+                return;
+            }
+
+            // Rimuove messaggio di benvenuto se presente
+            this.removeWelcomeMessage();
+
+            // Crea container per le wine cards
+            const wineCardsHtml = this.createWineCardsHtml(wines);
+            
+            // Aggiunge ai messaggi con tutte le informazioni necessarie
+            const message = {
+                id: Date.now() + Math.random(),
+                text: `Ecco ${wines.length} vini disponibili:`,
+                type: 'bot',
+                timestamp: new Date(),
+                isWineCards: true,
+                wineCardsHtml: wineCardsHtml,
+                wines: wines // Salva anche i dati originali per debug
+            };
+
+            this.messages.push(message);
+            this.render(); // Usa il sistema normale di rendering
+
+
+
+            console.log('🍷 Wine cards aggiunte:', wines.length);
+        },
+
+        /**
+         * 🎯 Scopo: Crea HTML per le wine cards
+         * 📥 Input: wines (array di oggetti vino)
+         * 📤 Output: HTML string delle cards
+         */
+        createWineCardsHtml(wines) {
+            let cardsHtml = '<div class="chatbot-wine-cards">';
+            
+            wines.forEach(wine => {
+                cardsHtml += `
+                    <div class="chatbot-wine-card">
+                        <div class="chatbot-wine-name">${wine.name || 'Nome non disponibile'}</div>
+                        <div class="chatbot-wine-details">
+                            <div class="chatbot-wine-detail">
+                                <span class="chatbot-wine-label">Produttore:</span>
+                                <span class="chatbot-wine-value">${wine.producer || 'N/A'}</span>
+                            </div>
+                            <div class="chatbot-wine-detail">
+                                <span class="chatbot-wine-label">Regione:</span>
+                                <span class="chatbot-wine-value">${wine.region || 'N/A'}</span>
+                            </div>
+                            <div class="chatbot-wine-detail">
+                                <span class="chatbot-wine-label">Annata:</span>
+                                <span class="chatbot-wine-value">${wine.vintage || 'N/A'}</span>
+                            </div>
+                        </div>
+                        ${wine.category ? `<div class="chatbot-wine-category">${wine.category}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+                        cardsHtml += '</div>';
+            return cardsHtml;
+        },
+
+        /**
+         * 🎯 Scopo: Aggiunge card delle esperienze ai messaggi
+         * 📥 Input: experiences (array di oggetti esperienza)
+         * 📤 Output: Card esperienze visualizzate
+         */
+        addExperienceCards(experiences) {
+            if (!experiences || !Array.isArray(experiences) || experiences.length === 0) {
+                this.addMessage('Non ho trovato esperienze da mostrare.', 'bot');
+                return;
+            }
+
+            // Crea container per le experience cards
+            const experienceCardsHtml = this.createExperienceCardsHtml(experiences);
+            
+            // Aggiunge ai messaggi con tutte le informazioni necessarie
+            const message = {
+                id: Date.now() + Math.random(),
+                text: '', // Nessun testo, solo cards
+                type: 'bot',
+                timestamp: new Date(),
+                isExperienceCards: true,
+                experienceCardsHtml: experienceCardsHtml,
+                experiences: experiences // Salva anche i dati originali per debug
+            };
+
+            this.messages.push(message);
+            this.render(); // Usa il sistema normale di rendering
+
+            console.log('🎯 Experience cards aggiunte:', experiences.length);
+        },
+
+        /**
+         * 🎯 Scopo: Crea HTML per le experience cards
+         * 📥 Input: experiences (array di oggetti esperienza)
+         * 📤 Output: HTML string delle cards
+         */
+        createExperienceCardsHtml(experiences) {
+            let cardsHtml = '<div class="chatbot-experience-cards">';
+            
+            experiences.forEach(experience => {
+                cardsHtml += `
+                    <div class="chatbot-experience-card">
+                        <div class="chatbot-experience-title">${experience.title || 'Esperienza non disponibile'}</div>
+                        <div class="chatbot-experience-description">${experience.description || ''}</div>
+                        <div class="chatbot-experience-details">
+                            <div class="chatbot-experience-detail">${experience.duration || ''}</div>
+                        </div>
+                        <div class="chatbot-experience-price">${experience.price || ''}</div>
+                    </div>
+                `;
+            });
+            
+            cardsHtml += '</div>';
+            return cardsHtml;
+        },
+
+ 
+    };
+
+    /**
+     * 🌐 MODULO: ChatbotAPI
+     * 🎯 Scopo: Gestisce integrazione API esterna
+     * 📋 Responsabilità: Autenticazione, chiamate API, error handling
+     */
+    const ChatbotAPI = {
+        /**
+         * 📝 Proprietà del modulo
+         */
+        token: null,
+        baseURL: 'https://macaw-eager-gradually.ngrok-free.app',
+        isAuthenticated: false,
+        userGUID: null,
+        clientId: '89b90056-4cc4-054a-a3db-9a3c0ded7efc', // Default, sarà configurabile
+
+        /**
+         * 🎯 Scopo: Genera GUID unico per l'utente
+         * 📥 Input: Nessuno
+         * 📤 Output: GUID stringa
+         */
+        generateUserGUID() {
+            return 'xxxx-xxxx-4xxx-yxxx-xxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        },
+
+        /**
+         * 🎯 Scopo: Inizializza API con GUID utente
+         * 📥 Input: clientId (string, opzionale)
+         * 📤 Output: API inizializzato
+         */
+        init(clientId = null) {
+            if (clientId) {
+                this.clientId = clientId;
+            }
+            
+            this.userGUID = this.generateUserGUID();
+            console.log('🆔 GUID utente generato:', this.userGUID);
+        },
+
+        /**
+         * 🎯 Scopo: Autentica con l'API e ottiene token
+         * 📥 Input: Nessuno (usa clientId fisso)
+         * 📤 Output: Token di autenticazione salvato
+         */
+        async authenticate() {
+            try {
+                console.log('🔑 Autenticazione con API...');
+                
+                const response = await fetch(`${this.baseURL}/auth/token`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
+                    body: JSON.stringify({
+                        clientId: 'discord'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Errore HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.token) {
+                    this.token = data.token;
+                    this.isAuthenticated = true;
+                    console.log('✅ Autenticazione completata');
+                    return true;
+                } else {
+                    throw new Error('Token non ricevuto nella risposta');
+                }
+
+            } catch (error) {
+                console.error('❌ Errore autenticazione:', error);
+                this.isAuthenticated = false;
+                this.token = null;
+                throw error;
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Invia messaggio all'API e ottiene risposta bot
+         * 📥 Input: message (string)
+         * 📤 Output: Risposta del bot
+         */
+        async sendMessage(message) {
+            try {
+                if (!this.isAuthenticated || !this.token) {
+                    throw new Error('Non autenticato - richiesto login');
+                }
+
+                if (!this.userGUID) {
+                    throw new Error('GUID utente non generato');
+                }
+
+                console.log('📤 Invio messaggio all\'API:', message);
+
+                const response = await fetch(`${this.baseURL}/${this.clientId}/message`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.token}`,
+                        'ngrok-skip-browser-warning': 'true'
+                    },
+                    body: JSON.stringify({
+                        text: message,
+                        user: this.userGUID,
+                        client: this.clientId
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Errore HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('📥 Risposta API ricevuta:', data);
+                
+                // La risposta è un array di oggetti con struttura: [{user, text, action}]
+                if (Array.isArray(data) && data.length > 0) {
+                    // Prende il campo 'text' del primo elemento
+                    const firstMessage = data[0];
+                    if (firstMessage && firstMessage.text) {
+                        return firstMessage.text;
+                    }
+                }
+                
+                // Fallback se la struttura non è quella attesa
+                return data.response || data.text || 'Scusa, non sono riuscito a elaborare la tua richiesta.';
+
+            } catch (error) {
+                console.error('❌ Errore invio messaggio:', error);
+                // Fallback con risposta locale
+                return 'Scusa, c\'è stato un problema di connessione. Riprova più tardi.';
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Invia messaggio a API custom (quick actions)
+         * 📥 Input: message (string), customApiUrl (string)
+         * 📤 Output: Risposta dell'API custom
+         */
+        async sendMessageToCustomAPI(message, customApiUrl) {
+            try {
+                if (!this.isAuthenticated || !this.token) {
+                    throw new Error('Non autenticato - richiesto login');
+                }
+
+                console.log('📤 Invio messaggio a API custom:', message, 'URL:', customApiUrl);
+
+                const response = await fetch(customApiUrl, {
+                    method: 'GET', // Assumendo GET per le API specifiche
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`,
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Errore HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('📥 Risposta API custom ricevuta:', data);
+                console.log('🔍 URL chiamata:', customApiUrl);
+                
+                // Gestione speciale per API wine-knowledge/wines
+                if (customApiUrl.includes('wine-knowledge/wines') && data.wines && Array.isArray(data.wines)) {
+                    console.log('✅ Riconosciuto come wine API');
+                    return { type: 'wines', data: data.wines };
+                }
+                
+                // Gestione speciale per API experiences
+                if (customApiUrl.includes('api/winery/experiences') && data.reply && data.cards && Array.isArray(data.cards)) {
+                    console.log('✅ Riconosciuto come experience API');
+                    return { type: 'experiences', reply: data.reply, data: data.cards };
+                }
+                
+                console.log('❌ Nessuna API riconosciuta, usando fallback');
+                
+                // Se la risposta è un array, prende il primo elemento
+                if (Array.isArray(data) && data.length > 0) {
+                    const firstMessage = data[0];
+                    if (firstMessage && firstMessage.text) {
+                        return firstMessage.text;
+                    }
+                }
+                
+                // Se è un oggetto diretto
+                if (data && data.text) {
+                    return data.text;
+                }
+                
+                // Se è una stringa diretta
+                if (typeof data === 'string') {
+                    return data;
+                }
+                
+                // Fallback
+                return data.response || data.message || 'Scusa, non sono riuscito a elaborare la tua richiesta.';
+
+            } catch (error) {
+                console.error('❌ Errore invio a API custom:', error);
+                throw error;
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Verifica stato connessione API
+         * 📥 Input: Nessuno
+         * 📤 Output: boolean stato connessione
+         */
+        isConnected() {
+            return this.isAuthenticated && this.token !== null;
+        },
+
+        /**
+         * 🎯 Scopo: Reset autenticazione
+         * 📥 Input: Nessuno
+         * 📤 Output: Stato resettato
+         */
+        reset() {
+            this.token = null;
+            this.isAuthenticated = false;
+            this.userGUID = null;
+            console.log('🔄 API reset completato');
         }
     };
 
@@ -668,6 +1267,7 @@
             language: 'it',
             position: 'bottom-right',
             theme: 'light',
+            clientId: '89b90056-4cc4-054a-a3db-9a3c0ded7efc',
             apiEndpoint: null,
             welcomeMessage: 'Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?'
         },
@@ -729,6 +1329,14 @@
                 // Inizializza UI
                 await ChatbotUI.init(this.container);
 
+                // Inizializza e autentica API
+                try {
+                    ChatbotAPI.init(config.clientId);
+                    await ChatbotAPI.authenticate();
+                } catch (error) {
+                    console.warn('⚠️ Continuo senza API - modalità offline');
+                }
+
                 this.isInitialized = true;
                 console.log('✅ Chatbot inizializzato con successo!');
 
@@ -786,6 +1394,7 @@
                 ChatbotUI.shadowRoot = null;
                 ChatbotUI.isVisible = false;
                 ChatbotMessages.messages = [];
+                ChatbotAPI.reset();
 
                 console.log('✅ Chatbot distrutto con successo');
 
@@ -849,6 +1458,7 @@
             ui: ChatbotUI,
             messages: ChatbotMessages,
             config: ChatbotConfig,
+            api: ChatbotAPI,
             core: ChatbotCore
         }
     };

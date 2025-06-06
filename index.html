@@ -290,7 +290,8 @@
             try {
                 if (window.Chatbot && !window.Chatbot.isInitialized) {
                     window.Chatbot.init({
-                        language: 'it'
+                        language: 'it',
+                        clientId: '89b90056-4cc4-054a-a3db-9a3c0ded7efc' // ID client personalizzabile
                     });
                     updateStatus('success', '✅ Chatbot inizializzato con successo!');
                 } else if (window.Chatbot && window.Chatbot.isInitialized) {

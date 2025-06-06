@@ -232,6 +232,7 @@
   flex: 1;
   padding: var(--chatbot-spacing-md);
   overflow-y: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
   background: var(--chatbot-surface);
 }
@@ -241,7 +242,6 @@
   margin-bottom: var(--chatbot-spacing-md);
   display: flex;
   flex-direction: column;
-  max-width: 80%;
 }
 
 .chatbot-message--user {
@@ -327,6 +327,191 @@
 .chatbot-typing-text {
   font-size: var(--chatbot-font-size-sm);
   color: var(--chatbot-text-secondary);
+}
+
+/* ⚡ Quick Actions */
+.chatbot-quick-actions {
+  padding: var(--chatbot-spacing-md);
+  background: var(--chatbot-surface);
+  border-top: 1px solid var(--chatbot-border);
+  display: flex;
+  gap: var(--chatbot-spacing-sm);
+  flex-wrap: wrap;
+}
+
+.chatbot-quick-action {
+  background: var(--chatbot-bg);
+  border: 1px solid var(--chatbot-border);
+  border-radius: var(--chatbot-radius-md);
+  padding: var(--chatbot-spacing-sm) var(--chatbot-spacing-md);
+  font-size: var(--chatbot-font-size-sm);
+  font-family: inherit;
+  color: var(--chatbot-primary);
+  cursor: pointer;
+  transition: var(--chatbot-transition);
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.chatbot-quick-action:hover:not(:disabled) {
+  background: var(--chatbot-primary-light);
+  border-color: var(--chatbot-primary);
+  color: var(--chatbot-primary);
+}
+
+.chatbot-quick-action:active {
+  transform: translateY(1px);
+}
+
+.chatbot-quick-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 🍷 Wine Cards */
+.chatbot-wine-cards {
+  display: flex;
+  flex-direction: row;
+  gap: var(--chatbot-spacing-sm);
+  margin-top: var(--chatbot-spacing-sm);
+  padding-bottom: var(--chatbot-spacing-xs);
+}
+
+.chatbot-wine-card {
+  background: var(--chatbot-surface);
+  border: 1px solid var(--chatbot-border);
+  border-radius: var(--chatbot-radius-md);
+  padding: var(--chatbot-spacing-md);
+  transition: var(--chatbot-transition);
+  flex: 0 0 250px;
+  min-width: 250px;
+}
+
+.chatbot-wine-card:hover {
+  border-color: var(--chatbot-primary-light);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+}
+
+.chatbot-wine-name {
+  font-weight: 600;
+  font-size: var(--chatbot-font-size-md);
+  color: var(--chatbot-text-primary);
+  margin-bottom: var(--chatbot-spacing-xs);
+}
+
+.chatbot-wine-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chatbot-spacing-xs);
+}
+
+.chatbot-wine-detail {
+  display: flex;
+  font-size: var(--chatbot-font-size-sm);
+  color: var(--chatbot-text-secondary);
+}
+
+.chatbot-wine-label {
+  font-weight: 500;
+  min-width: 70px;
+  color: var(--chatbot-text-primary);
+}
+
+.chatbot-wine-value {
+  flex: 1;
+}
+
+.chatbot-wine-category {
+  display: inline-block;
+  background: var(--chatbot-primary-light);
+  color: var(--chatbot-primary);
+  padding: 2px var(--chatbot-spacing-xs);
+  border-radius: var(--chatbot-radius-sm);
+  font-size: var(--chatbot-font-size-xs);
+  font-weight: 500;
+  text-transform: capitalize;
+  margin-top: var(--chatbot-spacing-xs);
+}
+
+/* 🎯 Experience Cards */
+.chatbot-experience-cards {
+  display: flex;
+  flex-direction: row;
+  gap: var(--chatbot-spacing-sm);
+  margin-top: var(--chatbot-spacing-sm);
+  padding-bottom: var(--chatbot-spacing-xs);
+}
+
+.chatbot-experience-card {
+  background: var(--chatbot-surface);
+  border: 1px solid var(--chatbot-border);
+  border-radius: var(--chatbot-radius-md);
+  padding: var(--chatbot-spacing-md);
+  transition: var(--chatbot-transition);
+  flex: 0 0 280px;
+  min-width: 280px;
+}
+
+.chatbot-experience-card:hover {
+  border-color: var(--chatbot-primary-light);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+}
+
+.chatbot-experience-title {
+  font-weight: 600;
+  font-size: var(--chatbot-font-size-md);
+  color: var(--chatbot-text-primary);
+  margin-bottom: var(--chatbot-spacing-sm);
+}
+
+.chatbot-experience-description {
+  font-size: var(--chatbot-font-size-sm);
+  color: var(--chatbot-text-secondary);
+  margin-bottom: var(--chatbot-spacing-sm);
+  line-height: 1.4;
+}
+
+.chatbot-experience-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chatbot-spacing-xs);
+}
+
+.chatbot-experience-detail {
+  font-size: var(--chatbot-font-size-sm);
+  color: var(--chatbot-text-secondary);
+}
+
+.chatbot-experience-price {
+  font-weight: 600;
+  color: var(--chatbot-primary);
+  font-size: var(--chatbot-font-size-md);
+  margin-top: var(--chatbot-spacing-xs);
+}
+
+
+
+/* Gestione scroll per message-content con wine cards */
+.chatbot-message-content:has(.chatbot-wine-cards) {
+  padding: var(--chatbot-spacing-sm) 0;
+  background: transparent;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+
+/* Gestione scroll per message-content con experience cards */
+.chatbot-message-content:has(.chatbot-experience-cards) {
+  padding: var(--chatbot-spacing-sm) 0;
+  background: transparent;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
 }
 
 /* 📝 Area Input */
@@ -443,6 +628,42 @@
 }
 
 .chatbot-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--chatbot-text-secondary);
+}
+
+/* Scrollbar per message-content con wine cards */
+.chatbot-message-content:has(.chatbot-wine-cards)::-webkit-scrollbar {
+  height: 6px;
+}
+
+.chatbot-message-content:has(.chatbot-wine-cards)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatbot-message-content:has(.chatbot-wine-cards)::-webkit-scrollbar-thumb {
+  background: var(--chatbot-border);
+  border-radius: var(--chatbot-radius-sm);
+}
+
+.chatbot-message-content:has(.chatbot-wine-cards)::-webkit-scrollbar-thumb:hover {
+  background: var(--chatbot-text-secondary);
+}
+
+/* Scrollbar per message-content con experience cards */
+.chatbot-message-content:has(.chatbot-experience-cards)::-webkit-scrollbar {
+  height: 6px;
+}
+
+.chatbot-message-content:has(.chatbot-experience-cards)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatbot-message-content:has(.chatbot-experience-cards)::-webkit-scrollbar-thumb {
+  background: var(--chatbot-border);
+  border-radius: var(--chatbot-radius-sm);
+}
+
+.chatbot-message-content:has(.chatbot-experience-cards)::-webkit-scrollbar-thumb:hover {
   background: var(--chatbot-text-secondary);
 }
 
