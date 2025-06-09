@@ -725,6 +725,7 @@
 
             // Renderizza tutti i messaggi
             let hasWineCards = false;
+            let hasExperienceCards = false;
             this.messages.forEach(message => {
                 const messageElement = this.createMessageElement(message);
                 messagesContainer.appendChild(messageElement);
@@ -732,11 +733,19 @@
                 if (message.isWineCards) {
                     hasWineCards = true;
                 }
+                if (message.isExperienceCards) {
+                    hasExperienceCards = true;
+                }
             });
 
             // Configura event listeners per wine cards se presenti
             if (hasWineCards) {
                 setTimeout(() => this.setupWineCardListeners(), 100);
+            }
+            
+            // Configura event listeners per experience cards se presenti
+            if (hasExperienceCards) {
+                setTimeout(() => this.setupExperienceCardListeners(), 100);
             }
 
             this.scrollToBottom();
@@ -1039,6 +1048,10 @@
                 cardsHtml += `
                     <div class="chatbot-wine-card" data-wine-name="${wine.name || ''}" data-wine-id="${wine.id || ''}" data-wine-index="${index}">
                         ${wine.vintage ? `<div class="chatbot-wine-vintage-badge">${wine.vintage}</div>` : ''}
+                        <img src="https://cdn.pixabay.com/photo/2013/07/12/16/28/wine-150955_1280.png" 
+                             alt="Wine bottle" 
+                             class="chatbot-wine-image"
+                             loading="lazy">
                         <div class="chatbot-wine-name">${wine.name || 'Nome non disponibile'}</div>
                         <div class="chatbot-wine-producer">${wine.producer || 'Produttore sconosciuto'}</div>
                         <div class="chatbot-wine-details">
@@ -1074,6 +1087,39 @@
                     }
                 });
             });
+        },
+
+        /**
+         * 🎯 Scopo: Configura event listeners per experience cards dopo il render
+         * 📥 Input: Nessuno
+         * 📤 Output: Event listeners configurati
+         */
+        setupExperienceCardListeners() {
+            const experienceCards = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-experience-card');
+            experienceCards.forEach((card, index) => {
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('🎯 Experience card clicked:', index);
+                    this.showExperienceOverlay(index);
+                });
+            });
+        },
+
+        /**
+         * 🎯 Scopo: Mostra overlay con dettagli dell'esperienza
+         * 📥 Input: experienceIndex (number)
+         * 📤 Output: Overlay mostrato
+         */
+        showExperienceOverlay(experienceIndex) {
+            // Trova l'esperienza nei messaggi
+            const experienceMessage = this.messages.find(msg => msg.isExperienceCards);
+            if (!experienceMessage || !experienceMessage.experiences[experienceIndex]) {
+                console.error('❌ Esperienza non trovata:', experienceIndex);
+                return;
+            }
+
+            const experience = experienceMessage.experiences[experienceIndex];
+            ChatbotExperience.showOverlay(experience);
         },
 
         /**
@@ -1116,14 +1162,20 @@
             let cardsHtml = '<div class="chatbot-experience-cards">';
             
             experiences.forEach(experience => {
+                const backgroundImage = experience.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400';
+                
                 cardsHtml += `
-                    <div class="chatbot-experience-card">
-                        <div class="chatbot-experience-title">${experience.title || 'Esperienza non disponibile'}</div>
-                        <div class="chatbot-experience-description">${experience.description || ''}</div>
-                        <div class="chatbot-experience-details">
-                            <div class="chatbot-experience-detail">${experience.duration || ''}</div>
+                    <div class="chatbot-experience-card" style="background-image: url('${backgroundImage}')">
+                        <div class="chatbot-experience-overlay">
+                            <div class="chatbot-experience-content">
+                                <div class="chatbot-experience-title">${experience.title || 'Esperienza non disponibile'}</div>
+                                <div class="chatbot-experience-description">${experience.description || ''}</div>
+                                <div class="chatbot-experience-chips">
+                                    ${experience.duration ? `<div class="chatbot-experience-chip">${experience.duration}</div>` : ''}
+                                    ${experience.price ? `<div class="chatbot-experience-chip">${experience.price}</div>` : ''}
+                                </div>
+                            </div>
                         </div>
-                        <div class="chatbot-experience-price">${experience.price || ''}</div>
                     </div>
                 `;
             });
@@ -2063,6 +2115,447 @@
     };
 
     /**
+     * 🎯 MODULO: ChatbotExperience
+     * 🎯 Scopo: Gestisce overlay delle experience cards
+     * 📋 Responsabilità: Mostra dettagli esperienza, gestisce azioni
+     */
+    const ChatbotExperience = {
+        /**
+         * 🎯 Scopo: Mostra overlay con dettagli esperienza
+         * 📥 Input: experience (object)
+         * 📤 Output: Overlay visualizzato
+         */
+        showOverlay(experience) {
+            console.log('🎯 Showing experience overlay:', experience);
+            
+            const overlayHTML = `
+                <div class="chatbot-experience-detail-overlay" data-experience-id="${experience.id || ''}">
+                    <div class="chatbot-experience-detail-content">
+                        <button class="chatbot-experience-detail-close" aria-label="Chiudi">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                        
+                        <div class="chatbot-experience-detail-image" style="background-image: url('${experience.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'}')">
+                            <div class="chatbot-experience-detail-image-overlay"></div>
+                        </div>
+                        
+                        <div class="chatbot-experience-detail-info">
+                            <h3 class="chatbot-experience-detail-title">${experience.title || 'Esperienza'}</h3>
+                            <p class="chatbot-experience-detail-description">${experience.additonal_description || experience.description || ''}</p>
+                            
+                            <div class="chatbot-experience-detail-chips">
+                                ${experience.duration ? `<div class="chatbot-experience-detail-chip">${experience.duration}</div>` : ''}
+                                ${experience.price ? `<div class="chatbot-experience-detail-chip">${experience.price}</div>` : ''}
+                            </div>
+                            
+                            <div class="chatbot-experience-detail-actions">
+                                <button class="chatbot-experience-detail-action" data-action="discover" data-url="${experience.discoverMoreLink || '#'}">
+                                    Discover more
+                                </button>
+                                <button class="chatbot-experience-detail-action" data-action="chat">
+                                    Chatta per avere info
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Crea elemento overlay
+            const overlayElement = document.createElement('div');
+            overlayElement.innerHTML = overlayHTML;
+            const overlay = overlayElement.firstElementChild;
+            
+            // Aggiungi overlay al shadow DOM
+            ChatbotUI.shadowRoot.appendChild(overlay);
+            
+            // Setup event listeners
+            this.setupOverlayListeners();
+        },
+
+        /**
+         * 🎯 Scopo: Configura event listeners per overlay
+         * 📥 Input: Nessuno
+         * 📤 Output: Event listeners configurati
+         */
+        setupOverlayListeners() {
+            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-experience-detail-overlay');
+            const closeButton = ChatbotUI.shadowRoot.querySelector('.chatbot-experience-detail-close');
+            const actionButtons = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-experience-detail-action');
+            
+            // Close button
+            if (closeButton) {
+                closeButton.addEventListener('click', () => this.closeOverlay());
+            }
+            
+            // Click outside to close
+            if (overlay) {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        this.closeOverlay();
+                    }
+                });
+            }
+            
+            // Action buttons
+            actionButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const action = button.getAttribute('data-action');
+                    const url = button.getAttribute('data-url');
+                    
+                    if (action === 'discover' && url && url !== '#') {
+                        window.open(url, '_blank');
+                    } else if (action === 'chat') {
+                        // Ottieni i dati dell'esperienza dall'overlay
+                        const title = overlay.querySelector('.chatbot-experience-detail-title').textContent;
+                        const experienceData = {
+                            title: title,
+                            id: button.closest('.chatbot-experience-detail-overlay').dataset.experienceId
+                        };
+                        this.closeOverlay();
+                        this.showChatOverlay(experienceData);
+                    }
+                });
+            });
+            
+            // Escape key
+            document.addEventListener('keydown', this.handleEscapeKey);
+        },
+
+        /**
+         * 🎯 Scopo: Gestisce tasto Escape
+         * 📥 Input: event
+         * 📤 Output: Overlay chiuso se necessario
+         */
+        handleEscapeKey(e) {
+            if (e.key === 'Escape') {
+                ChatbotExperience.closeOverlay();
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Chiude overlay esperienza
+         * 📥 Input: Nessuno
+         * 📤 Output: Overlay rimosso
+         */
+        closeOverlay() {
+            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-experience-detail-overlay');
+            if (overlay) {
+                overlay.remove();
+            }
+            document.removeEventListener('keydown', this.handleEscapeKey);
+        },
+
+        /**
+         * 🎯 Scopo: Mostra overlay chat per esperienza specifica
+         * 📥 Input: experienceData (object con title e id)
+         * 📤 Output: Overlay chat visualizzato
+         */
+        showChatOverlay(experienceData) {
+            console.log('🎯 Showing experience chat overlay:', experienceData);
+            
+            const chatOverlayHTML = `
+                <div class="chatbot-tasting-overlay chatbot-tasting-overlay--experience-chat">
+                    <div class="chatbot-tasting-chat-container">
+                        <div class="chatbot-tasting-chat-header">
+                            <h3 class="chatbot-tasting-chat-title">Chat: ${experienceData.title || 'Esperienza'}</h3>
+                            <button class="chatbot-tasting-chat-close" id="experience-chat-close-button">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="chatbot-tasting-messages" id="experience-chat-messages">
+                            <div class="chatbot-message chatbot-message--bot">
+                                <div class="chatbot-message-content">
+                                    Ciao! 👋 Sono qui per aiutarti con domande su "${experienceData.title}". Cosa vorresti sapere?
+                                </div>
+                                <div class="chatbot-message-time">${new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Typing indicator -->
+                        <div class="chatbot-typing" id="experience-chat-typing-indicator" style="display: none;">
+                            <div class="chatbot-typing-indicator">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="chatbot-typing-text">${ChatbotConfig.t('typing')}</div>
+                        </div>
+                        
+                        <!-- Area input -->
+                        <div class="chatbot-input-area" id="experience-chat-input-area">
+                            <form class="chatbot-input-form" id="experience-chat-input-form">
+                                <div class="chatbot-input-container">
+                                    <input 
+                                        type="text" 
+                                        class="chatbot-input" 
+                                        id="experience-chat-input"
+                                        placeholder="${ChatbotConfig.t('placeholder')}" 
+                                        autocomplete="off"
+                                    >
+                                    <button 
+                                        type="submit" 
+                                        class="chatbot-send-button" 
+                                        id="experience-chat-send-button"
+                                        aria-label="${ChatbotConfig.t('sendLabel')}"
+                                        disabled
+                                    >
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                                            <polygon points="22,2 15,22 11,13 2,9"></polygon>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Crea elemento overlay
+            const overlayElement = document.createElement('div');
+            overlayElement.innerHTML = chatOverlayHTML;
+            const overlay = overlayElement.firstElementChild;
+            
+            // Salva i dati dell'esperienza nell'overlay per riferimento futuro
+            overlay.dataset.experienceId = experienceData.id;
+            overlay.dataset.experienceTitle = experienceData.title;
+            
+            // Aggiungi overlay al shadow DOM
+            ChatbotUI.shadowRoot.appendChild(overlay);
+            
+            // Setup event listeners per la chat
+            this.setupChatOverlayListeners();
+        },
+
+        /**
+         * 🎯 Scopo: Configura event listeners per chat overlay esperienza
+         * 📥 Input: Nessuno
+         * 📤 Output: Event listeners configurati
+         */
+        setupChatOverlayListeners() {
+            const form = ChatbotUI.shadowRoot.querySelector('#experience-chat-input-form');
+            const input = ChatbotUI.shadowRoot.querySelector('#experience-chat-input');
+            const sendButton = ChatbotUI.shadowRoot.querySelector('#experience-chat-send-button');
+            const closeButton = ChatbotUI.shadowRoot.querySelector('#experience-chat-close-button');
+
+            // Close button
+            if (closeButton) {
+                closeButton.addEventListener('click', () => {
+                    this.closeChatOverlay();
+                });
+            }
+
+            if (form && input && sendButton) {
+                // Form submit
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleExperienceChatSubmit();
+                });
+
+                // Input events
+                input.addEventListener('input', () => {
+                    sendButton.disabled = input.value.trim().length === 0;
+                });
+
+                // Enter key
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (input.value.trim().length > 0) {
+                            this.handleExperienceChatSubmit();
+                        }
+                    }
+                });
+            }
+
+            // Escape key
+            document.addEventListener('keydown', this.handleChatEscapeKey);
+            
+            // Focus sull'input
+            if (input) {
+                setTimeout(() => input.focus(), 300);
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Gestisce tasto Escape per chat overlay
+         * 📥 Input: event
+         * 📤 Output: Overlay chiuso se necessario
+         */
+        handleChatEscapeKey(e) {
+            if (e.key === 'Escape') {
+                ChatbotExperience.closeChatOverlay();
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Gestisce invio messaggio chat esperienza
+         * 📥 Input: Nessuno
+         * 📤 Output: Messaggio inviato e risposta API
+         */
+        async handleExperienceChatSubmit() {
+            const input = ChatbotUI.shadowRoot.querySelector('#experience-chat-input');
+            const sendButton = ChatbotUI.shadowRoot.querySelector('#experience-chat-send-button');
+            const messagesContainer = ChatbotUI.shadowRoot.querySelector('#experience-chat-messages');
+            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay--experience-chat');
+
+            if (!input || !sendButton || !messagesContainer || !overlay) return;
+
+            const message = input.value.trim();
+            if (!message) return;
+
+            const experienceId = overlay.dataset.experienceId;
+
+            // Disabilita input durante invio
+            sendButton.disabled = true;
+            input.disabled = true;
+
+            // Aggiungi messaggio utente
+            this.addExperienceChatMessage(messagesContainer, message, 'user');
+            
+            // Reset input
+            input.value = '';
+
+            try {
+                // Mostra typing indicator
+                this.showExperienceChatTyping();
+                
+                // Chiamata API esperienza
+                const response = await this.callExperienceAPI(experienceId, message);
+                
+                // Nasconde typing indicator
+                this.hideExperienceChatTyping();
+                
+                // Mostra risposta bot
+                if (response) {
+                    this.addExperienceChatMessage(messagesContainer, response, 'bot');
+                }
+                
+            } catch (error) {
+                console.error('❌ Errore invio messaggio esperienza:', error);
+                this.hideExperienceChatTyping();
+                this.addExperienceChatMessage(messagesContainer, 'Scusa, c\'è stato un problema. Riprova più tardi.', 'bot');
+            } finally {
+                // Riabilita input
+                input.disabled = false;
+                input.focus();
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Chiama API per chat esperienza
+         * 📥 Input: cardId (string), userMessage (string)
+         * 📤 Output: Risposta API
+         */
+        async callExperienceAPI(cardId, userMessage) {
+            if (!ChatbotAPI.isAuthenticated) {
+                throw new Error('API non autenticata');
+            }
+
+            const payload = {
+                cardId: cardId,
+                userMessage: userMessage,
+                language: ChatbotConfig.current.language || 'it'
+            };
+
+            console.log('📡 Payload experience API:', payload);
+
+            const response = await fetch(`${ChatbotAPI.baseURL}/api/winery/experiences/message`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${ChatbotAPI.token}`,
+                    'ngrok-skip-browser-warning': 'true'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Errore API esperienza: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('📥 Risposta API esperienza ricevuta:', data);
+
+            // Gestione risposta API esperienza: usa la proprietà 'reply'
+            if (data.reply) {
+                return data.reply;
+            }
+            
+            return 'Scusa, non sono riuscito a elaborare la tua richiesta.';
+        },
+
+        /**
+         * 🎯 Scopo: Aggiunge messaggio alla chat esperienza
+         * 📥 Input: container, text, type
+         * 📤 Output: Messaggio aggiunto
+         */
+        addExperienceChatMessage(container, text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chatbot-message chatbot-message--${type}`;
+            messageDiv.setAttribute('data-message-id', Date.now() + Math.random());
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'chatbot-message-content';
+            contentDiv.textContent = text;
+
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'chatbot-message-time';
+            timeDiv.textContent = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        },
+
+        /**
+         * 🎯 Scopo: Mostra typing indicator chat esperienza
+         * 📥 Input: Nessuno
+         * 📤 Output: Typing indicator mostrato
+         */
+        showExperienceChatTyping() {
+            const typingIndicator = ChatbotUI.shadowRoot.querySelector('#experience-chat-typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.style.display = 'flex';
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Nasconde typing indicator chat esperienza
+         * 📥 Input: Nessuno
+         * 📤 Output: Typing indicator nascosto
+         */
+        hideExperienceChatTyping() {
+            const typingIndicator = ChatbotUI.shadowRoot.querySelector('#experience-chat-typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.style.display = 'none';
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Chiude overlay chat esperienza
+         * 📥 Input: Nessuno
+         * 📤 Output: Overlay rimosso
+         */
+        closeChatOverlay() {
+            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay--experience-chat');
+            if (overlay) {
+                overlay.remove();
+            }
+            document.removeEventListener('keydown', this.handleChatEscapeKey);
+        }
+    };
+
+    /**
      * ⚙️ MODULO: ChatbotConfig
      * 🎯 Scopo: Gestisce configurazione del chatbot
      * 📋 Responsabilità: Opzioni default, merge configurazioni, validazione
@@ -2208,10 +2701,16 @@
                 '.chatbot-powered': this.t('powered')
             };
 
-            // Aggiorna quick actions
+            // Aggiorna quick actions (testo visibile e data-text)
             const quickActions = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-quick-action');
-            if (quickActions.length >= 1) quickActions[0].textContent = this.t('quickAction1');
-            if (quickActions.length >= 2) quickActions[1].textContent = this.t('quickAction2');
+            if (quickActions.length >= 1) {
+                quickActions[0].textContent = this.t('quickAction1');
+                quickActions[0].setAttribute('data-text', this.t('quickAction1'));
+            }
+            if (quickActions.length >= 2) {
+                quickActions[1].textContent = this.t('quickAction2');
+                quickActions[1].setAttribute('data-text', this.t('quickAction2'));
+            }
 
             // Aggiorna altri elementi
             Object.entries(elements).forEach(([selector, value]) => {
