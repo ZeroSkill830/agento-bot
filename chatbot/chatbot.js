@@ -222,10 +222,14 @@
      */
     async loadStyles() {
         try {
+            // Determina il percorso del CSS basandosi sulla posizione dello script
+            const scriptSrc = this.getScriptPath();
+            const cssPath = scriptSrc.replace('chatbot.js', 'chatbot.css');
+            
             // Usa <link> invece di fetch per evitare problemi CORS con file://
             const linkElement = document.createElement('link');
             linkElement.rel = 'stylesheet';
-            linkElement.href = 'chatbot/chatbot.css';
+            linkElement.href = cssPath;
             
             // Promessa per sapere quando il CSS è caricato
             const loadPromise = new Promise((resolve, reject) => {
@@ -248,6 +252,29 @@
             // Fallback già caricato nell'onerror
         }
     },
+
+        /**
+         * 🎯 Scopo: Ottiene il percorso del file script corrente
+         * 📥 Input: Nessuno
+         * 📤 Output: URL completo del file chatbot.js
+         */
+        getScriptPath() {
+            // Cerca tra tutti i script per trovare quello che contiene chatbot.js
+            const scripts = document.querySelectorAll('script[src*="chatbot.js"]');
+            if (scripts.length > 0) {
+                return scripts[scripts.length - 1].src; // Prende l'ultimo script caricato
+            }
+            
+            // Fallback: cerca nell'elemento script corrente
+            const currentScript = document.currentScript;
+            if (currentScript && currentScript.src) {
+                return currentScript.src;
+            }
+            
+            // Fallback finale: percorso relativo di default
+            console.warn('⚠️ Impossibile determinare il percorso dello script, uso fallback');
+            return 'chatbot/chatbot.css';
+        },
 
         /**
          * 🎯 Scopo: Carica stili CSS di fallback
