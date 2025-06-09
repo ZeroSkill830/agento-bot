@@ -2597,7 +2597,8 @@
             theme: 'light',
             clientId: '89b90056-4cc4-054a-a3db-9a3c0ded7efc',
             apiEndpoint: null,
-            welcomeMessage: 'Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?'
+            welcomeMessage: 'Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?',
+            chatbotName: null // Sarà automaticamente impostato in base alla lingua
         },
 
         current: {},
@@ -2607,7 +2608,7 @@
          */
         translations: {
             it: {
-                title: 'Assistente Virtuale',
+                title: '{chatbotName}',
                 welcomeMessage: 'Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?',
                 placeholder: 'Scrivi un messaggio...',
                 typing: 'L\'assistente sta scrivendo...',
@@ -2616,7 +2617,7 @@
                 sendLabel: 'Invia messaggio',
                 quickAction1: 'Organizzate visite?',
                 quickAction2: 'Degustiamo insieme?',
-                powered: 'Powered by Chatbot v1.0',
+                powered: 'Powered by {chatbotName} v1.0',
                 // Tasting
                 selectLevel: 'Seleziona il tuo livello',
                 beginner: 'Principiante',
@@ -2633,7 +2634,7 @@
                 close: 'Chiudi'
             },
             en: {
-                title: 'Virtual Assistant',
+                title: '{chatbotName}',
                 welcomeMessage: 'Hello! 👋 I\'m your virtual assistant. How can I help you today?',
                 placeholder: 'Type a message...',
                 typing: 'Assistant is typing...',
@@ -2642,7 +2643,7 @@
                 sendLabel: 'Send message',
                 quickAction1: 'Do you organize visits?',
                 quickAction2: 'Let\'s taste together?',
-                powered: 'Powered by Chatbot v1.0',
+                powered: 'Powered by {chatbotName} v1.0',
                 // Tasting
                 selectLevel: 'Select your level',
                 beginner: 'Beginner',
@@ -2678,11 +2679,24 @@
         /**
          * 🎯 Scopo: Ottiene testo tradotto per lingua corrente
          * 📥 Input: key (string) - chiave traduzione
-         * 📤 Output: Testo tradotto
+         * 📤 Output: Testo tradotto con placeholder sostituiti
          */
         t(key) {
             const lang = this.current.language || 'it';
-            return this.translations[lang]?.[key] || this.translations.it[key] || key;
+            let text = this.translations[lang]?.[key] || this.translations.it[key] || key;
+            
+            // Determina il nome del chatbot di default in base alla lingua
+            const defaultNames = {
+                'it': 'Assistente Virtuale',
+                'en': 'Virtual Assistant'
+            };
+            
+            const chatbotName = this.current.chatbotName || defaultNames[lang] || defaultNames.it;
+            
+            // Sostituisce placeholder con valori di configurazione
+            text = text.replace('{chatbotName}', chatbotName);
+            
+            return text;
         },
 
         /**
