@@ -7,30 +7,30 @@
 
 /* 🎨 CSS Variables - Design System */
 :host {
-  /* Colori primari */
-  --chatbot-primary: #2563eb;
-  --chatbot-primary-hover: #1d4ed8;
-  --chatbot-primary-light: #dbeafe;
+  /* Colori primari - Wine Theme Light */
+  --chatbot-primary: #B83C5E;
+  --chatbot-primary-hover: #A73255;
+  --chatbot-primary-light: #F8E8EC;
   
   /* Colori secondari */
-  --chatbot-secondary: #64748b;
-  --chatbot-secondary-light: #f1f5f9;
+  --chatbot-secondary: #C7677F;
+  --chatbot-secondary-light: #FDF7F8;
   
   /* Sfondo e superficie */
   --chatbot-bg: #ffffff;
-  --chatbot-surface: #f8fafc;
-  --chatbot-border: #e2e8f0;
+  --chatbot-surface: #FEFBFC;
+  --chatbot-border: #F0E4E7;
   
   /* Testo */
-  --chatbot-text-primary: #1e293b;
-  --chatbot-text-secondary: #64748b;
+  --chatbot-text-primary: #2C1F21;
+  --chatbot-text-secondary: #7A5A60;
   --chatbot-text-inverse: #ffffff;
   
   /* Messaggi */
-  --chatbot-message-user-bg: #2563eb;
+  --chatbot-message-user-bg: #B83C5E;
   --chatbot-message-user-text: #ffffff;
-  --chatbot-message-bot-bg: #f1f5f9;
-  --chatbot-message-bot-text: #1e293b;
+  --chatbot-message-bot-bg: #f1f0f0;
+  --chatbot-message-bot-text: #2C1F21;
   
   /* Spacing (8px grid system) */
   --chatbot-spacing-xs: 4px;
@@ -69,13 +69,13 @@
 
 /* 🌙 Dark Mode Support (opzionale - da implementare in Fase 3) */
 :host([data-theme="dark"]) {
-  --chatbot-bg: #1e293b;
-  --chatbot-surface: #334155;
-  --chatbot-border: #475569;
-  --chatbot-text-primary: #f1f5f9;
-  --chatbot-text-secondary: #94a3b8;
-  --chatbot-message-bot-bg: #334155;
-  --chatbot-message-bot-text: #f1f5f9;
+  --chatbot-bg: #2A1A1D;
+  --chatbot-surface: #3A2528;
+  --chatbot-border: #4F343A;
+  --chatbot-text-primary: #F8F4F5;
+  --chatbot-text-secondary: #D4B7BC;
+  --chatbot-message-bot-bg: #3A2528;
+  --chatbot-message-bot-text: #F8F4F5;
 }
 
 /* 🧹 Reset e base styles */
@@ -130,9 +130,9 @@
   position: fixed;
   bottom: 100px;
   right: var(--chatbot-spacing-lg);
-  width: 400px;
+  width: 500px;
   max-width: calc(100vw - 48px);
-  height: 600px;
+  height: 800px;
   max-height: calc(100vh - 120px);
   background: var(--chatbot-bg);
   border-radius: var(--chatbot-radius-lg);
@@ -201,6 +201,96 @@
   font-size: var(--chatbot-font-size-lg);
   font-weight: 600;
   margin: 0;
+}
+
+.chatbot-header-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--chatbot-spacing-sm);
+}
+
+/* 🌐 Selettore Lingua */
+.chatbot-language-selector {
+  position: relative;
+}
+
+.chatbot-language-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--chatbot-text-inverse);
+  padding: 6px 8px;
+  border-radius: var(--chatbot-radius-sm);
+  cursor: pointer;
+  font-size: var(--chatbot-font-size-sm);
+  font-weight: 500;
+  transition: var(--chatbot-transition);
+  min-width: 50px;
+}
+
+.chatbot-language-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.chatbot-language-current {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.chatbot-language-arrow {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.chatbot-language-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: var(--chatbot-bg);
+  border: 1px solid var(--chatbot-border);
+  border-radius: var(--chatbot-radius-md);
+  box-shadow: var(--chatbot-shadow-lg);
+  min-width: 140px;
+  z-index: 1000;
+  display: none;
+  overflow: hidden;
+}
+
+.chatbot-language-option {
+  display: flex;
+  align-items: center;
+  gap: var(--chatbot-spacing-sm);
+  width: 100%;
+  padding: var(--chatbot-spacing-sm) var(--chatbot-spacing-md);
+  background: transparent;
+  border: none;
+  color: var(--chatbot-text);
+  cursor: pointer;
+  font-size: var(--chatbot-font-size-sm);
+  transition: var(--chatbot-transition);
+  text-align: left;
+}
+
+.chatbot-language-option:hover {
+  background: var(--chatbot-surface);
+}
+
+.chatbot-language-option:active {
+  background: var(--chatbot-primary-light);
+}
+
+.chatbot-language-flag {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.chatbot-language-name {
+  font-weight: 500;
 }
 
 .chatbot-close {
@@ -369,70 +459,143 @@
   cursor: not-allowed;
 }
 
-/* 🍷 Wine Cards */
+/* 🍷 Wine Cards - Modern Design */
 .chatbot-wine-cards {
   display: flex;
   flex-direction: row;
-  gap: var(--chatbot-spacing-sm);
+  gap: 16px;
   margin-top: var(--chatbot-spacing-sm);
-  padding-bottom: var(--chatbot-spacing-xs);
+  padding: 8px 0 var(--chatbot-spacing-xs) 0;
 }
 
 .chatbot-wine-card {
-  background: var(--chatbot-surface);
-  border: 1px solid var(--chatbot-border);
-  border-radius: var(--chatbot-radius-md);
-  padding: var(--chatbot-spacing-md);
-  transition: var(--chatbot-transition);
-  flex: 0 0 250px;
-  min-width: 250px;
+  background: linear-gradient(135deg, #8B1538 0%, #B83C5E 100%);
+  border: 1px solid rgba(139, 21, 56, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  flex: 0 0 280px;
+  min-width: 280px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(139, 21, 56, 0.15);
+  cursor: pointer;
+  transform: translateY(0);
 }
 
 .chatbot-wine-card:hover {
-  border-color: var(--chatbot-primary-light);
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(139, 21, 56, 0.25);
+  border-color: rgba(139, 21, 56, 0.3);
 }
 
 .chatbot-wine-name {
+  font-weight: 700;
+  font-size: 20px;
+  color: white;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  max-width: 80%;
+}
+
+.chatbot-wine-producer {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.95);
   font-weight: 600;
-  font-size: var(--chatbot-font-size-md);
-  color: var(--chatbot-text-primary);
-  margin-bottom: var(--chatbot-spacing-xs);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  margin-bottom: 16px;
 }
 
 .chatbot-wine-details {
   display: flex;
-  flex-direction: column;
-  gap: var(--chatbot-spacing-xs);
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-.chatbot-wine-detail {
-  display: flex;
-  font-size: var(--chatbot-font-size-sm);
-  color: var(--chatbot-text-secondary);
+.chatbot-wine-chip {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(2px);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
 }
 
-.chatbot-wine-label {
-  font-weight: 500;
-  min-width: 70px;
-  color: var(--chatbot-text-primary);
-}
-
-.chatbot-wine-value {
-  flex: 1;
+.chatbot-wine-chip:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.05);
 }
 
 .chatbot-wine-category {
-  display: inline-block;
-  background: var(--chatbot-primary-light);
-  color: var(--chatbot-primary);
-  padding: 2px var(--chatbot-spacing-xs);
-  border-radius: var(--chatbot-radius-sm);
-  font-size: var(--chatbot-font-size-xs);
-  font-weight: 500;
-  text-transform: capitalize;
-  margin-top: var(--chatbot-spacing-xs);
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  color: #8B1538;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  align-self: flex-start;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.9);
 }
+
+.chatbot-wine-category:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: white;
+}
+
+.chatbot-wine-vintage-badge {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #8B1538;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* 🎬 Animazioni Wine Cards */
+@keyframes wine-card-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chatbot-wine-card {
+  animation: wine-card-slide-in 0.4s ease-out forwards;
+}
+
+.chatbot-wine-card:nth-child(1) { animation-delay: 0.1s; }
+.chatbot-wine-card:nth-child(2) { animation-delay: 0.2s; }
+.chatbot-wine-card:nth-child(3) { animation-delay: 0.3s; }
+.chatbot-wine-card:nth-child(4) { animation-delay: 0.4s; }
+.chatbot-wine-card:nth-child(5) { animation-delay: 0.5s; }
+
+/* Rimuovo l'animazione conflittuale al hover, uso solo la transition */
+
+/* 🌟 Effetti aggiuntivi rimossi per un look più elegante */
 
 /* 🎯 Experience Cards */
 .chatbot-experience-cards {
@@ -695,3 +858,449 @@
   outline: 2px solid var(--chatbot-primary);
   outline-offset: 2px;
 } 
+
+/* 🍷 TASTING OVERLAY STYLES */
+
+/* Overlay principale */
+.chatbot-tasting-overlay {
+  position: fixed;
+  bottom: 100px;
+  right: var(--chatbot-spacing-lg);
+  width: 500px;
+  max-width: calc(100vw - 48px);
+  height: 800px;
+  max-height: calc(100vh - 120px);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  border-radius: var(--chatbot-radius-lg);
+  animation: chatbot-overlay-fade-in 0.3s ease-out;
+}
+
+/* Mobile responsive per overlay */
+@media (max-width: 768px) {
+  .chatbot-tasting-overlay {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+  }
+}
+
+@keyframes chatbot-overlay-fade-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Content container */
+.chatbot-tasting-overlay-content {
+  background: var(--chatbot-bg);
+  border-radius: var(--chatbot-radius-lg);
+  padding: var(--chatbot-spacing-xl);
+  width: 85%;
+  max-width: 420px;
+  max-height: 70%;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: chatbot-content-slide-up 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes chatbot-content-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .chatbot-tasting-overlay-content {
+    max-width: 95%;
+    padding: var(--chatbot-spacing-lg);
+  }
+}
+
+/* Titoli overlay */
+.chatbot-tasting-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--chatbot-text-primary);
+  margin-bottom: var(--chatbot-spacing-lg);
+  text-align: center;
+}
+
+/* Level selector cards */
+.chatbot-level-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--chatbot-spacing-md);
+  margin-bottom: var(--chatbot-spacing-lg);
+}
+
+@media (max-width: 480px) {
+  .chatbot-level-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chatbot-level-card {
+  background: var(--chatbot-surface);
+  border: 2px solid var(--chatbot-border);
+  border-radius: var(--chatbot-radius-md);
+  padding: var(--chatbot-spacing-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.chatbot-level-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.chatbot-level-card:hover {
+  border-color: var(--chatbot-primary);
+  box-shadow: 0 8px 25px rgba(139, 21, 56, 0.15);
+  transform: translateY(-4px);
+}
+
+.chatbot-level-card:hover::before {
+  left: 100%;
+}
+
+.chatbot-level-card:active {
+  transform: translateY(-2px);
+}
+
+.chatbot-level-icon {
+  font-size: 48px;
+  margin-bottom: var(--chatbot-spacing-md);
+  display: block;
+}
+
+.chatbot-level-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--chatbot-text-primary);
+  margin-bottom: var(--chatbot-spacing-sm);
+}
+
+.chatbot-level-description {
+  font-size: 14px;
+  color: var(--chatbot-text-secondary);
+  line-height: 1.4;
+}
+
+/* Stage preview */
+.chatbot-stage-description {
+  font-size: 16px;
+  color: var(--chatbot-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--chatbot-spacing-xl);
+  text-align: center;
+}
+
+.chatbot-stage-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--chatbot-spacing-md);
+}
+
+.chatbot-stage-button {
+  padding: var(--chatbot-spacing-md) var(--chatbot-spacing-xl);
+  background: var(--chatbot-primary);
+  color: var(--chatbot-text-inverse);
+  border: none;
+  border-radius: var(--chatbot-radius-md);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.chatbot-stage-button:hover {
+  background: var(--chatbot-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 21, 56, 0.3);
+}
+
+.chatbot-stage-button:active {
+  transform: translateY(0);
+}
+
+/* Loading overlay */
+.chatbot-tasting-overlay--loading .chatbot-tasting-overlay-content {
+  text-align: center;
+  padding: var(--chatbot-spacing-xl);
+}
+
+.chatbot-loading-spinner {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto var(--chatbot-spacing-lg);
+  border: 4px solid var(--chatbot-border);
+  border-top: 4px solid var(--chatbot-primary);
+  border-radius: 50%;
+  animation: chatbot-spin 1s linear infinite;
+}
+
+@keyframes chatbot-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.chatbot-loading-text {
+  font-size: 16px;
+  color: var(--chatbot-text-secondary);
+  margin: 0;
+}
+
+/* Error overlay */
+.chatbot-error-title {
+  color: #dc2626;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: var(--chatbot-spacing-md);
+  text-align: center;
+}
+
+.chatbot-error-message {
+  color: var(--chatbot-text-secondary);
+  margin-bottom: var(--chatbot-spacing-lg);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.chatbot-error-close {
+  padding: var(--chatbot-spacing-sm) var(--chatbot-spacing-lg);
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: var(--chatbot-radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+.chatbot-error-close:hover {
+  background: #b91c1c;
+}
+
+/* Tasting actions (continua/termina buttons) */
+.chatbot-tasting-actions {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid var(--chatbot-border);
+  background: var(--chatbot-surface);
+}
+
+.chatbot-continue-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--chatbot-primary);
+  color: var(--chatbot-text-inverse);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+  box-shadow: 0 4px 12px rgba(184, 60, 94, 0.3);
+}
+
+.chatbot-continue-button:hover {
+  background: var(--chatbot-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(184, 60, 94, 0.4);
+}
+
+.chatbot-continue-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(184, 60, 94, 0.5);
+  background: var(--chatbot-primary-hover);
+}
+
+.chatbot-continue-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(184, 60, 94, 0.3);
+}
+
+/* Icona animata nel bottone */
+.chatbot-continue-icon {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+/* Animazione freccia destra per "continua" */
+.chatbot-continue-button--continue .chatbot-continue-icon {
+  animation: bounceArrow 2s infinite;
+}
+
+.chatbot-continue-button--continue:hover .chatbot-continue-icon {
+  transform: translateX(4px);
+  animation: none;
+}
+
+/* Animazione freccia giù per "termina" */
+.chatbot-continue-button--end .chatbot-continue-icon {
+  animation: pulseDown 2s infinite;
+}
+
+.chatbot-continue-button--end:hover .chatbot-continue-icon {
+  transform: translateY(2px);
+  animation: none;
+}
+
+/* Stile per bottone "termina degustazione" */
+.chatbot-continue-button--end {
+  background: #059669;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.chatbot-continue-button--end:hover {
+  background: #047857;
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+}
+
+.chatbot-continue-button--end:focus {
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.5);
+  background: #047857;
+}
+
+/* Keyframes per animazioni */
+@keyframes bounceArrow {
+  0%, 100% { 
+    transform: translateX(0px); 
+  }
+  50% { 
+    transform: translateX(6px); 
+  }
+}
+
+@keyframes pulseDown {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(4px); 
+  }
+}
+
+/* 💬 TASTING CHAT OVERLAY */
+
+/* Container chat degustazione */
+.chatbot-tasting-chat-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--chatbot-bg);
+  border-radius: var(--chatbot-radius-lg);
+  overflow: hidden;
+}
+
+/* Header chat degustazione */
+.chatbot-tasting-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--chatbot-spacing-md);
+  background: var(--chatbot-primary);
+  color: var(--chatbot-text-inverse);
+  border-bottom: 1px solid var(--chatbot-border);
+}
+
+.chatbot-tasting-chat-title {
+  font-size: var(--chatbot-font-size-lg);
+  font-weight: 600;
+  margin: 0;
+  color: var(--chatbot-text-inverse);
+}
+
+.chatbot-tasting-chat-close {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  color: var(--chatbot-text-inverse);
+  cursor: pointer;
+  border-radius: var(--chatbot-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--chatbot-transition);
+}
+
+.chatbot-tasting-chat-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.chatbot-tasting-chat-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Area messaggi degustazione - IDENTICA alla chat principale */
+.chatbot-tasting-messages {
+  flex: 1;
+  padding: var(--chatbot-spacing-md);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  background: var(--chatbot-surface);
+}
+
+/* Actions container degustazione - riutilizza stili esistenti */
+
+/* Scrollbar per chat degustazione */
+.chatbot-tasting-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatbot-tasting-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatbot-tasting-messages::-webkit-scrollbar-thumb {
+  background: var(--chatbot-border);
+  border-radius: var(--chatbot-radius-sm);
+}
+
+.chatbot-tasting-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--chatbot-text-secondary);
+}

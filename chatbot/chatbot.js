@@ -102,7 +102,7 @@
         async loadTemplate() {
             const htmlTemplate = `
                 <!-- Pulsante Toggle Chatbot -->
-                <button class="chatbot-toggle" aria-label="Apri chat" type="button">
+                <button class="chatbot-toggle" aria-label="${ChatbotConfig.t('toggleLabel')}" type="button">
                     <svg class="chatbot-toggle-icon" viewBox="0 0 24 24">
                         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
                     </svg>
@@ -112,19 +112,40 @@
                 <div class="chatbot-window" aria-hidden="true" role="dialog" aria-labelledby="chatbot-title">
                     <!-- Header -->
                     <header class="chatbot-header">
-                        <h2 class="chatbot-title" id="chatbot-title">Assistente Virtuale</h2>
-                        <button class="chatbot-close" aria-label="Chiudi chat" type="button">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                            </svg>
-                        </button>
+                        <h2 class="chatbot-title" id="chatbot-title">${ChatbotConfig.t('title')}</h2>
+                        <div class="chatbot-header-controls">
+                            <!-- Selettore Lingua -->
+                            <div class="chatbot-language-selector">
+                                <button class="chatbot-language-toggle" aria-label="Seleziona lingua" type="button">
+                                    <span class="chatbot-language-current">IT</span>
+                                    <svg class="chatbot-language-arrow" viewBox="0 0 24 24">
+                                        <path d="M7 10l5 5 5-5z"/>
+                                    </svg>
+                                </button>
+                                <div class="chatbot-language-dropdown" role="menu">
+                                    <button class="chatbot-language-option" data-lang="it" role="menuitem">
+                                        <span class="chatbot-language-flag">🇮🇹</span>
+                                        <span class="chatbot-language-name">Italiano</span>
+                                    </button>
+                                    <button class="chatbot-language-option" data-lang="en" role="menuitem">
+                                        <span class="chatbot-language-flag">🇬🇧</span>
+                                        <span class="chatbot-language-name">English</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="chatbot-close" aria-label="${ChatbotConfig.t('closeLabel')}" type="button">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </button>
+                        </div>
                     </header>
 
                     <!-- Area Messaggi -->
                     <div class="chatbot-messages" role="log" aria-live="polite" aria-label="Cronologia conversazione">
                         <div class="chatbot-welcome-message chatbot-message chatbot-message--bot">
                             <div class="chatbot-message-content">
-                                Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?
+                                ${ChatbotConfig.t('welcomeMessage')}
                             </div>
                         </div>
                     </div>
@@ -136,16 +157,16 @@
                             <span></span>
                             <span></span>
                         </div>
-                        <span class="chatbot-typing-text">L'assistente sta scrivendo...</span>
+                        <span class="chatbot-typing-text">${ChatbotConfig.t('typing')}</span>
                     </div>
 
                     <!-- Quick Actions -->
                     <div class="chatbot-quick-actions">
-                        <button class="chatbot-quick-action" data-text="Organizzate visite?" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/winery/experiences">
-                            Organizzate visite?
+                        <button class="chatbot-quick-action" data-text="${ChatbotConfig.t('quickAction1')}" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/winery/experiences">
+                            ${ChatbotConfig.t('quickAction1')}
                         </button>
-                        <button class="chatbot-quick-action" data-text="Degustiamo insieme?" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/wine-knowledge/wines">
-                            Degustiamo insieme?
+                        <button class="chatbot-quick-action" data-text="${ChatbotConfig.t('quickAction2')}" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/wine-knowledge/wines">
+                            ${ChatbotConfig.t('quickAction2')}
                         </button>
                     </div>
 
@@ -156,16 +177,16 @@
                                 <input 
                                     type="text" 
                                     class="chatbot-input" 
-                                    placeholder="Scrivi un messaggio..." 
+                                    placeholder="${ChatbotConfig.t('placeholder')}" 
                                     autocomplete="off"
-                                    aria-label="Scrivi il tuo messaggio"
+                                    aria-label="${ChatbotConfig.t('placeholder')}"
                                     maxlength="500"
                                 />
                                 <button 
                                     type="submit" 
                                     class="chatbot-send-button" 
                                     disabled 
-                                    aria-label="Invia messaggio"
+                                    aria-label="${ChatbotConfig.t('sendLabel')}"
                                 >
                                     <svg viewBox="0 0 24 24">
                                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
@@ -177,7 +198,7 @@
 
                     <!-- Footer -->
                     <footer class="chatbot-footer">
-                        <div class="chatbot-powered">Powered by Chatbot v1.0</div>
+                        <div class="chatbot-powered">${ChatbotConfig.t('powered')}</div>
                     </footer>
                 </div>
 
@@ -256,7 +277,7 @@
                 .chatbot-window {
                   position: fixed;
                   bottom: 100px; right: var(--chatbot-spacing-lg);
-                  width: 400px; height: 600px;
+                  width: 500px; height: 800px;
                   background: white;
                   border-radius: var(--chatbot-radius-lg);
                   box-shadow: var(--chatbot-shadow-xl);
@@ -337,6 +358,21 @@
          * 📤 Output: Finestra chiusa con animazione
          */
         closeChatbot(window, toggle) {
+            // Controlla se c'è un overlay di degustazione (livello, preview, o chat) e rimuovilo
+            const tastingOverlay = this.shadowRoot.querySelector('.chatbot-tasting-overlay');
+            if (tastingOverlay) {
+                console.log('🍷 Overlay di degustazione rilevato, rimozione in corso...');
+                ChatbotTasting.removeOverlay();
+                // Reset stato degustazione se era attiva
+                if (ChatbotTasting.isActive) {
+                    ChatbotTasting.isActive = false;
+                    ChatbotTasting.currentTasting = null;
+                    ChatbotTasting.currentWineName = null;
+                    ChatbotTasting.currentWineId = null;
+                    ChatbotTasting.currentWineIndex = null;
+                }
+            }
+            
             // Aggiorna attributi ARIA
             window.setAttribute('aria-hidden', 'true');
             toggle.setAttribute('aria-label', 'Apri chat');
@@ -449,6 +485,58 @@
                             this.handleQuickAction(text, apiUrl);
                         }
                     });
+                });
+            }
+
+            // Event listeners per selettore lingua
+            const languageToggle = this.shadowRoot.querySelector('.chatbot-language-toggle');
+            const languageDropdown = this.shadowRoot.querySelector('.chatbot-language-dropdown');
+            const languageOptions = this.shadowRoot.querySelectorAll('.chatbot-language-option');
+
+            // Toggle dropdown
+            if (languageToggle && languageDropdown) {
+                languageToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isVisible = languageDropdown.style.display === 'block';
+                    languageDropdown.style.display = isVisible ? 'none' : 'block';
+                    
+                    // Toggle arrow rotation
+                    const arrow = languageToggle.querySelector('.chatbot-language-arrow');
+                    if (arrow) {
+                        arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+                        arrow.style.transition = 'transform 0.2s ease';
+                    }
+                });
+
+                // Handle language selection
+                languageOptions.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const newLanguage = option.getAttribute('data-lang');
+                        if (newLanguage && ChatbotConfig.setLanguage(newLanguage)) {
+                            // Close dropdown
+                            languageDropdown.style.display = 'none';
+                            
+                            // Reset arrow
+                            const arrow = languageToggle.querySelector('.chatbot-language-arrow');
+                            if (arrow) {
+                                arrow.style.transform = 'rotate(0deg)';
+                            }
+                            
+                            console.log(`🌐 Lingua cambiata a: ${newLanguage}`);
+                        }
+                    });
+                });
+
+                // Close dropdown when clicking outside
+                this.shadowRoot.addEventListener('click', () => {
+                    if (languageDropdown.style.display === 'block') {
+                        languageDropdown.style.display = 'none';
+                        const arrow = languageToggle.querySelector('.chatbot-language-arrow');
+                        if (arrow) {
+                            arrow.style.transform = 'rotate(0deg)';
+                        }
+                    }
                 });
             }
 
@@ -636,10 +724,20 @@
             dynamicMessages.forEach(msg => msg.remove());
 
             // Renderizza tutti i messaggi
+            let hasWineCards = false;
             this.messages.forEach(message => {
                 const messageElement = this.createMessageElement(message);
                 messagesContainer.appendChild(messageElement);
+                
+                if (message.isWineCards) {
+                    hasWineCards = true;
+                }
             });
+
+            // Configura event listeners per wine cards se presenti
+            if (hasWineCards) {
+                setTimeout(() => this.setupWineCardListeners(), 100);
+            }
 
             this.scrollToBottom();
         },
@@ -667,6 +765,10 @@
             else if (message.isExperienceCards && message.experienceCardsHtml) {
                 contentDiv.innerHTML = message.experienceCardsHtml;
             } 
+            // Gestione speciale per tasting actions
+            else if (message.isTastingActions && message.actionsHtml) {
+                contentDiv.innerHTML = message.actionsHtml;
+            }
             else {
                 contentDiv.textContent = message.text;
             }
@@ -926,38 +1028,52 @@
         },
 
         /**
-         * 🎯 Scopo: Crea HTML per le wine cards
+         * 🎯 Scopo: Crea HTML per le wine cards con design moderno
          * 📥 Input: wines (array di oggetti vino)
          * 📤 Output: HTML string delle cards
          */
         createWineCardsHtml(wines) {
             let cardsHtml = '<div class="chatbot-wine-cards">';
             
-            wines.forEach(wine => {
+            wines.forEach((wine, index) => {
                 cardsHtml += `
-                    <div class="chatbot-wine-card">
+                    <div class="chatbot-wine-card" data-wine-name="${wine.name || ''}" data-wine-id="${wine.id || ''}" data-wine-index="${index}">
+                        ${wine.vintage ? `<div class="chatbot-wine-vintage-badge">${wine.vintage}</div>` : ''}
                         <div class="chatbot-wine-name">${wine.name || 'Nome non disponibile'}</div>
+                        <div class="chatbot-wine-producer">${wine.producer || 'Produttore sconosciuto'}</div>
                         <div class="chatbot-wine-details">
-                            <div class="chatbot-wine-detail">
-                                <span class="chatbot-wine-label">Produttore:</span>
-                                <span class="chatbot-wine-value">${wine.producer || 'N/A'}</span>
-                            </div>
-                            <div class="chatbot-wine-detail">
-                                <span class="chatbot-wine-label">Regione:</span>
-                                <span class="chatbot-wine-value">${wine.region || 'N/A'}</span>
-                            </div>
-                            <div class="chatbot-wine-detail">
-                                <span class="chatbot-wine-label">Annata:</span>
-                                <span class="chatbot-wine-value">${wine.vintage || 'N/A'}</span>
-                            </div>
+                            ${wine.region ? `<div class="chatbot-wine-chip">📍 ${wine.region}</div>` : ''}
+                            ${wine.type ? `<div class="chatbot-wine-chip">🍇 ${wine.type}</div>` : ''}
+                            ${wine.category ? `<div class="chatbot-wine-chip">⭐ ${wine.category}</div>` : ''}
                         </div>
-                        ${wine.category ? `<div class="chatbot-wine-category">${wine.category}</div>` : ''}
                     </div>
                 `;
             });
             
-                        cardsHtml += '</div>';
+            cardsHtml += '</div>';
             return cardsHtml;
+        },
+
+        /**
+         * 🎯 Scopo: Configura event listeners per wine cards dopo il render
+         * 📥 Input: Nessuno
+         * 📤 Output: Event listeners configurati
+         */
+        setupWineCardListeners() {
+            const wineCards = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-wine-card');
+            wineCards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const wineName = card.getAttribute('data-wine-name');
+                    const wineId = card.getAttribute('data-wine-id');
+                    const wineIndex = card.getAttribute('data-wine-index');
+                    
+                    if (wineName && wineId) {
+                        console.log('🍷 Wine card clicked:', wineName, 'ID:', wineId);
+                        ChatbotTasting.startTasting(wineName, wineIndex, wineId);
+                    }
+                });
+            });
         },
 
         /**
@@ -1131,7 +1247,8 @@
                     body: JSON.stringify({
                         text: message,
                         user: this.userGUID,
-                        client: this.clientId
+                        client: this.clientId,
+                        language: ChatbotConfig.current.language || 'it'
                     })
                 });
 
@@ -1255,6 +1372,697 @@
     };
 
     /**
+    /**
+     * 🍷 MODULO: ChatbotTasting
+     * 🎯 Scopo: Gestisce il flusso di degustazione vino
+     * 📋 Responsabilità: Overlay selezione livello, API tasting, gestione stages
+     */
+    const ChatbotTasting = {
+        /**
+         * 📝 Proprietà del modulo
+         */
+        currentTasting: null,
+        currentWineName: null,
+        currentWineId: null,
+        currentWineIndex: null,
+        isActive: false,
+
+        /**
+         * 🎯 Scopo: Avvia flusso di degustazione vino
+         * 📥 Input: wineName (string), wineIndex (number), wineId (string)
+         * 📤 Output: Overlay selezione livello visualizzato
+         */
+        startTasting(wineName, wineIndex, wineId) {
+            console.log('🍷 Avvio degustazione per:', wineName, 'ID:', wineId);
+            this.currentWineName = wineName;
+            this.currentWineId = wineId;
+            this.currentWineIndex = wineIndex;
+            this.showLevelSelector();
+        },
+
+        /**
+         * 🎯 Scopo: Mostra overlay per selezione livello (principiante/esperto)
+         * 📥 Input: Nessuno
+         * 📤 Output: Overlay visualizzato
+         */
+        showLevelSelector() {
+            this.createOverlay('level-selector', `
+                <div class="chatbot-tasting-overlay-content">
+                    <h2 class="chatbot-tasting-title">${ChatbotConfig.t('selectLevel')}</h2>
+                    <div class="chatbot-level-cards">
+                        <div class="chatbot-level-card" data-level="beginner">
+                            <div class="chatbot-level-icon">🌱</div>
+                            <h3 class="chatbot-level-name">${ChatbotConfig.t('beginner')}</h3>
+                            <p class="chatbot-level-description">${ChatbotConfig.t('beginnerDesc')}</p>
+                        </div>
+                        <div class="chatbot-level-card" data-level="expert">
+                            <div class="chatbot-level-icon">🍷</div>
+                            <h3 class="chatbot-level-name">${ChatbotConfig.t('expert')}</h3>
+                            <p class="chatbot-level-description">${ChatbotConfig.t('expertDesc')}</p>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            // Setup event listeners per selezione livello
+            const levelCards = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-level-card');
+            levelCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const level = card.getAttribute('data-level');
+                    this.selectLevel(level);
+                });
+            });
+        },
+
+        /**
+         * 🎯 Scopo: Gestisce selezione livello e chiamata API
+         * 📥 Input: level (string) - 'beginner' o 'expert'
+         * 📤 Output: Chiamata API e passaggio al prossimo step
+         */
+        async selectLevel(level) {
+            console.log('📝 Livello selezionato:', level);
+            
+            try {
+                this.removeOverlay();
+                this.showLoadingOverlay();
+
+                // Chiamata API tasting
+                const tastingData = await this.callTastingAPI(level);
+                
+                this.removeOverlay();
+                this.currentTasting = tastingData;
+                this.showStagePreview();
+
+            } catch (error) {
+                console.error('❌ Errore selezione livello:', error);
+                this.removeOverlay();
+                this.showErrorOverlay('Errore durante l\'avvio della degustazione. Riprova.');
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Chiama API per iniziare degustazione
+         * 📥 Input: level (string), stage (string, opzionale)
+         * 📤 Output: Dati degustazione dalla API
+         */
+        async callTastingAPI(level, stage = 'visual') {
+            if (!ChatbotAPI.isAuthenticated) {
+                throw new Error('API non autenticata');
+            }
+
+            const payload = {
+                language: ChatbotConfig.current.language || 'it',
+                mode: level, // 'beginner' o 'expert'
+                userId: ChatbotAPI.userGUID,
+                wineName: this.currentWineId,
+                stage: stage
+            };
+
+            console.log('📡 Payload tasting API:', payload);
+
+            const response = await fetch(`${ChatbotAPI.baseURL}/api/wine-tasting`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${ChatbotAPI.token}`,
+                    'ngrok-skip-browser-warning': 'true'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Errore API: ${response.status}`);
+            }
+
+            return await response.json();
+        },
+
+        /**
+         * 🎯 Scopo: Mostra overlay con anteprima stage corrente
+         * 📥 Input: Nessuno
+         * 📤 Output: Overlay stage preview visualizzato
+         */
+        showStagePreview() {
+            if (!this.currentTasting) return;
+
+            const { currentStage, previewText } = this.currentTasting;
+
+            this.createOverlay('stage-preview', `
+                <div class="chatbot-tasting-overlay-content">
+                    <h2 class="chatbot-tasting-title">${ChatbotConfig.t('stage')}: ${currentStage}</h2>
+                    <p class="chatbot-stage-description">${previewText || 'Iniziamo questa fase della degustazione.'}</p>
+                    <div class="chatbot-stage-actions">
+                        <button class="chatbot-stage-button chatbot-stage-start" data-action="start">
+                            ${ChatbotConfig.t('start')}
+                        </button>
+                    </div>
+                </div>
+            `);
+
+            // Setup event listener per bottone start
+            const startButton = ChatbotUI.shadowRoot.querySelector('.chatbot-stage-start');
+            if (startButton) {
+                startButton.addEventListener('click', () => {
+                    this.startStage();
+                });
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Avvia stage di degustazione
+         * 📥 Input: Nessuno
+         * 📤 Output: Overlay rimosso, chat di degustazione mostrata
+         */
+        startStage() {
+            this.removeOverlay();
+            this.isActive = true;
+            this.showTastingChat();
+        },
+
+        /**
+         * 🎯 Scopo: Mostra overlay chat dedicato per la degustazione
+         * 📥 Input: Nessuno
+         * 📤 Output: Chat di degustazione visualizzata
+         */
+        showTastingChat() {
+            if (!this.currentTasting) return;
+
+            const { currentStage } = this.currentTasting;
+
+            this.createOverlay('tasting-chat', `
+                <div class="chatbot-tasting-chat-container">
+                    <div class="chatbot-tasting-chat-header">
+                        <h3 class="chatbot-tasting-chat-title">${ChatbotConfig.t('stage')}: ${currentStage}</h3>
+                        <button class="chatbot-tasting-chat-close" id="tasting-close-button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="chatbot-tasting-messages" id="tasting-messages"></div>
+                    
+                    <!-- Typing indicator - IDENTICO alla chat principale -->
+                    <div class="chatbot-typing" id="tasting-typing-indicator" style="display: none;">
+                        <div class="chatbot-typing-indicator">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="chatbot-typing-text">${ChatbotConfig.t('typing')}</div>
+                    </div>
+                    
+                    <!-- Area azioni degustazione -->
+                    <div class="chatbot-tasting-actions" id="tasting-actions-area" style="display: none;">
+                        <!-- Il bottone continua sarà aggiunto qui dinamicamente -->
+                    </div>
+                    
+                    <!-- Area input - IDENTICA alla chat principale -->
+                    <div class="chatbot-input-area" id="tasting-input-area" style="display: none;">
+                        <form class="chatbot-input-form" id="tasting-input-form">
+                            <div class="chatbot-input-container">
+                                <input 
+                                    type="text" 
+                                    class="chatbot-input" 
+                                    id="tasting-input"
+                                    placeholder="${ChatbotConfig.t('placeholder')}" 
+                                    autocomplete="off"
+                                >
+                                <button 
+                                    type="submit" 
+                                    class="chatbot-send-button" 
+                                    id="tasting-send-button"
+                                    aria-label="${ChatbotConfig.t('sendLabel')}"
+                                    disabled
+                                >
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22,2 15,22 11,13 2,9"></polygon>
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `);
+
+            // Avvia i messaggi dopo un breve delay
+            setTimeout(() => {
+                // Setup event listeners dopo che l'HTML è renderizzato
+                this.setupTastingInputListeners();
+                this.showStageMessages();
+            }, 300);
+        },
+
+        /**
+         * 🎯 Scopo: Mostra messaggi dello stage automaticamente nella chat di degustazione
+         * 📥 Input: Nessuno
+         * 📤 Output: Messaggi mostrati con delay nella chat dedicata
+         */
+        async showStageMessages() {
+            if (!this.currentTasting || !this.currentTasting.chunks) return;
+
+            const chunks = this.currentTasting.chunks;
+            const messagesContainer = ChatbotUI.shadowRoot.querySelector('#tasting-messages');
+            
+            if (!messagesContainer) {
+                console.error('❌ Container messaggi degustazione non trovato');
+                return;
+            }
+
+            console.log('📝 Mostrando chunks stage:', chunks.length);
+
+            // Mostra ogni chunk con delay
+            for (let i = 0; i < chunks.length; i++) {
+                const chunk = chunks[i];
+                
+                // Delay prima di ogni messaggio
+                await new Promise(resolve => setTimeout(resolve, i === 0 ? 500 : 2000));
+                
+                // Mostra typing indicator
+                this.showTastingTyping(messagesContainer);
+                
+                // Delay per il typing
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Nascondi typing e mostra messaggio
+                this.hideTastingTyping(messagesContainer);
+                this.addTastingMessage(messagesContainer, chunk.text);
+            }
+
+            // Mostra input per permettere interazione
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            this.showTastingInput();
+            
+            // Mostra bottone continua nel footer dopo tutti i messaggi
+            this.showTastingContinueButton();
+        },
+
+        /**
+         * 🎯 Scopo: Aggiunge messaggio alla chat di degustazione (STESSO STILE CHAT PRINCIPALE)
+         * 📥 Input: container, text
+         * 📤 Output: Messaggio aggiunto
+         */
+        addTastingMessage(container, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chatbot-message chatbot-message--bot';
+            messageDiv.setAttribute('data-message-id', Date.now() + Math.random());
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'chatbot-message-content';
+            contentDiv.textContent = text;
+
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'chatbot-message-time';
+            timeDiv.textContent = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        },
+
+        /**
+         * 🎯 Scopo: Mostra typing indicator nella chat di degustazione (FISSO IN BASSO)
+         * 📥 Input: container
+         * 📤 Output: Typing indicator mostrato
+         */
+        showTastingTyping(container) {
+            const typingIndicator = ChatbotUI.shadowRoot.querySelector('#tasting-typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.style.display = 'flex';
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Nasconde typing indicator nella chat di degustazione
+         * 📥 Input: container
+         * 📤 Output: Typing indicator nascosto
+         */
+        hideTastingTyping(container) {
+            const typingIndicator = ChatbotUI.shadowRoot.querySelector('#tasting-typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.style.display = 'none';
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Mostra bottone continua nell'area azioni footer
+         * 📥 Input: Nessuno
+         * 📤 Output: Bottone aggiunto nel footer
+         */
+        showTastingContinueButton() {
+            const actionsArea = ChatbotUI.shadowRoot.querySelector('#tasting-actions-area');
+            if (!actionsArea) {
+                console.error('❌ Area azioni degustazione non trovata');
+                return;
+            }
+
+            // Se il nextStage è "feedback", considera la degustazione come terminata
+            const hasNextStage = this.currentTasting.nextStage && this.currentTasting.nextStage !== 'feedback';
+            const buttonText = hasNextStage ? ChatbotConfig.t('continue') : ChatbotConfig.t('endTasting');
+            
+            // Pulisci area azioni precedenti
+            actionsArea.innerHTML = '';
+            
+            // Crea il bottone con icona animata
+            const iconSvg = hasNextStage ? 
+                `<svg class="chatbot-continue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>` : 
+                `<svg class="chatbot-continue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>`;
+            
+            actionsArea.innerHTML = `
+                <button 
+                    class="chatbot-continue-button ${hasNextStage ? 'chatbot-continue-button--continue' : 'chatbot-continue-button--end'}" 
+                    data-action="${hasNextStage ? 'continue' : 'end'}"
+                    aria-label="${buttonText}"
+                    title="${buttonText}"
+                >
+                    <span class="chatbot-continue-text">${buttonText}</span>
+                    ${iconSvg}
+                </button>
+            `;
+
+            // Mostra l'area azioni
+            actionsArea.style.display = 'flex';
+
+            // Setup event listener per bottone
+            const continueButton = actionsArea.querySelector('.chatbot-continue-button');
+            if (continueButton) {
+                continueButton.addEventListener('click', () => {
+                    const action = continueButton.getAttribute('data-action');
+                    if (action === 'continue') {
+                        this.continueToNextStage();
+                    } else {
+                        this.endTasting();
+                    }
+                });
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Mostra input area per interazione utente
+         * 📥 Input: Nessuno
+         * 📤 Output: Input area visibile
+         */
+        showTastingInput() {
+            const inputArea = ChatbotUI.shadowRoot.querySelector('#tasting-input-area');
+            if (inputArea) {
+                inputArea.style.display = 'block';
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Setup event listeners per input di degustazione
+         * 📥 Input: Nessuno
+         * 📤 Output: Event listeners configurati
+         */
+        setupTastingInputListeners() {
+            const form = ChatbotUI.shadowRoot.querySelector('#tasting-input-form');
+            const input = ChatbotUI.shadowRoot.querySelector('#tasting-input');
+            const sendButton = ChatbotUI.shadowRoot.querySelector('#tasting-send-button');
+            const closeButton = ChatbotUI.shadowRoot.querySelector('#tasting-close-button');
+
+            // Close button
+            if (closeButton) {
+                console.log('✅ Bottone close trovato, configurando event listener');
+                closeButton.addEventListener('click', () => {
+                    console.log('🔥 Click bottone close rilevato');
+                    this.endTasting();
+                });
+            } else {
+                console.error('❌ Bottone close non trovato!');
+            }
+
+            if (form && input && sendButton) {
+                // Form submit
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleTastingMessageSubmit();
+                });
+
+                // Input events
+                input.addEventListener('input', () => {
+                    sendButton.disabled = input.value.trim().length === 0;
+                });
+
+                // Enter key
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (input.value.trim().length > 0) {
+                            this.handleTastingMessageSubmit();
+                        }
+                    }
+                });
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Gestisce invio messaggio nella chat di degustazione
+         * 📥 Input: Nessuno
+         * 📤 Output: Messaggio inviato e risposta API
+         */
+        async handleTastingMessageSubmit() {
+            const input = ChatbotUI.shadowRoot.querySelector('#tasting-input');
+            const sendButton = ChatbotUI.shadowRoot.querySelector('#tasting-send-button');
+            const messagesContainer = ChatbotUI.shadowRoot.querySelector('#tasting-messages');
+
+            if (!input || !sendButton || !messagesContainer) return;
+
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Disabilita input durante invio
+            sendButton.disabled = true;
+            input.disabled = true;
+
+            // Aggiungi messaggio utente
+            this.addTastingUserMessage(messagesContainer, message);
+            
+            // Reset input
+            input.value = '';
+
+            try {
+                // Mostra typing indicator
+                this.showTastingTyping();
+                
+                // Chiamata API feedback
+                const response = await this.callFeedbackAPI(message);
+                
+                // Nasconde typing indicator
+                this.hideTastingTyping();
+                
+                // Mostra risposta bot (se presente)
+                if (response && response.responseToFeedback) {
+                    this.addTastingMessage(messagesContainer, response.responseToFeedback);
+                }
+                
+            } catch (error) {
+                console.error('❌ Errore invio feedback:', error);
+                this.hideTastingTyping();
+                this.addTastingMessage(messagesContainer, 'Scusa, c\'è stato un problema. Riprova più tardi.');
+            } finally {
+                // Riabilita input
+                input.disabled = false;
+                input.focus();
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Aggiunge messaggio utente alla chat di degustazione
+         * 📥 Input: container, text
+         * 📤 Output: Messaggio utente aggiunto
+         */
+        addTastingUserMessage(container, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chatbot-message chatbot-message--user';
+            messageDiv.setAttribute('data-message-id', Date.now() + Math.random());
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'chatbot-message-content';
+            contentDiv.textContent = text;
+
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'chatbot-message-time';
+            timeDiv.textContent = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        },
+
+        /**
+         * 🎯 Scopo: Chiama API feedback per messaggio utente
+         * 📥 Input: feedbackText (string)
+         * 📤 Output: Risposta API
+         */
+        async callFeedbackAPI(feedbackText) {
+            if (!ChatbotAPI.isAuthenticated || !this.currentTasting) {
+                throw new Error('API non autenticata o degustazione non attiva');
+            }
+
+            const payload = {
+                sessionId: ChatbotAPI.userGUID,
+                wineName: this.currentWineId,
+                stage: this.currentTasting.currentStage,
+                feedbackType: "stage",
+                feedbackText: feedbackText
+            };
+
+            console.log('📡 Payload feedback API:', payload);
+
+            const response = await fetch(`${ChatbotAPI.baseURL}/api/wine-tasting/feedback`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${ChatbotAPI.token}`,
+                    'ngrok-skip-browser-warning': 'true'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Errore API feedback: ${response.status}`);
+            }
+
+            return await response.json();
+        },
+
+        /**
+         * 🎯 Scopo: Continua al prossimo stage
+         * 📥 Input: Nessuno
+         * 📤 Output: Chiamata API per prossimo stage o termina se feedback
+         */
+        async continueToNextStage() {
+            // Se non c'è nextStage o è "feedback", termina la degustazione
+            if (!this.currentTasting.nextStage || this.currentTasting.nextStage === 'feedback') {
+                this.endTasting();
+                return;
+            }
+
+            try {
+                // Nascondi l'area azioni prima di procedere
+                const actionsArea = ChatbotUI.shadowRoot.querySelector('#tasting-actions-area');
+                if (actionsArea) {
+                    actionsArea.style.display = 'none';
+                }
+
+                // Rimuovi overlay chat corrente e mostra loading
+                this.removeOverlay();
+                this.showLoadingOverlay();
+
+                // Chiamata API per prossimo stage
+                const nextStageData = await this.callTastingAPI(this.currentTasting.mode || 'beginner', this.currentTasting.nextStage);
+                
+                this.removeOverlay();
+                this.currentTasting = nextStageData;
+                this.showStagePreview();
+
+            } catch (error) {
+                console.error('❌ Errore prossimo stage:', error);
+                this.removeOverlay();
+                this.showErrorOverlay('Errore durante il caricamento del prossimo stage.');
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Termina degustazione
+         * 📥 Input: Nessuno
+         * 📤 Output: Overlay chiuso, ritorno al chatbot normale
+         */
+        endTasting() {
+            console.log('✅ Degustazione terminata');
+            
+            // Nascondi l'area azioni se presente
+            const actionsArea = ChatbotUI.shadowRoot.querySelector('#tasting-actions-area');
+            if (actionsArea) {
+                actionsArea.style.display = 'none';
+            }
+            
+            // Rimuovi overlay prima di tutto
+            this.removeOverlay();
+            
+            // Reset stato degustazione
+            this.isActive = false;
+            this.currentTasting = null;
+            this.currentWineName = null;
+            this.currentWineId = null;
+            this.currentWineIndex = null;
+            
+            // Mostra messaggio di fine degustazione
+            ChatbotMessages.addMessage(ChatbotConfig.t('tastingCompleted'), 'bot');
+            
+            // Ripristina chatbot normale
+            ChatbotConfig.updateWelcomeMessage();
+        },
+
+        /**
+         * 🎯 Scopo: Crea overlay generico
+         * 📥 Input: type (string), content (string)
+         * 📤 Output: Overlay visualizzato
+         */
+        createOverlay(type, content) {
+            this.removeOverlay(); // Rimuovi overlay precedenti
+
+            const overlay = document.createElement('div');
+            overlay.className = `chatbot-tasting-overlay chatbot-tasting-overlay--${type}`;
+            overlay.innerHTML = content;
+
+            ChatbotUI.shadowRoot.appendChild(overlay);
+        },
+
+        /**
+         * 🎯 Scopo: Mostra overlay di caricamento
+         * 📥 Input: Nessuno
+         * 📤 Output: Overlay loading visualizzato
+         */
+        showLoadingOverlay() {
+            this.createOverlay('loading', `
+                <div class="chatbot-tasting-overlay-content">
+                    <div class="chatbot-loading-spinner"></div>
+                    <p class="chatbot-loading-text">${ChatbotConfig.t('loading')}</p>
+                </div>
+            `);
+        },
+
+        /**
+         * 🎯 Scopo: Mostra overlay di errore
+         * 📥 Input: message (string)
+         * 📤 Output: Overlay errore visualizzato
+         */
+        showErrorOverlay(message) {
+            this.createOverlay('error', `
+                <div class="chatbot-tasting-overlay-content">
+                    <h2 class="chatbot-error-title">${ChatbotConfig.t('error')}</h2>
+                    <p class="chatbot-error-message">${message}</p>
+                    <button class="chatbot-error-close" onclick="ChatbotTasting.removeOverlay()">
+                        ${ChatbotConfig.t('close')}
+                    </button>
+                </div>
+            `);
+        },
+
+        /**
+         * 🎯 Scopo: Rimuove overlay corrente
+         * 📥 Input: Nessuno
+         * 📤 Output: Overlay rimosso
+         */
+        removeOverlay() {
+            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+    };
+
+    /**
      * ⚙️ MODULO: ChatbotConfig
      * 🎯 Scopo: Gestisce configurazione del chatbot
      * 📋 Responsabilità: Opzioni default, merge configurazioni, validazione
@@ -1275,6 +2083,64 @@
         current: {},
 
         /**
+         * 🌐 Testi multilingua
+         */
+        translations: {
+            it: {
+                title: 'Assistente Virtuale',
+                welcomeMessage: 'Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?',
+                placeholder: 'Scrivi un messaggio...',
+                typing: 'L\'assistente sta scrivendo...',
+                toggleLabel: 'Apri chat',
+                closeLabel: 'Chiudi chat',
+                sendLabel: 'Invia messaggio',
+                quickAction1: 'Organizzate visite?',
+                quickAction2: 'Degustiamo insieme?',
+                powered: 'Powered by Chatbot v1.0',
+                // Tasting
+                selectLevel: 'Seleziona il tuo livello',
+                beginner: 'Principiante',
+                expert: 'Esperto',
+                beginnerDesc: 'Perfetto per chi inizia a scoprire il mondo del vino',
+                expertDesc: 'Per degustatori esperti che vogliono approfondire',
+                stage: 'Fase',
+                start: 'Inizia',
+                continue: 'Continua la degustazione',
+                endTasting: 'Termina Degustazione',
+                tastingCompleted: '🍷 Degustazione completata! Grazie per aver partecipato.',
+                loading: 'Caricamento...',
+                error: 'Errore',
+                close: 'Chiudi'
+            },
+            en: {
+                title: 'Virtual Assistant',
+                welcomeMessage: 'Hello! 👋 I\'m your virtual assistant. How can I help you today?',
+                placeholder: 'Type a message...',
+                typing: 'Assistant is typing...',
+                toggleLabel: 'Open chat',
+                closeLabel: 'Close chat',
+                sendLabel: 'Send message',
+                quickAction1: 'Do you organize visits?',
+                quickAction2: 'Let\'s taste together?',
+                powered: 'Powered by Chatbot v1.0',
+                // Tasting
+                selectLevel: 'Select your level',
+                beginner: 'Beginner',
+                expert: 'Expert',
+                beginnerDesc: 'Perfect for those starting to discover the wine world',
+                expertDesc: 'For experienced tasters who want to deepen their knowledge',
+                stage: 'Stage',
+                start: 'Start',
+                continue: 'Continue tasting',
+                endTasting: 'End Tasting',
+                tastingCompleted: '🍷 Tasting completed! Thank you for participating.',
+                loading: 'Loading...',
+                error: 'Error',
+                close: 'Close'
+            }
+        },
+
+        /**
          * 🎯 Scopo: Unisce configurazione utente con defaults
          * 📥 Input: userConfig (object)
          * 📤 Output: Configurazione finale
@@ -1287,6 +2153,99 @@
             
             console.log('⚙️ Configurazione applicata:', this.current);
             return this.current;
+        },
+
+        /**
+         * 🎯 Scopo: Ottiene testo tradotto per lingua corrente
+         * 📥 Input: key (string) - chiave traduzione
+         * 📤 Output: Testo tradotto
+         */
+        t(key) {
+            const lang = this.current.language || 'it';
+            return this.translations[lang]?.[key] || this.translations.it[key] || key;
+        },
+
+        /**
+         * 🎯 Scopo: Cambia lingua e aggiorna UI
+         * 📥 Input: newLanguage (string)
+         * 📤 Output: UI aggiornata
+         */
+        setLanguage(newLanguage) {
+            if (!this.translations[newLanguage]) {
+                console.warn(`⚠️ Lingua '${newLanguage}' non supportata`);
+                return false;
+            }
+
+            const oldLanguage = this.current.language;
+            this.current.language = newLanguage;
+            
+            console.log(`🌐 Lingua cambiata da '${oldLanguage}' a '${newLanguage}'`);
+            
+            // Aggiorna UI
+            this.updateUI();
+            
+            // Aggiorna messaggio benvenuto se presente
+            this.updateWelcomeMessage();
+            
+            return true;
+        },
+
+        /**
+         * 🎯 Scopo: Aggiorna testi UI per lingua corrente
+         * 📥 Input: Nessuno
+         * 📤 Output: UI aggiornata
+         */
+        updateUI() {
+            if (!ChatbotUI.shadowRoot) return;
+
+            const elements = {
+                '.chatbot-title': this.t('title'),
+                '.chatbot-input': { placeholder: this.t('placeholder') },
+                '.chatbot-toggle': { 'aria-label': this.t('toggleLabel') },
+                '.chatbot-close': { 'aria-label': this.t('closeLabel') },
+                '.chatbot-send-button': { 'aria-label': this.t('sendLabel') },
+                '.chatbot-typing-text': this.t('typing'),
+                '.chatbot-powered': this.t('powered')
+            };
+
+            // Aggiorna quick actions
+            const quickActions = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-quick-action');
+            if (quickActions.length >= 1) quickActions[0].textContent = this.t('quickAction1');
+            if (quickActions.length >= 2) quickActions[1].textContent = this.t('quickAction2');
+
+            // Aggiorna altri elementi
+            Object.entries(elements).forEach(([selector, value]) => {
+                const element = ChatbotUI.shadowRoot.querySelector(selector);
+                if (element) {
+                    if (typeof value === 'string') {
+                        element.textContent = value;
+                    } else if (typeof value === 'object') {
+                        Object.entries(value).forEach(([attr, val]) => {
+                            element.setAttribute(attr, val);
+                        });
+                    }
+                }
+            });
+
+            // Aggiorna indicatore lingua corrente
+            const currentLangDisplay = ChatbotUI.shadowRoot.querySelector('.chatbot-language-current');
+            if (currentLangDisplay) {
+                currentLangDisplay.textContent = this.current.language.toUpperCase();
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Aggiorna messaggio di benvenuto
+         * 📥 Input: Nessuno
+         * 📤 Output: Messaggio benvenuto aggiornato
+         */
+        updateWelcomeMessage() {
+            if (!ChatbotUI.shadowRoot) return;
+
+            const welcomeElement = ChatbotUI.shadowRoot.querySelector('.chatbot-welcome-message .chatbot-message-content');
+            if (welcomeElement) {
+                welcomeElement.textContent = this.t('welcomeMessage');
+            }
         }
     };
 

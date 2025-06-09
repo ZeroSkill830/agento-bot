@@ -92,6 +92,11 @@
   - [x] Traduzione automatica UI
   - [x] Campo `language` nelle chiamate API
   - [x] Aggiornamento dinamico testi
+- [x] **Wine Cards moderne e animate**
+  - [x] Design con gradiente e immagine vino
+  - [x] Animazioni di entrata sequenziali
+  - [x] Hover effects e transizioni fluide
+  - [x] Layout responsive e moderno
 
 ### 5.2 Entry Point (`window.Chatbot`)
 - [x] Esportare oggetto globale `window.Chatbot`
