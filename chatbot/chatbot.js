@@ -160,7 +160,8 @@
                         <span class="chatbot-typing-text">${ChatbotConfig.t('typing')}</span>
                     </div>
 
-                    <!-- Quick Actions -->
+                    <!-- Quick Actions (condizionali) -->
+                    ${ChatbotConfig.current.showQuickActions ? `
                     <div class="chatbot-quick-actions">
                         <button class="chatbot-quick-action" data-text="${ChatbotConfig.t('quickAction1')}" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/winery/experiences">
                             ${ChatbotConfig.t('quickAction1')}
@@ -169,6 +170,7 @@
                             ${ChatbotConfig.t('quickAction2')}
                         </button>
                     </div>
+                    ` : ''}
 
                     <!-- Area Input -->
                     <div class="chatbot-input-area">
@@ -2637,7 +2639,8 @@
             clientId: '89b90056-4cc4-054a-a3db-9a3c0ded7efc',
             apiEndpoint: null,
             welcomeMessage: 'Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?',
-            chatbotName: null // Sarà automaticamente impostato in base alla lingua
+            chatbotName: null, // Sarà automaticamente impostato in base alla lingua
+            showQuickActions: true // Flag per mostrare/nascondere le quick actions
         },
 
         current: {},
@@ -2787,15 +2790,26 @@
                 '.chatbot-powered': this.t('powered')
             };
 
-            // Aggiorna quick actions (testo visibile e data-text)
-            const quickActions = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-quick-action');
-            if (quickActions.length >= 1) {
-                quickActions[0].textContent = this.t('quickAction1');
-                quickActions[0].setAttribute('data-text', this.t('quickAction1'));
-            }
-            if (quickActions.length >= 2) {
-                quickActions[1].textContent = this.t('quickAction2');
-                quickActions[1].setAttribute('data-text', this.t('quickAction2'));
+            // Gestisce visibilità e aggiorna quick actions
+            const quickActionsContainer = ChatbotUI.shadowRoot.querySelector('.chatbot-quick-actions');
+            if (quickActionsContainer) {
+                // Controlla visibilità basata su flag
+                if (this.current.showQuickActions) {
+                    quickActionsContainer.style.display = 'flex';
+                    
+                    // Aggiorna testo delle quick actions se visibili
+                    const quickActions = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-quick-action');
+                    if (quickActions.length >= 1) {
+                        quickActions[0].textContent = this.t('quickAction1');
+                        quickActions[0].setAttribute('data-text', this.t('quickAction1'));
+                    }
+                    if (quickActions.length >= 2) {
+                        quickActions[1].textContent = this.t('quickAction2');
+                        quickActions[1].setAttribute('data-text', this.t('quickAction2'));
+                    }
+                } else {
+                    quickActionsContainer.style.display = 'none';
+                }
             }
 
             // Aggiorna altri elementi
@@ -2972,7 +2986,17 @@
          * 📤 Output: Promise<boolean>
          */
         async init(config = {}) {
-            return await ChatbotCore.init(config);
+            const result = await ChatbotCore.init(config);
+            
+            // Aggiungi accesso debug per testing
+            this._debug = {
+                ui: ChatbotUI,
+                config: ChatbotConfig,
+                messages: ChatbotMessages,
+                api: ChatbotAPI
+            };
+            
+            return result;
         },
 
         /**
@@ -2982,6 +3006,7 @@
          */
         destroy() {
             ChatbotCore.destroy();
+            this._debug = null;
         },
 
         /**

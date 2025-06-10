@@ -231,6 +231,9 @@
                 <button class="demo-button" onclick="initChatbot()">
                     🚀 Inizializza Chatbot
                 </button>
+                <button class="demo-button secondary" onclick="initChatbotNoQuickActions()">
+                    🤖 Init senza Quick Actions
+                </button>
                 <button class="demo-button secondary" onclick="destroyChatbot()">
                     🗑️ Rimuovi Chatbot
                 </button>
@@ -245,6 +248,9 @@
                 </button>
                 <button class="demo-button" onclick="loadAgents()">
                     🤖 Carica Lista Agents
+                </button>
+                <button class="demo-button secondary" onclick="toggleQuickActions()">
+                    🎛️ Toggle Quick Actions
                 </button>
             </div>
 
@@ -362,9 +368,33 @@
                     window.Chatbot.init({
                         language: 'it',
                         clientId: '89b90056-4cc4-054a-a3db-9a3c0ded7efc', // ID client personalizzabile
-                        chatbotName: 'Agento Bot'
+                        chatbotName: 'Agento Bot',
+                        showQuickActions: true // Flag per mostrare/nascondere quick actions
                     });
                     updateStatus('success', '✅ Chatbot inizializzato con successo!');
+                } else if (window.Chatbot && window.Chatbot.isInitialized) {
+                    updateStatus('info', '⚠️ Chatbot già inizializzato');
+                } else {
+                    updateStatus('error', '❌ Script chatbot non caricato');
+                }
+            } catch (error) {
+                updateStatus('error', `❌ Errore inizializzazione: ${error.message}`);
+            }
+        }
+
+        /**
+         * 🚀 Inizializza il chatbot senza quick actions
+         */
+        function initChatbotNoQuickActions() {
+            try {
+                if (window.Chatbot && !window.Chatbot.isInitialized) {
+                    window.Chatbot.init({
+                        language: 'it',
+                        clientId: '89b90056-4cc4-054a-a3db-9a3c0ded7efc',
+                        chatbotName: 'Agento Bot Clean',
+                        showQuickActions: false // Disabilita le quick actions
+                    });
+                    updateStatus('success', '✅ Chatbot senza quick actions inizializzato!');
                 } else if (window.Chatbot && window.Chatbot.isInitialized) {
                     updateStatus('info', '⚠️ Chatbot già inizializzato');
                 } else {
@@ -585,6 +615,36 @@
             `;
             
             agentsContainer.innerHTML = agentsHTML;
+        }
+
+        /**
+         * 🎛️ Toggle delle quick actions
+         */
+        function toggleQuickActions() {
+            if (!window.Chatbot || !window.Chatbot.isInitialized) {
+                updateStatus('error', '❌ Chatbot non inizializzato. Inizializzalo prima.');
+                return;
+            }
+
+            try {
+                // Accedi alla configurazione tramite debug (per demo)
+                if (window.Chatbot._debug && window.Chatbot._debug.config) {
+                    const currentValue = window.Chatbot._debug.config.current.showQuickActions;
+                    const newValue = !currentValue;
+                    
+                    // Aggiorna configurazione
+                    window.Chatbot._debug.config.current.showQuickActions = newValue;
+                    
+                    // Aggiorna UI
+                    window.Chatbot._debug.config.updateUI();
+                    
+                    updateStatus('success', `✅ Quick Actions ${newValue ? 'abilitate' : 'disabilitate'}`);
+                } else {
+                    updateStatus('error', '❌ Configurazione non accessibile');
+                }
+            } catch (error) {
+                updateStatus('error', `❌ Errore toggle: ${error.message}`);
+            }
         }
 
         /**
