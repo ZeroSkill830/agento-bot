@@ -278,12 +278,58 @@
 &lt;!-- 1. Includi lo script del chatbot --&gt;
 &lt;script src="chatbot/chatbot.js"&gt;&lt;/script&gt;
 
-&lt;!-- 2. Inizializza il chatbot --&gt;
+&lt;!-- 2. Inizializza il chatbot con tutti i parametri disponibili --&gt;
+&lt;script&gt;
+  window.Chatbot.init({
+    // 🌍 Configurazione lingua
+    language: 'it',              // 'it' | 'en'
+    
+    // 🎨 Configurazione UI
+    position: 'bottom-right',    // 'bottom-right' | 'bottom-left'
+    theme: 'light',              // 'light' | 'dark'
+    
+    // 🤖 Configurazione chatbot
+    chatbotName: 'Assistant',    // Nome personalizzato
+    welcomeMessage: 'Ciao! Come posso aiutarti?',
+    
+    // ⚡ Configurazione funzionalità  
+    showQuickActions: true,      // Mostra/nasconde quick actions
+    
+    // 🔌 Configurazione API
+    clientId: 'your-client-id',  // ID client per autenticazione
+    apiEndpoint: null            // Endpoint API personalizzato
+  });
+&lt;/script&gt;
+            </div>
+            
+            <h3 class="demo-subtitle" style="margin-top: 2rem; margin-bottom: 1rem; color: #2563eb; font-size: 1.1rem;">🎯 Esempi di Configurazioni Specifiche</h3>
+            
+            <div class="demo-code">
+&lt;!-- Configurazione minima --&gt;
+&lt;script&gt;
+  window.Chatbot.init();
+&lt;/script&gt;
+
+&lt;!-- Chatbot pulito senza quick actions --&gt;
 &lt;script&gt;
   window.Chatbot.init({
     language: 'it',
-    position: 'bottom-right',
-    theme: 'light'
+    showQuickActions: false,
+    welcomeMessage: 'Benvenuto! Scrivimi pure.'
+  });
+&lt;/script&gt;
+
+&lt;!-- Configurazione completa per produzione --&gt;
+&lt;script&gt;
+  window.Chatbot.init({
+    language: 'en',
+    position: 'bottom-left',
+    theme: 'light',
+    chatbotName: 'Wine Assistant',
+    welcomeMessage: 'Welcome! I can help you discover wines.',
+    showQuickActions: true,
+    clientId: 'production-client-id',
+    apiEndpoint: 'https://api.mycompany.com'
   });
 &lt;/script&gt;
             </div>
@@ -391,7 +437,7 @@
                     window.Chatbot.init({
                         language: 'it',
                         clientId: '89b90056-4cc4-054a-a3db-9a3c0ded7efc',
-                        chatbotName: 'Agento Bot Clean',
+                        chatbotName: 'Agento Bot',
                         showQuickActions: false // Disabilita le quick actions
                     });
                     updateStatus('success', '✅ Chatbot senza quick actions inizializzato!');
