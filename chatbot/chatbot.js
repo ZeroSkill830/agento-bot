@@ -2173,10 +2173,10 @@
                             
                             <div class="chatbot-experience-detail-actions">
                                 <button class="chatbot-experience-detail-action" data-action="discover" data-url="${experience.discoverMoreLink || '#'}">
-                                    Discover more
+                                    ${ChatbotConfig.t('discoverMore')}
                                 </button>
                                 <button class="chatbot-experience-detail-action" data-action="chat">
-                                    Chatta per avere info
+                                    ${ChatbotConfig.t('chatForInfo')}
                                 </button>
                             </div>
                         </div>
@@ -2670,7 +2670,10 @@
                 tastingCompleted: '🍷 Degustazione completata! Grazie per aver partecipato.',
                 loading: 'Caricamento...',
                 error: 'Errore',
-                close: 'Chiudi'
+                close: 'Chiudi',
+                // Experience actions
+                discoverMore: 'Scopri di più',
+                chatForInfo: 'Chatta per avere info'
             },
             en: {
                 title: '{chatbotName}',
@@ -2696,7 +2699,10 @@
                 tastingCompleted: '🍷 Tasting completed! Thank you for participating.',
                 loading: 'Loading...',
                 error: 'Error',
-                close: 'Close'
+                close: 'Close',
+                // Experience actions
+                discoverMore: 'Discover more',
+                chatForInfo: 'Chat for info'
             }
         },
 
