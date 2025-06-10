@@ -1146,6 +1146,7 @@
             }
 
             const experience = experienceMessage.experiences[experienceIndex];
+            experience.index = experienceIndex; // Aggiungi l'indice per riferimento futuro
             ChatbotExperience.showOverlay(experience);
         },
 
@@ -1711,26 +1712,26 @@
 
             console.log('📝 Mostrando chunks stage:', chunks.length);
 
-            // Mostra ogni chunk con delay
+            // Mostra ogni chunk con delay ottimizzato
             for (let i = 0; i < chunks.length; i++) {
                 const chunk = chunks[i];
                 
-                // Delay prima di ogni messaggio
-                await new Promise(resolve => setTimeout(resolve, i === 0 ? 500 : 2000));
+                // Delay prima di ogni messaggio (bilanciato)
+                await new Promise(resolve => setTimeout(resolve, i === 0 ? 400 : 1200));
                 
                 // Mostra typing indicator
                 this.showTastingTyping(messagesContainer);
                 
-                // Delay per il typing
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                // Delay per il typing (bilanciato)
+                await new Promise(resolve => setTimeout(resolve, 900));
                 
                 // Nascondi typing e mostra messaggio
                 this.hideTastingTyping(messagesContainer);
                 this.addTastingMessage(messagesContainer, chunk.text);
             }
 
-            // Mostra input per permettere interazione
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Mostra input per permettere interazione (bilanciato)
+            await new Promise(resolve => setTimeout(resolve, 700));
             this.showTastingInput();
             
             // Mostra bottone continua nel footer dopo tutti i messaggi
@@ -1805,24 +1806,15 @@
             // Pulisci area azioni precedenti
             actionsArea.innerHTML = '';
             
-            // Crea il bottone con icona animata
-            const iconSvg = hasNextStage ? 
-                `<svg class="chatbot-continue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9,18 15,12 9,6"></polyline>
-                </svg>` : 
-                `<svg class="chatbot-continue-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="6,9 12,15 18,9"></polyline>
-                </svg>`;
-            
+            // Crea il bottone senza icona
             actionsArea.innerHTML = `
                 <button 
-                    class="chatbot-continue-button ${hasNextStage ? 'chatbot-continue-button--continue' : 'chatbot-continue-button--end'}" 
+                    class="chatbot-continue-button" 
                     data-action="${hasNextStage ? 'continue' : 'end'}"
                     aria-label="${buttonText}"
                     title="${buttonText}"
                 >
-                    <span class="chatbot-continue-text">${buttonText}</span>
-                    ${iconSvg}
+                    ${buttonText}
                 </button>
             `;
 
@@ -2154,9 +2146,10 @@
          */
         showOverlay(experience) {
             console.log('🎯 Showing experience overlay:', experience);
+            console.log('🔍 Experience index value:', experience.index, typeof experience.index);
             
             const overlayHTML = `
-                <div class="chatbot-experience-detail-overlay" data-experience-id="${experience.id || ''}">
+                <div class="chatbot-experience-detail-overlay" data-experience-id="${experience.id || ''}" data-experience-index="${experience.index !== undefined ? experience.index : ''}">
                     <div class="chatbot-experience-detail-content">
                         <button class="chatbot-experience-detail-close" aria-label="Chiudi">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2238,10 +2231,15 @@
                     } else if (action === 'chat') {
                         // Ottieni i dati dell'esperienza dall'overlay
                         const title = overlay.querySelector('.chatbot-experience-detail-title').textContent;
+                        const experienceId = button.closest('.chatbot-experience-detail-overlay').dataset.experienceId;
+                        const experienceIndex = button.closest('.chatbot-experience-detail-overlay').dataset.experienceIndex;
+                        console.log('📊 Raw dataset experienceIndex:', experienceIndex, typeof experienceIndex);
                         const experienceData = {
                             title: title,
-                            id: button.closest('.chatbot-experience-detail-overlay').dataset.experienceId
+                            id: experienceId,
+                            index: experienceIndex !== '' ? parseInt(experienceIndex) : undefined
                         };
+                        console.log('📊 Final experienceData:', experienceData);
                         this.closeOverlay();
                         this.showChatOverlay(experienceData);
                     }
@@ -2288,7 +2286,12 @@
                 <div class="chatbot-tasting-overlay chatbot-tasting-overlay--experience-chat">
                     <div class="chatbot-tasting-chat-container">
                         <div class="chatbot-tasting-chat-header">
-                            <h3 class="chatbot-tasting-chat-title">Chat: ${experienceData.title || 'Esperienza'}</h3>
+                            <button class="chatbot-tasting-chat-back" id="experience-chat-back-button" aria-label="Torna ai dettagli" title="Torna ai dettagli">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15,18 9,12 15,6"></polyline>
+                                </svg>
+                            </button>
+                            <h3 class="chatbot-tasting-chat-title">${experienceData.title || 'Esperienza'}</h3>
                             <button class="chatbot-tasting-chat-close" id="experience-chat-close-button">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -2353,6 +2356,8 @@
             // Salva i dati dell'esperienza nell'overlay per riferimento futuro
             overlay.dataset.experienceId = experienceData.id;
             overlay.dataset.experienceTitle = experienceData.title;
+            overlay.dataset.experienceIndex = experienceData.index !== undefined ? experienceData.index : '';
+            console.log('💾 Salvato nell\'overlay chat - Index:', overlay.dataset.experienceIndex);
             
             // Aggiungi overlay al shadow DOM
             ChatbotUI.shadowRoot.appendChild(overlay);
@@ -2371,6 +2376,14 @@
             const input = ChatbotUI.shadowRoot.querySelector('#experience-chat-input');
             const sendButton = ChatbotUI.shadowRoot.querySelector('#experience-chat-send-button');
             const closeButton = ChatbotUI.shadowRoot.querySelector('#experience-chat-close-button');
+            const backButton = ChatbotUI.shadowRoot.querySelector('#experience-chat-back-button');
+
+            // Back button
+            if (backButton) {
+                backButton.addEventListener('click', () => {
+                    this.goBackToDetailOverlay();
+                });
+            }
 
             // Close button
             if (closeButton) {
@@ -2565,6 +2578,32 @@
             const typingIndicator = ChatbotUI.shadowRoot.querySelector('#experience-chat-typing-indicator');
             if (typingIndicator) {
                 typingIndicator.style.display = 'none';
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Torna al detail overlay dall'experience chat
+         * 📥 Input: Nessuno
+         * 📤 Output: Chat overlay chiuso e detail overlay mostrato
+         */
+        goBackToDetailOverlay() {
+            const chatOverlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay--experience-chat');
+            if (!chatOverlay) return;
+            
+            const experienceIndex = parseInt(chatOverlay.dataset.experienceIndex);
+            
+            // Chiudi la chat
+            this.closeChatOverlay();
+            
+            // Riapri il detail overlay (controlla che sia un numero valido, incluso 0)
+            if (!isNaN(experienceIndex) && experienceIndex >= 0) {
+                // Trova l'esperienza nei messaggi
+                const experienceMessage = ChatbotMessages.messages.find(msg => msg.isExperienceCards);
+                if (experienceMessage && experienceMessage.experiences[experienceIndex]) {
+                    const experience = experienceMessage.experiences[experienceIndex];
+                    experience.index = experienceIndex;
+                    this.showOverlay(experience);
+                }
             }
         },
 

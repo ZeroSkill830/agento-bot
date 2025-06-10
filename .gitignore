@@ -1,0 +1,61 @@
+# 🚫 Chatbot Web Iniettabile - GitIgnore
+
+# File di sistema
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Directory di regole e configurazioni sviluppo
+rules/
+.cursorrules
+
+# File demo e documentazione sviluppo
+index.html
+task.md
+
+# File temporanei e cache
+*.tmp
+*.temp
+*.cache
+.cache/
+
+# File di log
+*.log
+logs/
+
+# File di backup
+*.bak
+*.backup
+*~
+
+# File IDE e editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# File di test (se ce ne fossero)
+test/
+*.test.js
+*.spec.js
+
+# File di build (per il futuro)
+dist/
+build/
+*.min.js
+*.min.css
+
+# Node modules (se mai si useranno)
+node_modules/
+
+# File di ambiente (se mai si useranno)
+.env
+.env.local
+.env.development
+.env.test
+.env.production 

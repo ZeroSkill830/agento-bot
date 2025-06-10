@@ -474,8 +474,8 @@
 
 .chatbot-wine-card {
   background: linear-gradient(135deg, #8B1538 0%, #B83C5E 100%);
-  border: 1px solid rgba(139, 21, 56, 0.2);
-  border-radius: 12px;
+  border: 10px solid white;
+  border-radius: 20px;
   padding: 24px;
   transition: all 0.3s ease;
   flex: 0 0 280px;
@@ -489,7 +489,6 @@
 .chatbot-wine-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 30px rgba(139, 21, 56, 0.25);
-  border-color: rgba(139, 21, 56, 0.3);
 }
 
 .chatbot-wine-name {
@@ -654,7 +653,7 @@
   transition: all 0.3s ease;
   flex: 0 0 300px;
   min-width: 300px;
-  height: 300px;
+  height: 250px;
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -1227,117 +1226,44 @@
   background: #b91c1c;
 }
 
-/* Tasting actions (continua/termina buttons) */
+/* Tasting actions (continua/termina buttons) - Stile Quick Actions */
 .chatbot-tasting-actions {
-  padding: 16px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid var(--chatbot-border);
+  padding: var(--chatbot-spacing-md);
   background: var(--chatbot-surface);
+  border-top: 1px solid var(--chatbot-border);
+  display: flex;
+  gap: var(--chatbot-spacing-sm);
+  flex-wrap: wrap;
 }
 
 .chatbot-continue-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: var(--chatbot-primary);
-  color: var(--chatbot-text-inverse);
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
+  background: var(--chatbot-bg);
+  border: 1px solid var(--chatbot-border);
+  border-radius: var(--chatbot-radius-md);
+  padding: var(--chatbot-spacing-sm) var(--chatbot-spacing-md);
+  font-size: var(--chatbot-font-size-sm);
+  font-family: inherit;
+  color: var(--chatbot-primary);
   cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 160px;
-  box-shadow: 0 4px 12px rgba(184, 60, 94, 0.3);
+  transition: var(--chatbot-transition);
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
 }
 
-.chatbot-continue-button:hover {
-  background: var(--chatbot-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(184, 60, 94, 0.4);
-}
-
-.chatbot-continue-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(184, 60, 94, 0.5);
-  background: var(--chatbot-primary-hover);
+.chatbot-continue-button:hover:not(:disabled) {
+  background: var(--chatbot-primary-light);
+  border-color: var(--chatbot-primary);
+  color: var(--chatbot-primary);
 }
 
 .chatbot-continue-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(184, 60, 94, 0.3);
+  transform: translateY(1px);
 }
 
-/* Icona animata nel bottone */
-.chatbot-continue-icon {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.3s ease;
-}
-
-/* Animazione freccia destra per "continua" */
-.chatbot-continue-button--continue .chatbot-continue-icon {
-  animation: bounceArrow 2s infinite;
-}
-
-.chatbot-continue-button--continue:hover .chatbot-continue-icon {
-  transform: translateX(4px);
-  animation: none;
-}
-
-/* Animazione freccia giù per "termina" */
-.chatbot-continue-button--end .chatbot-continue-icon {
-  animation: pulseDown 2s infinite;
-}
-
-.chatbot-continue-button--end:hover .chatbot-continue-icon {
-  transform: translateY(2px);
-  animation: none;
-}
-
-/* Stile per bottone "termina degustazione" */
-.chatbot-continue-button--end {
-  background: #059669;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-}
-
-.chatbot-continue-button--end:hover {
-  background: #047857;
-  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
-}
-
-.chatbot-continue-button--end:focus {
-  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.5);
-  background: #047857;
-}
-
-/* Keyframes per animazioni */
-@keyframes bounceArrow {
-
-  0%,
-  100% {
-    transform: translateX(0px);
-  }
-
-  50% {
-    transform: translateX(6px);
-  }
-}
-
-@keyframes pulseDown {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(4px);
-  }
+.chatbot-continue-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* 💬 TASTING CHAT OVERLAY */
@@ -1371,6 +1297,7 @@
   color: var(--chatbot-text-inverse);
 }
 
+.chatbot-tasting-chat-back,
 .chatbot-tasting-chat-close {
   width: 32px;
   height: 32px;
@@ -1385,10 +1312,12 @@
   transition: var(--chatbot-transition);
 }
 
+.chatbot-tasting-chat-back:hover,
 .chatbot-tasting-chat-close:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
+.chatbot-tasting-chat-back svg,
 .chatbot-tasting-chat-close svg {
   width: 20px;
   height: 20px;
