@@ -2657,8 +2657,8 @@
                 toggleLabel: 'Apri chat',
                 closeLabel: 'Chiudi chat',
                 sendLabel: 'Invia messaggio',
-                quickAction1: 'Organizzate visite?',
-                quickAction2: 'Degustiamo insieme?',
+                quickAction1: '📅 Organizzate visite?',
+                quickAction2: '🍷 Degustiamo insieme?',
                 powered: 'Powered by {chatbotName} v1.0',
                 // Tasting
                 selectLevel: 'Seleziona il tuo livello',
@@ -2686,8 +2686,8 @@
                 toggleLabel: 'Open chat',
                 closeLabel: 'Close chat',
                 sendLabel: 'Send message',
-                quickAction1: 'Do you organize visits?',
-                quickAction2: 'Let\'s taste together?',
+                quickAction1: '📅 Do you organize visits?',
+                quickAction2: '🍷 Let\'s taste together?',
                 powered: 'Powered by {chatbotName} v1.0',
                 // Tasting
                 selectLevel: 'Select your level',
