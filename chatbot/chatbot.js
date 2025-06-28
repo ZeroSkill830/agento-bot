@@ -2107,7 +2107,18 @@
             overlay.className = `chatbot-tasting-overlay chatbot-tasting-overlay--${type}`;
             overlay.innerHTML = content;
 
-            ChatbotUI.shadowRoot.appendChild(overlay);
+            // Se siamo in modalità embedded, appendi alla finestra chatbot
+            // altrimenti appendi al shadowRoot per il posizionamento fixed
+            if (ChatbotUI.isEmbedded) {
+                const chatbotWindow = ChatbotUI.shadowRoot.querySelector('.chatbot-window');
+                if (chatbotWindow) {
+                    chatbotWindow.appendChild(overlay);
+                } else {
+                    ChatbotUI.shadowRoot.appendChild(overlay);
+                }
+            } else {
+                ChatbotUI.shadowRoot.appendChild(overlay);
+            }
         },
 
         /**
@@ -2147,7 +2158,14 @@
          * 📤 Output: Overlay rimosso
          */
         removeOverlay() {
-            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay');
+            // Cerca overlay sia nel shadowRoot che nella finestra chatbot
+            let overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay');
+            if (!overlay && ChatbotUI.isEmbedded) {
+                const chatbotWindow = ChatbotUI.shadowRoot.querySelector('.chatbot-window');
+                if (chatbotWindow) {
+                    overlay = chatbotWindow.querySelector('.chatbot-tasting-overlay');
+                }
+            }
             if (overlay) {
                 overlay.remove();
             }
@@ -2210,8 +2228,18 @@
             overlayElement.innerHTML = overlayHTML;
             const overlay = overlayElement.firstElementChild;
             
-            // Aggiungi overlay al shadow DOM
-            ChatbotUI.shadowRoot.appendChild(overlay);
+            // Se siamo in modalità embedded, appendi alla finestra chatbot
+            // altrimenti appendi al shadowRoot per il posizionamento fixed
+            if (ChatbotUI.isEmbedded) {
+                const chatbotWindow = ChatbotUI.shadowRoot.querySelector('.chatbot-window');
+                if (chatbotWindow) {
+                    chatbotWindow.appendChild(overlay);
+                } else {
+                    ChatbotUI.shadowRoot.appendChild(overlay);
+                }
+            } else {
+                ChatbotUI.shadowRoot.appendChild(overlay);
+            }
             
             // Setup event listeners
             this.setupOverlayListeners();
@@ -2223,7 +2251,14 @@
          * 📤 Output: Event listeners configurati
          */
         setupOverlayListeners() {
-            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-experience-detail-overlay');
+            // Cerca overlay sia nel shadowRoot che nella finestra chatbot
+            let overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-experience-detail-overlay');
+            if (!overlay && ChatbotUI.isEmbedded) {
+                const chatbotWindow = ChatbotUI.shadowRoot.querySelector('.chatbot-window');
+                if (chatbotWindow) {
+                    overlay = chatbotWindow.querySelector('.chatbot-experience-detail-overlay');
+                }
+            }
             const closeButton = ChatbotUI.shadowRoot.querySelector('.chatbot-experience-detail-close');
             const actionButtons = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-experience-detail-action');
             
@@ -2288,7 +2323,14 @@
          * 📤 Output: Overlay rimosso
          */
         closeOverlay() {
-            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-experience-detail-overlay');
+            // Cerca overlay sia nel shadowRoot che nella finestra chatbot
+            let overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-experience-detail-overlay');
+            if (!overlay && ChatbotUI.isEmbedded) {
+                const chatbotWindow = ChatbotUI.shadowRoot.querySelector('.chatbot-window');
+                if (chatbotWindow) {
+                    overlay = chatbotWindow.querySelector('.chatbot-experience-detail-overlay');
+                }
+            }
             if (overlay) {
                 overlay.remove();
             }
@@ -2380,8 +2422,18 @@
             overlay.dataset.experienceIndex = experienceData.index !== undefined ? experienceData.index : '';
             console.log('💾 Salvato nell\'overlay chat - Index:', overlay.dataset.experienceIndex);
             
-            // Aggiungi overlay al shadow DOM
-            ChatbotUI.shadowRoot.appendChild(overlay);
+            // Se siamo in modalità embedded, appendi alla finestra chatbot
+            // altrimenti appendi al shadowRoot per il posizionamento fixed
+            if (ChatbotUI.isEmbedded) {
+                const chatbotWindow = ChatbotUI.shadowRoot.querySelector('.chatbot-window');
+                if (chatbotWindow) {
+                    chatbotWindow.appendChild(overlay);
+                } else {
+                    ChatbotUI.shadowRoot.appendChild(overlay);
+                }
+            } else {
+                ChatbotUI.shadowRoot.appendChild(overlay);
+            }
             
             // Setup event listeners per la chat
             this.setupChatOverlayListeners();
@@ -2465,7 +2517,14 @@
             const input = ChatbotUI.shadowRoot.querySelector('#experience-chat-input');
             const sendButton = ChatbotUI.shadowRoot.querySelector('#experience-chat-send-button');
             const messagesContainer = ChatbotUI.shadowRoot.querySelector('#experience-chat-messages');
-            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay--experience-chat');
+            // Cerca overlay sia nel shadowRoot che nella finestra chatbot
+            let overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay--experience-chat');
+            if (!overlay && ChatbotUI.isEmbedded) {
+                const chatbotWindow = ChatbotUI.shadowRoot.querySelector('.chatbot-window');
+                if (chatbotWindow) {
+                    overlay = chatbotWindow.querySelector('.chatbot-tasting-overlay--experience-chat');
+                }
+            }
 
             if (!input || !sendButton || !messagesContainer || !overlay) return;
 
@@ -2608,7 +2667,14 @@
          * 📤 Output: Chat overlay chiuso e detail overlay mostrato
          */
         goBackToDetailOverlay() {
-            const chatOverlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay--experience-chat');
+            // Cerca overlay sia nel shadowRoot che nella finestra chatbot
+            let chatOverlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay--experience-chat');
+            if (!chatOverlay && ChatbotUI.isEmbedded) {
+                const chatbotWindow = ChatbotUI.shadowRoot.querySelector('.chatbot-window');
+                if (chatbotWindow) {
+                    chatOverlay = chatbotWindow.querySelector('.chatbot-tasting-overlay--experience-chat');
+                }
+            }
             if (!chatOverlay) return;
             
             const experienceIndex = parseInt(chatOverlay.dataset.experienceIndex);
@@ -2634,7 +2700,14 @@
          * 📤 Output: Overlay rimosso
          */
         closeChatOverlay() {
-            const overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay--experience-chat');
+            // Cerca overlay sia nel shadowRoot che nella finestra chatbot
+            let overlay = ChatbotUI.shadowRoot.querySelector('.chatbot-tasting-overlay--experience-chat');
+            if (!overlay && ChatbotUI.isEmbedded) {
+                const chatbotWindow = ChatbotUI.shadowRoot.querySelector('.chatbot-window');
+                if (chatbotWindow) {
+                    overlay = chatbotWindow.querySelector('.chatbot-tasting-overlay--experience-chat');
+                }
+            }
             if (overlay) {
                 overlay.remove();
             }
@@ -2952,11 +3025,23 @@
             const shadowRoot = this.container?.shadowRoot;
             console.log('Shadow DOM presente:', !!shadowRoot);
             
-            // Test 2: Verifica isolamento CSS
-            const hostStyles = getComputedStyle(document.body);
-            const shadowStyles = shadowRoot ? getComputedStyle(shadowRoot.querySelector('.chatbot-toggle')) : null;
+            if (!shadowRoot) {
+                console.log('⚠️ Shadow DOM non disponibile per test');
+                return;
+            }
             
-            console.log('Stili host isolati:', hostStyles.color !== shadowStyles?.color);
+            // Test 2: Verifica isolamento CSS usando un elemento che esiste sempre
+            const hostStyles = getComputedStyle(document.body);
+            
+            // Usa .chatbot-window che esiste sempre, invece di .chatbot-toggle che non esiste in embedded
+            const testElement = shadowRoot.querySelector('.chatbot-window');
+            if (testElement) {
+                const shadowStyles = getComputedStyle(testElement);
+                console.log('Stili host isolati:', hostStyles.color !== shadowStyles.color);
+            } else {
+                console.log('⚠️ Elemento test non trovato');
+            }
+            
             console.log('✅ Test isolamento completato');
         },
 

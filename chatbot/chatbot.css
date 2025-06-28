@@ -173,6 +173,7 @@
   opacity: 1 !important;
   box-shadow: none !important;
   border-radius: var(--chatbot-radius-md) !important;
+  overflow: hidden !important; /* Contiene gli overlay al suo interno */
 }
 
 /* 📱 Mobile Responsive */
@@ -1007,6 +1008,20 @@
   animation: chatbot-overlay-fade-in 0.3s ease-out;
 }
 
+/* 🔗 Modalità Embedded: Overlay contenuto nel container */
+.chatbot-window--embedded .chatbot-tasting-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: var(--chatbot-radius-md) !important;
+}
+
 /* Mobile responsive per overlay */
 @media (max-width: 768px) {
   .chatbot-tasting-overlay {
@@ -1393,6 +1408,20 @@
   z-index: 10002;
   border-radius: var(--chatbot-radius-lg);
   animation: chatbot-overlay-fade-in 0.3s ease-out;
+}
+
+/* 🔗 Modalità Embedded: Experience overlay contenuto nel container */
+.chatbot-window--embedded .chatbot-experience-detail-overlay {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: var(--chatbot-radius-md) !important;
 }
 
 /* Mobile responsive per experience overlay */
