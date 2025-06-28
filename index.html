@@ -267,6 +267,55 @@
             </div>
         </section>
 
+        <!-- Sezione Demo Modalità Embedded -->
+        <section class="demo-section">
+            <h2 class="demo-title">🔗 Demo Modalità Embedded</h2>
+            <p class="demo-text">
+                <strong>Nuova funzionalità:</strong> Il chatbot può ora essere iniettato direttamente in un div specifico del tuo sito, 
+                senza il pulsante toggle e sempre visibile.
+            </p>
+            
+            <div class="demo-controls">
+                <button class="demo-button" onclick="initEmbeddedChatbot()">
+                    🚀 Inizializza Chatbot Embedded
+                </button>
+                <button class="demo-button secondary" onclick="destroyEmbeddedChatbot()">
+                    🗑️ Rimuovi Chatbot Embedded
+                </button>
+            </div>
+
+            <!-- Container per il chatbot embedded -->
+            <div style="border: 2px dashed #e2e8f0; border-radius: 12px; padding: 1rem; margin: 1rem 0; background: #f8fafc;">
+                <p style="text-align: center; color: #718096; margin-bottom: 1rem;">
+                    👇 Il chatbot embedded apparirà in questo container
+                </p>
+                <div id="embedded-chatbot-container" style="width: 100%; height: 500px; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #a0aec0; font-style: italic;">
+                        Clicca "Inizializza Chatbot Embedded" per vedere il chatbot qui
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-code">
+&lt;!-- HTML: Crea un container per il chatbot --&gt;
+&lt;div id="mio-chatbot-container" style="width: 400px; height: 600px;"&gt;&lt;/div&gt;
+
+&lt;!-- JavaScript: Inizializza in modalità embedded --&gt;
+&lt;script&gt;
+  window.Chatbot.init({
+    containerId: 'mio-chatbot-container',  // ID del div dove iniettare
+    language: 'it',
+    showQuickActions: true
+    // Nota: non ci sarà pulsante toggle in questa modalità
+  });
+&lt;/script&gt;
+            </div>
+
+            <div id="embedded-status" class="demo-status info">
+                📊 Modalità Embedded: Non inizializzato
+            </div>
+        </section>
+
         <!-- Sezione codice di esempio -->
         <section class="demo-section">
             <h2 class="demo-title">📝 Codice di Integrazione</h2>
@@ -330,6 +379,16 @@
     showQuickActions: true,
     clientId: 'production-client-id',
     apiEndpoint: 'https://api.mycompany.com'
+  });
+&lt;/script&gt;
+
+&lt;!-- 🔗 NUOVO: Modalità Embedded (inietta in div specifico) --&gt;
+&lt;script&gt;
+  window.Chatbot.init({
+    containerId: 'mio-container-chatbot',  // ← ID del div target
+    language: 'it',
+    chatbotName: 'Support Assistant',
+    showQuickActions: false              // Nessun toggle, sempre visibile
   });
 &lt;/script&gt;
             </div>
@@ -579,6 +638,68 @@
                 updateStatus('success', '✅ Configurazione avanzata applicata!');
             } catch (error) {
                 updateStatus('error', `❌ Errore configurazione: ${error.message}`);
+            }
+        }
+
+        /**
+         * 🚀 Inizializza il chatbot in modalità embedded
+         */
+        function initEmbeddedChatbot() {
+            try {
+                // Verifica che il chatbot normale non sia già attivo
+                if (window.Chatbot && window.Chatbot.isInitialized) {
+                    updateEmbeddedStatus('error', '❌ Rimuovi prima il chatbot normale');
+                    return;
+                }
+
+                if (window.Chatbot) {
+                    window.Chatbot.init({
+                        containerId: 'embedded-chatbot-container',
+                        language: 'it',
+                        clientId: '89b90056-4cc4-054a-a3db-9a3c0ded7efc',
+                        chatbotName: 'Embedded Bot',
+                        showQuickActions: true
+                    });
+                    updateEmbeddedStatus('success', '✅ Chatbot embedded inizializzato con successo!');
+                } else {
+                    updateEmbeddedStatus('error', '❌ Script chatbot non caricato');
+                }
+            } catch (error) {
+                updateEmbeddedStatus('error', `❌ Errore inizializzazione embedded: ${error.message}`);
+            }
+        }
+
+        /**
+         * 🗑️ Rimuove il chatbot embedded
+         */
+        function destroyEmbeddedChatbot() {
+            try {
+                if (window.Chatbot && window.Chatbot.isInitialized) {
+                    window.Chatbot.destroy();
+                    
+                    // Ripristina contenuto placeholder
+                    const container = document.getElementById('embedded-chatbot-container');
+                    if (container) {
+                        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #a0aec0; font-style: italic;">Clicca "Inizializza Chatbot Embedded" per vedere il chatbot qui</div>';
+                    }
+                    
+                    updateEmbeddedStatus('success', '✅ Chatbot embedded rimosso con successo!');
+                } else {
+                    updateEmbeddedStatus('info', '⚠️ Chatbot embedded non inizializzato');
+                }
+            } catch (error) {
+                updateEmbeddedStatus('error', `❌ Errore rimozione embedded: ${error.message}`);
+            }
+        }
+
+        /**
+         * 📊 Aggiorna il status della demo embedded
+         */
+        function updateEmbeddedStatus(type, message) {
+            const statusElement = document.getElementById('embedded-status');
+            if (statusElement) {
+                statusElement.className = `demo-status ${type}`;
+                statusElement.textContent = message;
             }
         }
 

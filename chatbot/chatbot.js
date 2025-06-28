@@ -37,6 +37,10 @@
             try {
                 console.log('🚀 Inizializzazione ChatbotUI...');
                 
+                // Determina se siamo in modalità embedded
+                this.isEmbedded = ChatbotConfig.current.containerId ? true : false;
+                console.log(`📍 Modalità: ${this.isEmbedded ? 'Embedded' : 'Floating'}`);
+                
                 await this.createShadowDOM(container);
                 await this.loadTemplate();
                 
@@ -44,6 +48,15 @@
                 const window = this.shadowRoot.querySelector('.chatbot-window');
                 if (window) {
                     window.classList.add('chatbot-window--no-transition');
+                    
+                    // Se embedded, applica stili specifici
+                    if (this.isEmbedded) {
+                        window.classList.add('chatbot-window--embedded');
+                        // In modalità embedded, la finestra è sempre visibile
+                        window.classList.add('chatbot-window--visible');
+                        window.setAttribute('aria-hidden', 'false');
+                        this.isVisible = true;
+                    }
                 }
                 
                 await this.loadStyles();
@@ -101,12 +114,14 @@
          */
         async loadTemplate() {
             const htmlTemplate = `
+                ${!this.isEmbedded ? `
                 <!-- Pulsante Toggle Chatbot -->
                 <button class="chatbot-toggle" aria-label="${ChatbotConfig.t('toggleLabel')}" type="button">
                     <svg class="chatbot-toggle-icon" viewBox="0 0 24 24">
                         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
                     </svg>
                 </button>
+                ` : ''}
 
                 <!-- Finestra Chatbot -->
                 <div class="chatbot-window" aria-hidden="true" role="dialog" aria-labelledby="chatbot-title">
@@ -133,11 +148,13 @@
                                     </button>
                                 </div>
                             </div>
+                            ${!this.isEmbedded ? `
                             <button class="chatbot-close" aria-label="${ChatbotConfig.t('closeLabel')}" type="button">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                                 </svg>
                             </button>
+                            ` : ''}
                         </div>
                     </header>
 
@@ -433,8 +450,8 @@
             const sendButton = this.shadowRoot.querySelector('.chatbot-send-button');
             const quickActions = this.shadowRoot.querySelectorAll('.chatbot-quick-action');
 
-            // Event listener per pulsante toggle
-            if (toggle) {
+            // Event listener per pulsante toggle (solo in modalità floating)
+            if (toggle && !this.isEmbedded) {
                 toggle.addEventListener('click', () => this.toggle());
                 toggle.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -444,8 +461,8 @@
                 });
             }
 
-            // Event listener per pulsante close
-            if (closeButton) {
+            // Event listener per pulsante close (solo in modalità floating)
+            if (closeButton && !this.isEmbedded) {
                 closeButton.addEventListener('click', () => this.toggle());
                 closeButton.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -486,22 +503,24 @@
                 });
             }
 
-            // Event listener per click fuori dalla finestra (mobile)
-            document.addEventListener('click', (e) => {
-                if (this.isVisible && !e.composedPath().includes(this.shadowRoot.host)) {
-                    // Su mobile, chiudi se clicchi fuori
-                    if (window.innerWidth <= 768) {
+            // Event listener per click fuori dalla finestra (solo modalità floating)
+            if (!this.isEmbedded) {
+                document.addEventListener('click', (e) => {
+                    if (this.isVisible && !e.composedPath().includes(this.shadowRoot.host)) {
+                        // Su mobile, chiudi se clicchi fuori
+                        if (window.innerWidth <= 768) {
+                            this.toggle();
+                        }
+                    }
+                });
+
+                // Event listener per Escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.isVisible) {
                         this.toggle();
                     }
-                }
-            });
-
-            // Event listener per Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && this.isVisible) {
-                    this.toggle();
-                }
-            });
+                });
+            }
 
             // Event listeners per quick actions
             if (quickActions) {
@@ -2640,7 +2659,8 @@
             apiEndpoint: null,
             welcomeMessage: 'Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?',
             chatbotName: null, // Sarà automaticamente impostato in base alla lingua
-            showQuickActions: true // Flag per mostrare/nascondere le quick actions
+            showQuickActions: true, // Flag per mostrare/nascondere le quick actions
+            containerId: null // ID del container per modalità embedded (null = modalità floating)
         },
 
         current: {},
@@ -2879,10 +2899,21 @@
                 // Applica configurazione
                 ChatbotConfig.merge(config);
 
-                // Crea container se non esiste
-                this.container = document.createElement('div');
-                this.container.className = 'chatbot-container';
-                document.body.appendChild(this.container);
+                // Gestisci container: embedded o floating
+                if (config.containerId) {
+                    // Modalità embedded: usa container esistente
+                    this.container = document.getElementById(config.containerId);
+                    if (!this.container) {
+                        throw new Error(`❌ Container con ID '${config.containerId}' non trovato`);
+                    }
+                    console.log(`📍 Modalità embedded: container #${config.containerId}`);
+                } else {
+                    // Modalità floating: crea nuovo container
+                    this.container = document.createElement('div');
+                    this.container.className = 'chatbot-container';
+                    document.body.appendChild(this.container);
+                    console.log('📍 Modalità floating: container creato');
+                }
 
                 // Inizializza UI
                 await ChatbotUI.init(this.container);

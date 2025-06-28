@@ -158,6 +158,23 @@
   opacity: 1;
 }
 
+/* 🔗 Modalità Embedded */
+.chatbot-window--embedded {
+  position: relative !important;
+  bottom: auto !important;
+  right: auto !important;
+  left: auto !important;
+  top: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  border-radius: var(--chatbot-radius-md) !important;
+}
+
 /* 📱 Mobile Responsive */
 @media (max-width: 768px) {
   .chatbot-toggle {
@@ -183,6 +200,11 @@
     max-height: none;
     border-radius: 0;
     border: none;
+  }
+
+  /* Modalità embedded su mobile mantiene bordi arrotondati */
+  .chatbot-window--embedded {
+    border-radius: var(--chatbot-radius-md) !important;
   }
 }
 
