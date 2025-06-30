@@ -35,11 +35,8 @@
          */
         async init(container) {
             try {
-                console.log('🚀 Inizializzazione ChatbotUI...');
-                
                 // Determina se siamo in modalità embedded
                 this.isEmbedded = ChatbotConfig.current.containerId ? true : false;
-                console.log(`📍 Modalità: ${this.isEmbedded ? 'Embedded' : 'Floating'}`);
                 
                 await this.createShadowDOM(container);
                 await this.loadTemplate();
@@ -68,7 +65,6 @@
                         window.classList.remove('chatbot-window--no-transition');
                     }
                     this.isInitializing = false;
-                    console.log('✅ ChatbotUI inizializzato con successo');
                 }, 100);
                 
                 return true;
@@ -93,8 +89,6 @@
                 if (!this.shadowRoot) {
                     throw new Error('Browser non supporta Shadow DOM');
                 }
-                
-                console.log('✅ Shadow DOM creato con successo');
                 
             } catch (error) {
                 console.error('❌ Errore creazione Shadow DOM:', error);
@@ -231,7 +225,6 @@
             `;
             
             this.shadowRoot.innerHTML = htmlTemplate;
-            console.log('✅ Template HTML caricato nel Shadow DOM');
         },
 
             /**
@@ -253,7 +246,6 @@
             // Promessa per sapere quando il CSS è caricato
             const loadPromise = new Promise((resolve, reject) => {
                 linkElement.onload = () => {
-                    console.log('✅ Stili CSS caricati da file esterno nel Shadow DOM');
                     resolve();
                 };
                 linkElement.onerror = () => {
@@ -334,7 +326,6 @@
             `;
             
             this.shadowRoot.appendChild(styleElement);
-            console.log('⚠️ Stili CSS di fallback caricati');
         },
 
         /**
@@ -351,7 +342,6 @@
 
             // Ignora toggle durante l'inizializzazione
             if (this.isInitializing) {
-                console.log('⏳ Toggle ignorato durante inizializzazione');
                 return;
             }
 
@@ -363,9 +353,7 @@
                 return;
             }
 
-            console.log('🔄 Toggle chiamato, stato attuale:', this.isVisible);
             this.isVisible = !this.isVisible;
-            console.log('🔄 Nuovo stato:', this.isVisible);
             
             if (this.isVisible) {
                 this.openChatbot(window, toggle);
@@ -395,7 +383,6 @@
                 }
             }, 300); // Dopo l'animazione
             
-            console.log('✅ Chatbot aperto');
         },
 
         /**
@@ -407,7 +394,6 @@
             // Controlla se c'è un overlay di degustazione (livello, preview, o chat) e rimuovilo
             const tastingOverlay = this.shadowRoot.querySelector('.chatbot-tasting-overlay');
             if (tastingOverlay) {
-                console.log('🍷 Overlay di degustazione rilevato, rimozione in corso...');
                 ChatbotTasting.removeOverlay();
                 // Reset stato degustazione se era attiva
                 if (ChatbotTasting.isActive) {
@@ -429,7 +415,6 @@
             // Non dare focus durante l'inizializzazione
             // toggle.focus();
             
-            console.log('✅ Chatbot chiuso');
         },
 
         /**
@@ -570,8 +555,6 @@
                             if (arrow) {
                                 arrow.style.transform = 'rotate(0deg)';
                             }
-                            
-                            console.log(`🌐 Lingua cambiata a: ${newLanguage}`);
                         }
                     });
                 });
@@ -587,8 +570,6 @@
                     }
                 });
             }
-
-            console.log('✅ Event listeners configurati');
         },
 
         /**
@@ -619,8 +600,6 @@
             
             // Ottieni risposta bot (API o fallback)
             ChatbotMessages.getBotResponse(message);
-            
-            console.log('📤 Messaggio inviato:', message);
         },
 
         /**
@@ -664,8 +643,6 @@
             
             // Ottieni risposta bot usando API custom
             ChatbotMessages.getBotResponseFromCustomAPI(text, apiUrl);
-            
-            console.log('⚡ Quick action cliccata:', text, 'API:', apiUrl);
         },
 
         /**
@@ -727,6 +704,44 @@
         welcomeMessageShown: true,
 
         /**
+         * 🎯 Scopo: Formatta il testo per renderizzazione sicura con link e grassetto
+         * 📥 Input: text (string) - testo da formattare
+         * 📤 Output: HTML string formattato
+         */
+        formatMessageText(text) {
+            if (!text || typeof text !== 'string') {
+                return '';
+            }
+
+            // 1. Escapa caratteri HTML per sicurezza
+            let formattedText = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+
+            // 2. Converti **text** in <strong>text</strong>
+            formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            // 3. PRIMA converti link markdown [text](url) in tag <a>
+            const markdownLinkPattern = /\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g;
+            formattedText = formattedText.replace(markdownLinkPattern, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+            // 4. POI converti URL diretti usando approccio word-by-word
+            const words = formattedText.split(' ');
+            formattedText = words.map(word => {
+                // Verifica se la parola è un URL e non è già parte di un tag HTML
+                if (word.match(/^https?:\/\/[^\s<>"]+$/) && !word.includes('href=')) {
+                    return `<a href="${word}" target="_blank" rel="noopener noreferrer">${word}</a>`;
+                }
+                return word;
+            }).join(' ');
+
+            return formattedText;
+        },
+
+        /**
          * 🎯 Scopo: Aggiunge nuovo messaggio alla conversazione
          * 📥 Input: text (string), type ('user'|'bot') 
          * 📤 Output: Messaggio aggiunto e renderizzato
@@ -749,7 +764,6 @@
             }
             
             this.render();
-            console.log(`💬 Messaggio ${type} aggiunto:`, text);
         },
 
         /**
@@ -812,8 +826,6 @@
             const contentDiv = document.createElement('div');
             contentDiv.className = 'chatbot-message-content';
 
-            console.log(message, 'xxx');
-            
             // Gestione speciale per wine cards
             if (message.isWineCards && message.wineCardsHtml) {
                 contentDiv.innerHTML = message.wineCardsHtml;
@@ -827,7 +839,8 @@
                 contentDiv.innerHTML = message.actionsHtml;
             }
             else {
-                contentDiv.textContent = message.text;
+                // Usa formattazione per testo normale con link e grassetto
+                contentDiv.innerHTML = this.formatMessageText(message.text);
             }
 
             const timeDiv = document.createElement('div');
@@ -936,11 +949,9 @@
                 if (ChatbotAPI.isConnected()) {
                     // Usa API custom per quick actions
                     botResponse = await ChatbotAPI.sendMessageToCustomAPI(userMessage, customApiUrl);
-                    console.log('🔄 BotResponse ricevuta:', typeof botResponse, botResponse);
                     
                     // Se la risposta contiene vini, gestiscila diversamente
                     if (typeof botResponse === 'object' && botResponse.type === 'wines') {
-                        console.log('🍷 Gestendo wine cards');
                         this.hideTypingIndicator();
                         this.addWineCards(botResponse.data);
                         
@@ -955,7 +966,6 @@
                     
                     // Se la risposta contiene esperienze, gestiscila diversamente
                     if (typeof botResponse === 'object' && botResponse.type === 'experiences') {
-                        console.log('🎯 Gestendo experience cards');
                         this.hideTypingIndicator();
                         
                         // Prima mostra il messaggio di reply
@@ -973,7 +983,6 @@
                         return;
                     }
                     
-                    console.log('📝 Gestendo come messaggio normale');
                 } else {
                     // Fallback con risposte simulate
                     await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000));
@@ -1078,10 +1087,6 @@
 
             this.messages.push(message);
             this.render(); // Usa il sistema normale di rendering
-
-
-
-            console.log('🍷 Wine cards aggiunte:', wines.length);
         },
 
         /**
@@ -1130,7 +1135,6 @@
                     const wineIndex = card.getAttribute('data-wine-index');
                     
                     if (wineName && wineId) {
-                        console.log('🍷 Wine card clicked:', wineName, 'ID:', wineId);
                         ChatbotTasting.startTasting(wineName, wineIndex, wineId);
                     }
                 });
@@ -1147,7 +1151,6 @@
             experienceCards.forEach((card, index) => {
                 card.addEventListener('click', (e) => {
                     e.preventDefault();
-                    console.log('🎯 Experience card clicked:', index);
                     this.showExperienceOverlay(index);
                 });
             });
@@ -1198,8 +1201,6 @@
 
             this.messages.push(message);
             this.render(); // Usa il sistema normale di rendering
-
-            console.log('🎯 Experience cards aggiunte:', experiences.length);
         },
 
         /**
@@ -1275,7 +1276,6 @@
             }
             
             this.userGUID = this.generateUserGUID();
-            console.log('🆔 GUID utente generato:', this.userGUID);
         },
 
         /**
@@ -1285,7 +1285,6 @@
          */
         async authenticate() {
             try {
-                console.log('🔑 Autenticazione con API...');
                 
                 const response = await fetch(`${this.baseURL}/auth/token`, {
                     method: 'POST',
@@ -1307,7 +1306,6 @@
                 if (data.token) {
                     this.token = data.token;
                     this.isAuthenticated = true;
-                    console.log('✅ Autenticazione completata');
                     return true;
                 } else {
                     throw new Error('Token non ricevuto nella risposta');
@@ -1336,8 +1334,6 @@
                     throw new Error('GUID utente non generato');
                 }
 
-                console.log('📤 Invio messaggio all\'API:', message);
-
                 const response = await fetch(`${this.baseURL}/${this.clientId}/message`, {
                     method: 'POST',
                     headers: {
@@ -1358,7 +1354,6 @@
                 }
 
                 const data = await response.json();
-                console.log('📥 Risposta API ricevuta:', data);
                 
                 // La risposta è un array di oggetti con struttura: [{user, text, action}]
                 if (Array.isArray(data) && data.length > 0) {
@@ -1390,8 +1385,6 @@
                     throw new Error('Non autenticato - richiesto login');
                 }
 
-                console.log('📤 Invio messaggio a API custom:', message, 'URL:', customApiUrl);
-
                 const response = await fetch(customApiUrl, {
                     method: 'GET', // Assumendo GET per le API specifiche
                     headers: {
@@ -1406,22 +1399,17 @@
                 }
 
                 const data = await response.json();
-                console.log('📥 Risposta API custom ricevuta:', data);
-                console.log('🔍 URL chiamata:', customApiUrl);
                 
                 // Gestione speciale per API wine-knowledge/wines
                 if (customApiUrl.includes('wine-knowledge/wines') && data.wines && Array.isArray(data.wines)) {
-                    console.log('✅ Riconosciuto come wine API');
                     return { type: 'wines', data: data.wines };
                 }
                 
                 // Gestione speciale per API experiences
                 if (customApiUrl.includes('api/winery/experiences') && data.reply && data.cards && Array.isArray(data.cards)) {
-                    console.log('✅ Riconosciuto come experience API');
                     return { type: 'experiences', reply: data.reply, data: data.cards };
                 }
                 
-                console.log('❌ Nessuna API riconosciuta, usando fallback');
                 
                 // Se la risposta è un array, prende il primo elemento
                 if (Array.isArray(data) && data.length > 0) {
@@ -1468,7 +1456,6 @@
             this.token = null;
             this.isAuthenticated = false;
             this.userGUID = null;
-            console.log('🔄 API reset completato');
         }
     };
 
@@ -1494,7 +1481,6 @@
          * 📤 Output: Overlay selezione livello visualizzato
          */
         startTasting(wineName, wineIndex, wineId) {
-            console.log('🍷 Avvio degustazione per:', wineName, 'ID:', wineId);
             this.currentWineName = wineName;
             this.currentWineId = wineId;
             this.currentWineIndex = wineIndex;
@@ -1541,8 +1527,6 @@
          * 📤 Output: Chiamata API e passaggio al prossimo step
          */
         async selectLevel(level) {
-            console.log('📝 Livello selezionato:', level);
-            
             try {
                 this.removeOverlay();
                 this.showLoadingOverlay();
@@ -1578,8 +1562,6 @@
                 wineName: this.currentWineId,
                 stage: stage
             };
-
-            console.log('📡 Payload tasting API:', payload);
 
             const response = await fetch(`${ChatbotAPI.baseURL}/api/wine-tasting`, {
                 method: 'POST',
@@ -1731,8 +1713,6 @@
                 return;
             }
 
-            console.log('📝 Mostrando chunks stage:', chunks.length);
-
             // Mostra ogni chunk con delay ottimizzato
             for (let i = 0; i < chunks.length; i++) {
                 const chunk = chunks[i];
@@ -1771,7 +1751,8 @@
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'chatbot-message-content';
-            contentDiv.textContent = text;
+            // Usa formattazione per link e grassetto
+            contentDiv.innerHTML = ChatbotMessages.formatMessageText(text);
 
             const timeDiv = document.createElement('div');
             timeDiv.className = 'chatbot-message-time';
@@ -1881,9 +1862,7 @@
 
             // Close button
             if (closeButton) {
-                console.log('✅ Bottone close trovato, configurando event listener');
                 closeButton.addEventListener('click', () => {
-                    console.log('🔥 Click bottone close rilevato');
                     this.endTasting();
                 });
             } else {
@@ -1977,7 +1956,8 @@
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'chatbot-message-content';
-            contentDiv.textContent = text;
+            // Usa formattazione per link e grassetto
+            contentDiv.innerHTML = ChatbotMessages.formatMessageText(text);
 
             const timeDiv = document.createElement('div');
             timeDiv.className = 'chatbot-message-time';
@@ -2007,8 +1987,6 @@
                 feedbackType: "stage",
                 feedbackText: feedbackText
             };
-
-            console.log('📡 Payload feedback API:', payload);
 
             const response = await fetch(`${ChatbotAPI.baseURL}/api/wine-tasting/feedback`, {
                 method: 'POST',
@@ -2070,8 +2048,6 @@
          * 📤 Output: Overlay chiuso, ritorno al chatbot normale
          */
         endTasting() {
-            console.log('✅ Degustazione terminata');
-            
             // Nascondi l'area azioni se presente
             const actionsArea = ChatbotUI.shadowRoot.querySelector('#tasting-actions-area');
             if (actionsArea) {
@@ -2184,9 +2160,6 @@
          * 📤 Output: Overlay visualizzato
          */
         showOverlay(experience) {
-            console.log('🎯 Showing experience overlay:', experience);
-            console.log('🔍 Experience index value:', experience.index, typeof experience.index);
-            
             const overlayHTML = `
                 <div class="chatbot-experience-detail-overlay" data-experience-id="${experience.id || ''}" data-experience-index="${experience.index !== undefined ? experience.index : ''}">
                     <div class="chatbot-experience-detail-content">
@@ -2289,13 +2262,11 @@
                         const title = overlay.querySelector('.chatbot-experience-detail-title').textContent;
                         const experienceId = button.closest('.chatbot-experience-detail-overlay').dataset.experienceId;
                         const experienceIndex = button.closest('.chatbot-experience-detail-overlay').dataset.experienceIndex;
-                        console.log('📊 Raw dataset experienceIndex:', experienceIndex, typeof experienceIndex);
                         const experienceData = {
                             title: title,
                             id: experienceId,
                             index: experienceIndex !== '' ? parseInt(experienceIndex) : undefined
                         };
-                        console.log('📊 Final experienceData:', experienceData);
                         this.closeOverlay();
                         this.showChatOverlay(experienceData);
                     }
@@ -2343,8 +2314,6 @@
          * 📤 Output: Overlay chat visualizzato
          */
         showChatOverlay(experienceData) {
-            console.log('🎯 Showing experience chat overlay:', experienceData);
-            
             const chatOverlayHTML = `
                 <div class="chatbot-tasting-overlay chatbot-tasting-overlay--experience-chat">
                     <div class="chatbot-tasting-chat-container">
@@ -2420,7 +2389,6 @@
             overlay.dataset.experienceId = experienceData.id;
             overlay.dataset.experienceTitle = experienceData.title;
             overlay.dataset.experienceIndex = experienceData.index !== undefined ? experienceData.index : '';
-            console.log('💾 Salvato nell\'overlay chat - Index:', overlay.dataset.experienceIndex);
             
             // Se siamo in modalità embedded, appendi alla finestra chatbot
             // altrimenti appendi al shadowRoot per il posizionamento fixed
@@ -2585,8 +2553,6 @@
                 language: ChatbotConfig.current.language || 'it'
             };
 
-            console.log('📡 Payload experience API:', payload);
-
             const response = await fetch(`${ChatbotAPI.baseURL}/api/winery/experiences/message`, {
                 method: 'POST',
                 headers: {
@@ -2602,7 +2568,6 @@
             }
 
             const data = await response.json();
-            console.log('📥 Risposta API esperienza ricevuta:', data);
 
             // Gestione risposta API esperienza: usa la proprietà 'reply'
             if (data.reply) {
@@ -2624,7 +2589,8 @@
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'chatbot-message-content';
-            contentDiv.textContent = text;
+            // Usa formattazione per link e grassetto
+            contentDiv.innerHTML = ChatbotMessages.formatMessageText(text);
 
             const timeDiv = document.createElement('div');
             timeDiv.className = 'chatbot-message-time';
@@ -2813,7 +2779,6 @@
                 ...userConfig
             };
             
-            console.log('⚙️ Configurazione applicata:', this.current);
             return this.current;
         },
 
@@ -2853,8 +2818,6 @@
 
             const oldLanguage = this.current.language;
             this.current.language = newLanguage;
-            
-            console.log(`🌐 Lingua cambiata da '${oldLanguage}' a '${newLanguage}'`);
             
             // Aggiorna UI
             this.updateUI();
@@ -2936,7 +2899,8 @@
 
             const welcomeElement = ChatbotUI.shadowRoot.querySelector('.chatbot-welcome-message .chatbot-message-content');
             if (welcomeElement) {
-                welcomeElement.textContent = this.t('welcomeMessage');
+                // Usa formattazione per link e grassetto
+                welcomeElement.innerHTML = ChatbotMessages.formatMessageText(this.t('welcomeMessage'));
             }
         }
     };
@@ -2961,11 +2925,9 @@
          */
         async init(config = {}) {
             try {
-                console.log('🚀 Inizializzazione Chatbot Core...');
 
                 // Previeni inizializzazione multipla
                 if (this.isInitialized) {
-                    console.warn('⚠️ Chatbot già inizializzato');
                     return false;
                 }
 
@@ -2979,13 +2941,11 @@
                     if (!this.container) {
                         throw new Error(`❌ Container con ID '${config.containerId}' non trovato`);
                     }
-                    console.log(`📍 Modalità embedded: container #${config.containerId}`);
                 } else {
                     // Modalità floating: crea nuovo container
                     this.container = document.createElement('div');
                     this.container.className = 'chatbot-container';
                     document.body.appendChild(this.container);
-                    console.log('📍 Modalità floating: container creato');
                 }
 
                 // Inizializza UI
@@ -2996,14 +2956,9 @@
                     ChatbotAPI.init(config.clientId);
                     await ChatbotAPI.authenticate();
                 } catch (error) {
-                    console.warn('⚠️ Continuo senza API - modalità offline');
                 }
 
                 this.isInitialized = true;
-                console.log('✅ Chatbot inizializzato con successo!');
-
-                // Test isolamento stili
-                this.testStyleIsolation();
 
                 return true;
 
@@ -3013,37 +2968,6 @@
             }
         },
 
-        /**
-         * 🎯 Scopo: Testa isolamento stili Shadow DOM
-         * 📥 Input: Nessuno
-         * 📤 Output: Log risultati test
-         */
-        testStyleIsolation() {
-            console.log('🧪 Test isolamento Shadow DOM:');
-            
-            // Test 1: Verifica Shadow DOM
-            const shadowRoot = this.container?.shadowRoot;
-            console.log('Shadow DOM presente:', !!shadowRoot);
-            
-            if (!shadowRoot) {
-                console.log('⚠️ Shadow DOM non disponibile per test');
-                return;
-            }
-            
-            // Test 2: Verifica isolamento CSS usando un elemento che esiste sempre
-            const hostStyles = getComputedStyle(document.body);
-            
-            // Usa .chatbot-window che esiste sempre, invece di .chatbot-toggle che non esiste in embedded
-            const testElement = shadowRoot.querySelector('.chatbot-window');
-            if (testElement) {
-                const shadowStyles = getComputedStyle(testElement);
-                console.log('Stili host isolati:', hostStyles.color !== shadowStyles.color);
-            } else {
-                console.log('⚠️ Elemento test non trovato');
-            }
-            
-            console.log('✅ Test isolamento completato');
-        },
 
         /**
          * 🎯 Scopo: Distrugge chatbot e pulisce risorse
@@ -3069,8 +2993,6 @@
                 ChatbotUI.isVisible = false;
                 ChatbotMessages.messages = [];
                 ChatbotAPI.reset();
-
-                console.log('✅ Chatbot distrutto con successo');
 
             } catch (error) {
                 console.error('❌ Errore durante distruzione:', error);
@@ -3147,7 +3069,4 @@
             core: ChatbotCore
         }
     };
-
-    console.log('🤖 Chatbot Web Iniettabile caricato - Pronto per window.Chatbot.init()');
-
 })(); 
