@@ -1497,10 +1497,13 @@
          */
         setupExperienceCardListeners() {
             const experienceCards = ChatbotUI.shadowRoot.querySelectorAll('.chatbot-experience-card');
-            experienceCards.forEach((card, index) => {
+            experienceCards.forEach((card) => {
                 card.addEventListener('click', (e) => {
                     e.preventDefault();
-                    this.showExperienceOverlay(index);
+                    const experienceIndex = parseInt(card.getAttribute('data-experience-index'));
+                    if (!isNaN(experienceIndex) && experienceIndex >= 0) {
+                        this.showExperienceOverlay(experienceIndex);
+                    }
                 });
             });
         },
@@ -1511,8 +1514,8 @@
          * 📤 Output: Overlay mostrato
          */
         showExperienceOverlay(experienceIndex) {
-            // Trova l'esperienza nei messaggi
-            const experienceMessage = this.messages.find(msg => msg.isExperienceCards);
+            // Trova l'ultimo messaggio con experience cards (il più recente)
+            const experienceMessage = this.messages.slice().reverse().find(msg => msg.isExperienceCards);
             if (!experienceMessage || !experienceMessage.experiences[experienceIndex]) {
                 console.error('❌ Esperienza non trovata:', experienceIndex);
                 return;
@@ -1560,11 +1563,14 @@
         createExperienceCardsHtml(experiences) {
             let cardsHtml = '<div class="chatbot-experience-cards">';
             
-            experiences.forEach(experience => {
+            experiences.forEach((experience, index) => {
                 const backgroundImage = experience.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400';
                 
                 cardsHtml += `
-                    <div class="chatbot-experience-card" style="background-image: url('${backgroundImage}')">
+                    <div class="chatbot-experience-card" 
+                         data-experience-index="${index}" 
+                         data-experience-id="${experience.id || ''}"
+                         style="background-image: url('${backgroundImage}')">
                         <div class="chatbot-experience-overlay">
                             <div class="chatbot-experience-content">
                                 <div class="chatbot-experience-container">
@@ -2524,6 +2530,9 @@
          * 📤 Output: Overlay visualizzato
          */
         showOverlay(experience) {
+            // Rimuovi qualsiasi overlay precedente prima di crearne uno nuovo
+            this.closeOverlay();
+            
             const overlayHTML = `
                 <div class="chatbot-experience-detail-overlay" data-experience-id="${experience.id || ''}" data-experience-index="${experience.index !== undefined ? experience.index : ''}">
                     <div class="chatbot-experience-detail-content">
@@ -3013,8 +3022,8 @@
             
             // Riapri il detail overlay (controlla che sia un numero valido, incluso 0)
             if (!isNaN(experienceIndex) && experienceIndex >= 0) {
-                // Trova l'esperienza nei messaggi
-                const experienceMessage = ChatbotMessages.messages.find(msg => msg.isExperienceCards);
+                // Trova l'ultimo messaggio con experience cards (il più recente)
+                const experienceMessage = ChatbotMessages.messages.slice().reverse().find(msg => msg.isExperienceCards);
                 if (experienceMessage && experienceMessage.experiences[experienceIndex]) {
                     const experience = experienceMessage.experiences[experienceIndex];
                     experience.index = experienceIndex;
