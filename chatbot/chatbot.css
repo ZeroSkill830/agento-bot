@@ -828,7 +828,6 @@
   left: 0;
   right: 0;
   height: 70%;
-  backdrop-filter: blur(6px);
   border-radius: var(--chatbot-radius-2xl);
   mask: linear-gradient(to bottom,
       transparent 0%,
@@ -1653,13 +1652,13 @@
   max-width: calc(100vw - 48px);
   height: 800px;
   max-height: calc(100vh - 120px);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10002;
-  border-radius: var(--chatbot-radius-lg);
+  border-radius: var(--chatbot-radius-2xl);
   animation: chatbot-overlay-fade-in 0.3s ease-out;
 }
 
@@ -1694,7 +1693,7 @@
 
 .chatbot-experience-detail-content {
   background: var(--chatbot-bg);
-  border-radius: var(--chatbot-radius-lg);
+  border-radius: var(--chatbot-radius-2xl);
   width: 90%;
   max-width: 450px;
   max-height: 85%;
@@ -1704,6 +1703,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+
 }
 
 .chatbot-experience-detail-close {
@@ -1785,13 +1785,17 @@
 }
 
 .chatbot-experience-detail-chip {
-  background: var(--chatbot-primary-light);
-  color: var(--chatbot-primary);
-  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  background: var(--chatbot-primary);
+  color: white;
+  padding: 4px 8px;
   border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  border: 1px solid var(--chatbot-primary);
+  font-size: 14px;
+  font-family: var(--chatbot-font-family);
+  letter-spacing: -0.5px;
+  font-weight: 300;
+  transition: all 0.3s ease;
 }
 
 .chatbot-experience-detail-actions {
@@ -1801,17 +1805,21 @@
 }
 
 .chatbot-experience-detail-action {
+  font-family: var(--chatbot-font-family);
+  letter-spacing: -0.5px;
+  font-weight: 500;
   background: var(--chatbot-bg);
   border: 1px solid var(--chatbot-border);
-  border-radius: var(--chatbot-radius-md);
-  padding: var(--chatbot-spacing-sm) var(--chatbot-spacing-md);
+  border-radius: var(--chatbot-radius-2xl);
+  padding: var(--chatbot-spacing-md);
   font-size: var(--chatbot-font-size-sm);
   font-family: inherit;
   color: var(--chatbot-primary);
   cursor: pointer;
   transition: var(--chatbot-transition);
-  font-weight: 500;
-  text-align: center;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
 }
 
 .chatbot-experience-detail-action:hover {
