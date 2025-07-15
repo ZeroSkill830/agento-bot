@@ -15,6 +15,146 @@
     }
 
     /**
+     * 🎨 MODULO: ChatbotThemeManager
+     * 🎯 Scopo: Gestisce i temi del chatbot
+     * 📋 Responsabilità: Applicazione temi, persistenza, transizioni smooth
+     */
+    const ChatbotThemeManager = {
+        /**
+         * 🎨 Definizione temi disponibili
+         */
+        themes: {
+            classic: {
+                name: 'Classic',
+                colors: {
+                    // Colori primari - Wine Theme Light
+                    '--chatbot-primary': '#E94744',
+                    '--chatbot-primary-hover': '#D63C25',
+                    '--chatbot-primary-light': '#FFEDEF',
+                    '--chatbot-modal-text': 'black',
+                    // Sfondo e superficie
+                    '--chatbot-bg': '#ffffff',
+                    '--chatbot-surface': 'white',
+                    '--chatbot-border': '#F0E4E7',
+                    // Testo
+                    '--chatbot-text-primary': '#2C1F21',
+                    '--chatbot-text-secondary': '#7A5A60',
+                    '--chatbot-text-inverse': '#ffffff',
+                    '--chatbot-footer-text': 'white',
+                    // Messaggi
+                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-text': '#484848',
+                    '--chatbot-message-bot-bg': '#FFEDEF',
+                    '--chatbot-message-bot-text': '#777777'
+                }
+            },
+            'dark-wine': {
+                name: 'Dark-Wine',
+                colors: {
+                    // Colori primari - Wine Theme Dark
+                    '--chatbot-primary': '#722F37',
+                }
+            }
+        },
+
+        /**
+         * 📝 Proprietà del modulo
+         */
+        shadowRoot: null,
+        currentTheme: null,
+        
+        /**
+         * 🎯 Scopo: Inizializza il theme manager
+         * 📥 Input: shadowRoot (ShadowRoot)
+         * 📤 Output: Theme manager inizializzato
+         */
+        init(shadowRoot) {
+            this.shadowRoot = shadowRoot;
+            this.currentTheme = this.loadThemeFromStorage();
+            this.applyTheme(this.currentTheme);
+        },
+
+        /**
+         * 🎯 Scopo: Carica tema salvato da localStorage
+         * 📥 Input: Nessuno
+         * 📤 Output: Nome tema salvato o 'classic' come default
+         */
+        loadThemeFromStorage() {
+            const savedTheme = localStorage.getItem('chatbot-theme');
+            return savedTheme && this.themes[savedTheme] ? savedTheme : 'classic';
+        },
+
+        /**
+         * 🎯 Scopo: Applica tema al chatbot
+         * 📥 Input: themeName (string)
+         * 📤 Output: Tema applicato
+         */
+        applyTheme(themeName) {
+            if (!this.themes[themeName] || !this.shadowRoot) return;
+
+            const theme = this.themes[themeName];
+            const hostElement = this.shadowRoot.host;
+
+            // Applica transizione smooth
+            hostElement.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+
+            // Applica le variabili CSS del tema
+            Object.entries(theme.colors).forEach(([property, value]) => {
+                hostElement.style.setProperty(property, value);
+            });
+
+            // Salva tema corrente
+            this.currentTheme = themeName;
+            localStorage.setItem('chatbot-theme', themeName);
+
+            // Aggiorna UI del selettore
+            this.updateThemeSelector();
+        },
+
+        /**
+         * 🎯 Scopo: Aggiorna l'interfaccia del selettore tema
+         * 📥 Input: Nessuno
+         * 📤 Output: UI aggiornata
+         */
+        updateThemeSelector() {
+            if (!this.shadowRoot) return;
+
+            const selector = this.shadowRoot.querySelector('.chatbot-theme-selector');
+            if (!selector) return;
+
+            const currentDisplay = selector.querySelector('.chatbot-theme-current');
+            const options = selector.querySelectorAll('.chatbot-theme-option');
+
+            if (currentDisplay) {
+                currentDisplay.textContent = this.themes[this.currentTheme].name;
+            }
+
+            options.forEach(option => {
+                const themeName = option.dataset.theme;
+                option.classList.toggle('chatbot-theme-option--active', themeName === this.currentTheme);
+            });
+        },
+
+        /**
+         * 🎯 Scopo: Ottiene lista temi disponibili
+         * 📥 Input: Nessuno
+         * 📤 Output: Array di temi disponibili
+         */
+        getAvailableThemes() {
+            return Object.keys(this.themes);
+        },
+
+        /**
+         * 🎯 Scopo: Ottiene tema corrente
+         * 📥 Input: Nessuno
+         * 📤 Output: Nome tema corrente
+         */
+        getCurrentTheme() {
+            return this.currentTheme;
+        }
+    };
+
+    /**
      * 🎨 MODULO: ChatbotUI
      * 🎯 Scopo: Gestisce interfaccia utente e Shadow DOM
      * 📋 Responsabilità: Creazione Shadow DOM, caricamento template/stili, eventi UI
@@ -58,6 +198,9 @@
                 
                 await this.loadStyles();
                 this.setupEventListeners();
+                
+                // Inizializza Theme Manager
+                ChatbotThemeManager.init(this.shadowRoot);
                 
                 // Riabilita transizioni dopo un piccolo delay
                 setTimeout(() => {
@@ -142,6 +285,31 @@
                                     </button>
                                 </div>
                             </div>
+                            
+                            <!-- Selettore Tema -->
+                            <div class="chatbot-theme-selector">
+                                <button class="chatbot-theme-toggle" aria-label="Seleziona tema" type="button">
+                                    <svg class="chatbot-theme-icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2"/>
+                                        <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                                    </svg>
+                                    <svg class="chatbot-theme-arrow" viewBox="0 0 24 24">
+                                        <path d="M7 10l5 5 5-5z"/>
+                                    </svg>
+                                </button>
+                                <div class="chatbot-theme-dropdown" role="menu">
+                                    <button class="chatbot-theme-option" data-theme="classic" role="menuitem">
+                                        <span class="chatbot-theme-preview chatbot-theme-preview--classic"></span>
+                                        <span class="chatbot-theme-name">Classic</span>
+                                    </button>
+                                    <button class="chatbot-theme-option" data-theme="dark-wine" role="menuitem">
+                                        <span class="chatbot-theme-preview chatbot-theme-preview--dark-wine"></span>
+                                        <span class="chatbot-theme-name">Dark-Wine</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
                             ${!this.isEmbedded ? `
                             <button class="chatbot-close" aria-label="${ChatbotConfig.t('closeLabel')}" type="button">
                                 <svg viewBox="0 0 24 24">
@@ -200,7 +368,7 @@
                     ` : ''}
 
                     <!-- Area Input -->
-                    <div class="chatbot-input-area">
+                    <div class="chatbot-input-area chatbot-home">
                         <form class="chatbot-input-form">
                             <div class="chatbot-input-container">
                                 <input 
@@ -227,6 +395,11 @@
 
                     <!-- Footer -->
                     <footer class="chatbot-footer">
+                        <div class="chatbot-footer-wave">
+                            <svg width="1248" height="64" viewBox="0 0 1248 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 8.5063V64H1248.01V45.0868L1251 8.5063C1251 8.5063 1110.88 45.0868 944.244 45.0868C774.663 45.0868 657.665 -23.4903 421.503 8.50625C151.501 45.0875 62.8255 16.736 0 8.5063Z" fill="currentColor"/>
+                            </svg>
+                        </div>
                         <div class="chatbot-powered">
                             <span class="chatbot-powered-by">Powered by</span> 
                             <span class="chatbot-name">${ChatbotConfig.t('title')}</span>
@@ -611,6 +784,59 @@
                     if (languageDropdown.style.display === 'block') {
                         languageDropdown.style.display = 'none';
                         const arrow = languageToggle.querySelector('.chatbot-language-arrow');
+                        if (arrow) {
+                            arrow.style.transform = 'rotate(0deg)';
+                        }
+                    }
+                });
+            }
+
+            // Event listeners per selettore tema
+            const themeToggle = this.shadowRoot.querySelector('.chatbot-theme-toggle');
+            const themeDropdown = this.shadowRoot.querySelector('.chatbot-theme-dropdown');
+            const themeOptions = this.shadowRoot.querySelectorAll('.chatbot-theme-option');
+
+            // Toggle dropdown tema
+            if (themeToggle && themeDropdown) {
+                themeToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isVisible = themeDropdown.style.display === 'block';
+                    themeDropdown.style.display = isVisible ? 'none' : 'block';
+                    
+                    // Toggle arrow rotation
+                    const arrow = themeToggle.querySelector('.chatbot-theme-arrow');
+                    if (arrow) {
+                        arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+                        arrow.style.transition = 'transform 0.2s ease';
+                    }
+                });
+
+                // Handle theme selection
+                themeOptions.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const newTheme = option.getAttribute('data-theme');
+                        if (newTheme && ChatbotThemeManager.themes[newTheme]) {
+                            // Applica tema
+                            ChatbotThemeManager.applyTheme(newTheme);
+                            
+                            // Close dropdown
+                            themeDropdown.style.display = 'none';
+                            
+                            // Reset arrow
+                            const arrow = themeToggle.querySelector('.chatbot-theme-arrow');
+                            if (arrow) {
+                                arrow.style.transform = 'rotate(0deg)';
+                            }
+                        }
+                    });
+                });
+
+                // Close dropdown when clicking outside
+                this.shadowRoot.addEventListener('click', () => {
+                    if (themeDropdown.style.display === 'block') {
+                        themeDropdown.style.display = 'none';
+                        const arrow = themeToggle.querySelector('.chatbot-theme-arrow');
                         if (arrow) {
                             arrow.style.transform = 'rotate(0deg)';
                         }
@@ -3174,7 +3400,8 @@
                 ui: ChatbotUI,
                 config: ChatbotConfig,
                 messages: ChatbotMessages,
-                api: ChatbotAPI
+                api: ChatbotAPI,
+                themes: ChatbotThemeManager
             };
             
             return result;
@@ -3200,6 +3427,50 @@
         },
 
         /**
+         * 🎨 Scopo: Imposta tema del chatbot
+         * 📥 Input: themeName (string)
+         * 📤 Output: boolean
+         */
+        setTheme(themeName) {
+            if (!this.isInitialized) {
+                console.warn('🤖 Chatbot non inizializzato');
+                return false;
+            }
+            
+            if (ChatbotThemeManager.themes[themeName]) {
+                ChatbotThemeManager.applyTheme(themeName);
+                return true;
+            }
+            
+            console.warn(`🎨 Tema '${themeName}' non trovato`);
+            return false;
+        },
+
+        /**
+         * 🎨 Scopo: Ottiene tema corrente
+         * 📥 Input: Nessuno
+         * 📤 Output: string | null
+         */
+        getTheme() {
+            if (!this.isInitialized) {
+                return null;
+            }
+            return ChatbotThemeManager.getCurrentTheme();
+        },
+
+        /**
+         * 🎨 Scopo: Ottiene temi disponibili
+         * 📥 Input: Nessuno
+         * 📤 Output: string[] | null
+         */
+        getAvailableThemes() {
+            if (!this.isInitialized) {
+                return null;
+            }
+            return ChatbotThemeManager.getAvailableThemes();
+        },
+
+        /**
          * 🛠️ API di debug (solo sviluppo)
          * 📥 Input: Nessuno
          * 📤 Output: Oggetti interni
@@ -3209,7 +3480,8 @@
             messages: ChatbotMessages,
             config: ChatbotConfig,
             api: ChatbotAPI,
-            core: ChatbotCore
+            core: ChatbotCore,
+            themes: ChatbotThemeManager
         }
     };
 })(); 
