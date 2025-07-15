@@ -307,6 +307,34 @@
         },
 
         /**
+         * 🎯 Scopo: Ottiene l'URL base del chatbot per percorsi assoluti
+         * 📥 Input: Nessuno
+         * 📤 Output: URL base del chatbot (es: "https://example.com/chatbot/")
+         */
+        getBaseURL() {
+            const scriptPath = this.getScriptPath();
+            
+            // Se è un URL completo, estrai la base
+            if (scriptPath.startsWith('http')) {
+                return scriptPath.replace(/chatbot\.js$/, '');
+            }
+            
+            // Se è un percorso relativo, usa la base del documento corrente
+            const baseURL = new URL(scriptPath, document.baseURI);
+            return baseURL.href.replace(/chatbot\.js$/, '');
+        },
+
+        /**
+         * 🎯 Scopo: Genera percorso assoluto per asset (immagini, etc.)
+         * 📥 Input: relativePath (string) - percorso relativo dall'asset
+         * 📤 Output: URL assoluto dell'asset
+         */
+        getAssetURL(relativePath) {
+            const baseURL = this.getBaseURL();
+            return baseURL + relativePath;
+        },
+
+        /**
          * 🎯 Scopo: Carica stili CSS di fallback
          * 📥 Input: Nessuno
          * 📤 Output: Stili minimi applicati
@@ -1601,14 +1629,14 @@
                     <div class="chatbot-level-cards">
                         <div class="chatbot-level-card" data-level="beginner">
                             <div class="chatbot-level-icon">
-                                <img src="chatbot/assets/imgs/wine-levels/beginner.svg" alt="Beginner" class="chatbot-level-image">
+                                <img src="${ChatbotUI.getAssetURL('assets/imgs/wine-levels/beginner.svg')}" alt="Beginner" class="chatbot-level-image">
                             </div>
                             <h3 class="chatbot-level-name">${ChatbotConfig.t('beginner')}</h3>
                             <p class="chatbot-level-description">${ChatbotConfig.t('beginnerDesc')}</p>
                         </div>
                         <div class="chatbot-level-card" data-level="expert">
                             <div class="chatbot-level-icon">
-                                <img src="chatbot/assets/imgs/wine-levels/expert.svg" alt="Expert" class="chatbot-level-image">
+                                <img src="${ChatbotUI.getAssetURL('assets/imgs/wine-levels/expert.svg')}" alt="Expert" class="chatbot-level-image">
                             </div>
                             <h3 class="chatbot-level-name">${ChatbotConfig.t('expert')}</h3>
                             <p class="chatbot-level-description">${ChatbotConfig.t('expertDesc')}</p>
@@ -1700,7 +1728,7 @@
                 <div class="chatbot-tasting-overlay-content">
                     <div class="chatbot-stage-preview-header">
                         <div class="chatbot-stage-icon">
-                            <img src="chatbot/assets/imgs/wine-stages/${currentStage}.svg" alt="${currentStage}" class="chatbot-stage-image">
+                            <img src="${ChatbotUI.getAssetURL(`assets/imgs/wine-stages/${currentStage}.svg`)}" alt="${currentStage}" class="chatbot-stage-image">
                         </div>
                         <h2 class="chatbot-stage-title">${ChatbotConfig.t('stage')} ${currentStage}</h2>
                     </div>
