@@ -741,6 +741,30 @@
                 });
             }
 
+            // Funzione per chiudere tutte le dropdown
+            const closeAllDropdowns = () => {
+                const languageDropdown = this.shadowRoot.querySelector('.chatbot-language-dropdown');
+                const themeDropdown = this.shadowRoot.querySelector('.chatbot-theme-dropdown');
+                
+                // Chiudi language dropdown
+                if (languageDropdown && languageDropdown.style.display === 'block') {
+                    languageDropdown.style.display = 'none';
+                    const languageArrow = this.shadowRoot.querySelector('.chatbot-language-arrow');
+                    if (languageArrow) {
+                        languageArrow.style.transform = 'rotate(0deg)';
+                    }
+                }
+                
+                // Chiudi theme dropdown
+                if (themeDropdown && themeDropdown.style.display === 'block') {
+                    themeDropdown.style.display = 'none';
+                    const themeArrow = this.shadowRoot.querySelector('.chatbot-theme-arrow');
+                    if (themeArrow) {
+                        themeArrow.style.transform = 'rotate(0deg)';
+                    }
+                }
+            };
+
             // Event listeners per selettore lingua
             const languageToggle = this.shadowRoot.querySelector('.chatbot-language-toggle');
             const languageDropdown = this.shadowRoot.querySelector('.chatbot-language-dropdown');
@@ -751,13 +775,20 @@
                 languageToggle.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const isVisible = languageDropdown.style.display === 'block';
-                    languageDropdown.style.display = isVisible ? 'none' : 'block';
                     
-                    // Toggle arrow rotation
-                    const arrow = languageToggle.querySelector('.chatbot-language-arrow');
-                    if (arrow) {
-                        arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
-                        arrow.style.transition = 'transform 0.2s ease';
+                    // Chiudi tutte le dropdown prima di aprire questa
+                    closeAllDropdowns();
+                    
+                    // Se non era visibile, aprila
+                    if (!isVisible) {
+                        languageDropdown.style.display = 'block';
+                        
+                        // Toggle arrow rotation
+                        const arrow = languageToggle.querySelector('.chatbot-language-arrow');
+                        if (arrow) {
+                            arrow.style.transform = 'rotate(180deg)';
+                            arrow.style.transition = 'transform 0.2s ease';
+                        }
                     }
                 });
 
@@ -767,27 +798,10 @@
                         e.stopPropagation();
                         const newLanguage = option.getAttribute('data-lang');
                         if (newLanguage && ChatbotConfig.setLanguage(newLanguage)) {
-                            // Close dropdown
-                            languageDropdown.style.display = 'none';
-                            
-                            // Reset arrow
-                            const arrow = languageToggle.querySelector('.chatbot-language-arrow');
-                            if (arrow) {
-                                arrow.style.transform = 'rotate(0deg)';
-                            }
+                            // Close all dropdowns
+                            closeAllDropdowns();
                         }
                     });
-                });
-
-                // Close dropdown when clicking outside
-                this.shadowRoot.addEventListener('click', () => {
-                    if (languageDropdown.style.display === 'block') {
-                        languageDropdown.style.display = 'none';
-                        const arrow = languageToggle.querySelector('.chatbot-language-arrow');
-                        if (arrow) {
-                            arrow.style.transform = 'rotate(0deg)';
-                        }
-                    }
                 });
             }
 
@@ -801,13 +815,20 @@
                 themeToggle.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const isVisible = themeDropdown.style.display === 'block';
-                    themeDropdown.style.display = isVisible ? 'none' : 'block';
                     
-                    // Toggle arrow rotation
-                    const arrow = themeToggle.querySelector('.chatbot-theme-arrow');
-                    if (arrow) {
-                        arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
-                        arrow.style.transition = 'transform 0.2s ease';
+                    // Chiudi tutte le dropdown prima di aprire questa
+                    closeAllDropdowns();
+                    
+                    // Se non era visibile, aprila
+                    if (!isVisible) {
+                        themeDropdown.style.display = 'block';
+                        
+                        // Toggle arrow rotation
+                        const arrow = themeToggle.querySelector('.chatbot-theme-arrow');
+                        if (arrow) {
+                            arrow.style.transform = 'rotate(180deg)';
+                            arrow.style.transition = 'transform 0.2s ease';
+                        }
                     }
                 });
 
@@ -820,29 +841,17 @@
                             // Applica tema
                             ChatbotThemeManager.applyTheme(newTheme);
                             
-                            // Close dropdown
-                            themeDropdown.style.display = 'none';
-                            
-                            // Reset arrow
-                            const arrow = themeToggle.querySelector('.chatbot-theme-arrow');
-                            if (arrow) {
-                                arrow.style.transform = 'rotate(0deg)';
-                            }
+                            // Close all dropdowns
+                            closeAllDropdowns();
                         }
                     });
                 });
-
-                // Close dropdown when clicking outside
-                this.shadowRoot.addEventListener('click', () => {
-                    if (themeDropdown.style.display === 'block') {
-                        themeDropdown.style.display = 'none';
-                        const arrow = themeToggle.querySelector('.chatbot-theme-arrow');
-                        if (arrow) {
-                            arrow.style.transform = 'rotate(0deg)';
-                        }
-                    }
-                });
             }
+
+            // Close all dropdowns when clicking outside
+            this.shadowRoot.addEventListener('click', () => {
+                closeAllDropdowns();
+            });
         },
 
         /**
