@@ -2500,11 +2500,17 @@
                 <div class="chatbot-tasting-overlay-content">
                     <h2 class="chatbot-error-title">${ChatbotConfig.t('error')}</h2>
                     <p class="chatbot-error-message">${message}</p>
-                    <button class="chatbot-error-close" onclick="ChatbotTasting.removeOverlay()">
+                    <button class="chatbot-error-close">
                         ${ChatbotConfig.t('close')}
                     </button>
                 </div>
             `);
+
+            // Aggancia listener al bottone close dell'overlay errore
+            const closeBtn = ChatbotUI.shadowRoot.querySelector('.chatbot-error-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => this.removeOverlay());
+            }
         },
 
         /**

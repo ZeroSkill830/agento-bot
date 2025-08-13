@@ -655,6 +655,7 @@
   transition: all 0.3s ease;
   flex: 0 0 280px;
   min-width: 280px;
+  min-height: 225px;
   position: relative;
   cursor: pointer;
   transform: translateY(0);
