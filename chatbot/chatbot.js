@@ -1381,7 +1381,7 @@
             
             wines.forEach((wine, index) => {
                 cardsHtml += `
-                    <div class="chatbot-wine-card" data-wine-name="${wine.name || ''}" data-wine-id="${wine.id || ''}" data-wine-index="${index}">
+                    <div class="chatbot-wine-card" data-wine-name="${wine.name || ''}" data-wine-id="${wine.id || ''}" data-wine-category="${(wine.category || '').toLowerCase()}" data-wine-index="${index}">
                         <img src="https://cdn.pixabay.com/photo/2013/07/12/16/28/wine-150955_1280.png" 
                              alt="Wine bottle" 
                              class="chatbot-wine-image"
@@ -1490,10 +1490,11 @@
                     e.preventDefault();
                     const wineName = card.getAttribute('data-wine-name');
                     const wineId = card.getAttribute('data-wine-id');
+                    const wineCategory = card.getAttribute('data-wine-category');
                     const wineIndex = card.getAttribute('data-wine-index');
                     
                     if (wineName && wineId) {
-                        ChatbotTasting.startTasting(wineName, wineIndex, wineId);
+                        ChatbotTasting.startTasting(wineName, wineIndex, wineId, wineCategory);
                     }
                 });
             });
@@ -1843,6 +1844,7 @@
         currentTasting: null,
         currentWineName: null,
         currentWineId: null,
+        currentWineCategory: null,
         currentWineIndex: null,
         isActive: false,
 
@@ -1851,9 +1853,10 @@
          * 📥 Input: wineName (string), wineIndex (number), wineId (string)
          * 📤 Output: Overlay selezione livello visualizzato
          */
-        startTasting(wineName, wineIndex, wineId) {
+        startTasting(wineName, wineIndex, wineId, wineCategory) {
             this.currentWineName = wineName;
             this.currentWineId = wineId;
+            this.currentWineCategory = wineCategory || null;
             this.currentWineIndex = wineIndex;
             this.showLevelSelector();
         },
@@ -1864,21 +1867,26 @@
          * 📤 Output: Overlay visualizzato
          */
         showLevelSelector() {
+            // Deduce wine type from currentWineCategory (fallback to currentWineId)
+            const wineType = (this.currentWineCategory || this.currentWineId || '').toLowerCase();
+            const validTypes = ['red', 'white', 'rose', 'sparkling'];
+            const safeWineType = validTypes.includes(wineType) ? wineType : 'red';
+
+            // Build path to selection preview for both levels for the chosen wine type
+            const beginnerSelectionSrc = ChatbotUI.getAssetURL(`assets/imgs/wine-degustation/${safeWineType}/beginner/selection.webm`);
+            const expertSelectionSrc = ChatbotUI.getAssetURL(`assets/imgs/wine-degustation/${safeWineType}/expert/selection.webm`);
+
             this.createOverlay('level-selector', `
                 <div class="chatbot-tasting-overlay-content">
                     <h2 class="chatbot-tasting-title">${ChatbotConfig.t('selectLevel')}</h2>
                     <div class="chatbot-level-cards">
                         <div class="chatbot-level-card" data-level="beginner">
-                            <div class="chatbot-level-icon">
-                                <img src="${ChatbotUI.getAssetURL('assets/imgs/wine-levels/beginner.svg')}" alt="Beginner" class="chatbot-level-image">
-                            </div>
+                            <video class="chatbot-level-selection-video" src="${beginnerSelectionSrc}" autoplay muted playsinline loop></video>
                             <h3 class="chatbot-level-name">${ChatbotConfig.t('beginner')}</h3>
                             <p class="chatbot-level-description">${ChatbotConfig.t('beginnerDesc')}</p>
                         </div>
                         <div class="chatbot-level-card" data-level="expert">
-                            <div class="chatbot-level-icon">
-                                <img src="${ChatbotUI.getAssetURL('assets/imgs/wine-levels/expert.svg')}" alt="Expert" class="chatbot-level-image">
-                            </div>
+                            <video class="chatbot-level-selection-video" src="${expertSelectionSrc}" autoplay muted playsinline loop></video>
                             <h3 class="chatbot-level-name">${ChatbotConfig.t('expert')}</h3>
                             <p class="chatbot-level-description">${ChatbotConfig.t('expertDesc')}</p>
                         </div>
@@ -1963,13 +1971,21 @@
         showStagePreview() {
             if (!this.currentTasting) return;
 
-            const { currentStage, previewText } = this.currentTasting;
+            const { currentStage, previewText, mode } = this.currentTasting;
+
+            // Determina categoria e livello per selezionare il media corretto
+            const wineType = (this.currentWineCategory || this.currentWineId || '').toLowerCase();
+            const validTypes = ['red', 'white', 'rose', 'sparkling'];
+            const safeWineType = validTypes.includes(wineType) ? wineType : 'red';
+            const safeMode = (mode === 'expert' || mode === 'beginner') ? mode : 'beginner';
+            const safeStage = (currentStage || 'visual').toLowerCase();
+            const stageMediaSrc = ChatbotUI.getAssetURL(`assets/imgs/wine-degustation/${safeWineType}/${safeMode}/${safeStage}.webm`);
 
             this.createOverlay('stage-preview', `
                 <div class="chatbot-tasting-overlay-content">
                     <div class="chatbot-stage-preview-header">
                         <div class="chatbot-stage-icon">
-                            <img src="${ChatbotUI.getAssetURL(`assets/imgs/wine-stages/${currentStage}.svg`)}" alt="${currentStage}" class="chatbot-stage-image">
+                            <video class="chatbot-stage-image" src="${stageMediaSrc}" autoplay muted playsinline loop></video>
                         </div>
                         <h2 class="chatbot-stage-title">${ChatbotConfig.t('stage')} ${currentStage}</h2>
                     </div>
