@@ -2554,23 +2554,29 @@
                         
                         <div class="chatbot-experience-detail-image" style="background-image: url('${experience.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'}')">
                             <div class="chatbot-experience-detail-image-overlay"></div>
+                            <h3 class="chatbot-experience-detail-title">${experience.title || 'Esperienza'}</h3>
                         </div>
                         
                         <div class="chatbot-experience-detail-info">
-                            <h3 class="chatbot-experience-detail-title">${experience.title || 'Esperienza'}</h3>
-                            <p class="chatbot-experience-detail-description">${experience.additonal_description || experience.description || ''}</p>
-                            
                             <div class="chatbot-experience-detail-chips">
                                 ${experience.duration ? `<div class="chatbot-experience-detail-chip">${experience.duration}</div>` : ''}
                                 ${experience.price ? `<div class="chatbot-experience-detail-chip">${experience.price}</div>` : ''}
                             </div>
                             
+                            <p class="chatbot-experience-detail-description">${experience.additonal_description || experience.description || ''}</p>
+                            
+                            <button class="chatbot-experience-detail-action" data-action="discover" data-url="${experience.discoverMoreLink || '#'}">
+                                ${ChatbotConfig.t('discoverMore')}
+                            </button>
+
                             <div class="chatbot-experience-detail-actions">
-                                <button class="chatbot-experience-detail-action" data-action="discover" data-url="${experience.discoverMoreLink || '#'}">
-                                    ${ChatbotConfig.t('discoverMore')}
-                                </button>
                                 <button class="chatbot-experience-detail-action" data-action="chat">
                                     ${ChatbotConfig.t('chatForInfo')}
+                                    <span class="chatbot-experience-detail-action-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                        </svg>
+                                    </span>
                                 </button>
                             </div>
                         </div>
