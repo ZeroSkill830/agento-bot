@@ -1791,7 +1791,23 @@
                     throw new Error('Non autenticato - richiesto login');
                 }
 
-                const response = await fetch(customApiUrl, {
+                // Appende language in querystring per l'endpoint experiences
+                let finalUrl = customApiUrl;
+                try {
+                    if (customApiUrl && customApiUrl.includes('api/winery/experiences')) {
+                        const urlObj = new URL(customApiUrl, window.location.origin);
+                        urlObj.searchParams.set('language', ChatbotConfig.current.language || 'it');
+                        finalUrl = urlObj.toString();
+                    }
+                } catch (e) {
+                    // Fallback per URL relativi non parsabili con URL()
+                    if (customApiUrl && customApiUrl.includes('api/winery/experiences')) {
+                        const sep = customApiUrl.includes('?') ? '&' : '?';
+                        finalUrl = `${customApiUrl}${sep}language=${encodeURIComponent(ChatbotConfig.current.language || 'it')}`;
+                    }
+                }
+
+                const response = await fetch(finalUrl, {
                     method: 'GET', // Assumendo GET per le API specifiche
                     headers: {
                         'Authorization': `Bearer ${this.token}`,
@@ -1812,7 +1828,7 @@
                 }
                 
                 // Gestione speciale per API experiences
-                if (customApiUrl.includes('api/winery/experiences') && data.reply && data.cards && Array.isArray(data.cards)) {
+                if (finalUrl.includes('api/winery/experiences') && data.reply && data.cards && Array.isArray(data.cards)) {
                     return { type: 'experiences', reply: data.reply, data: data.cards };
                 }
                 
