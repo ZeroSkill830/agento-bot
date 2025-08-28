@@ -219,6 +219,40 @@
         },
 
         /**
+         * 🎯 Scopo: Imposta stato loading sul pulsante toggle
+         * 📥 Input: isLoading (boolean)
+         * 📤 Output: Toggle disabilitato/abilitato e icona aggiornata
+         */
+        setToggleLoading(isLoading) {
+            if (!this.shadowRoot || this.isEmbedded) return;
+
+            const toggle = this.shadowRoot.querySelector('.chatbot-toggle');
+            if (!toggle) return;
+
+            if (isLoading) {
+                // Salva il contenuto originale una sola volta
+                if (!toggle.dataset.originalIcon) {
+                    toggle.dataset.originalIcon = toggle.innerHTML;
+                }
+
+                // Inserisce spinner CSS
+                toggle.innerHTML = '<span class="chatbot-toggle-spinner" aria-hidden="true"></span>';
+
+                toggle.disabled = true;
+                toggle.setAttribute('aria-busy', 'true');
+                toggle.setAttribute('aria-label', 'Caricamento...');
+            } else {
+                // Ripristina icona originale se presente
+                if (toggle.dataset.originalIcon) {
+                    toggle.innerHTML = toggle.dataset.originalIcon;
+                }
+                toggle.disabled = false;
+                toggle.removeAttribute('aria-busy');
+                toggle.setAttribute('aria-label', ChatbotConfig.t('toggleLabel'));
+            }
+        },
+
+        /**
          * 🎯 Scopo: Crea Shadow DOM isolato
          * 📥 Input: Container element
          * 📤 Output: Shadow DOM creato
@@ -3368,9 +3402,14 @@
 
                 // Inizializza e autentica API
                 try {
+                    // Mostra spinner sul toggle durante l'autenticazione (solo modalità floating)
+                    ChatbotUI.setToggleLoading(true);
                     ChatbotAPI.init(config.clientId);
                     await ChatbotAPI.authenticate();
                 } catch (error) {
+                } finally {
+                    // Rimuove lo stato di loading indipendentemente dall'esito
+                    ChatbotUI.setToggleLoading(false);
                 }
 
                 this.isInitialized = true;
