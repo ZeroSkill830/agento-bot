@@ -45,14 +45,164 @@
                     '--chatbot-message-user-bg': '#FFEDEF',
                     '--chatbot-message-user-text': '#484848',
                     '--chatbot-message-bot-bg': '#FFEDEF',
-                    '--chatbot-message-bot-text': '#777777'
+                    '--chatbot-message-bot-text': '#777777',
+                    '--chatbot-top-action-border': '#FFF',
+                    '--chatbot-quick-action-icon': '#E94744',
+                    '--chatbot-chips-bg': '#FFF',
+                    '--chatbot-chips-text': '#E94744',
+                    '--chatbot-experience-chips-text': '#FFF',
+                    '--chatbot-experience-chips-bg': '#E94744',
+                    '--chatbot-level-name-text': '#E94744',
+                    '--chatbot-send-button': '#E94744',
+                    '--chatbot-box-shadow': '0 10px 30px rgba(233, 71, 68, 0.3)',
                 }
             },
             'dark-wine': {
                 name: 'Dark-Wine',
                 colors: {
-                    // Colori primari - Wine Theme Dark
                     '--chatbot-primary': '#722F37',
+                    '--chatbot-primary-hover': '#5A232B',
+                    '--chatbot-primary-light': '#FFEDEF',
+                    '--chatbot-modal-text': 'black',
+                    // Sfondo e superficie
+                    '--chatbot-bg': '#ffffff',
+                    '--chatbot-surface': 'white',
+                    '--chatbot-border': '#F0E4E7',
+                    // Testo
+                    '--chatbot-text-primary': '#2C1F21',
+                    '--chatbot-text-secondary': '#7A5A60',
+                    '--chatbot-text-inverse': '#ffffff',
+                    '--chatbot-footer-text': 'white',
+                    // Messaggi
+                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-text': '#484848',
+                    '--chatbot-message-bot-bg': '#FFEDEF',
+                    '--chatbot-message-bot-text': '#777777',
+                    '--chatbot-top-action-border': '#FFF',
+                    '--chatbot-quick-action-icon': '#722F37',
+                    '--chatbot-chips-bg': '#FFF',
+                    '--chatbot-chips-text': '#722F37',
+                    '--chatbot-experience-chips-text': '#FFF',
+                    '--chatbot-experience-chips-bg': '#722F37',
+                    '--chatbot-level-name-text': '#722F37',
+                    '--chatbot-send-button': '#722F37',
+                    '--chatbot-box-shadow': '0 10px 30px rgba(114, 47, 55, 0.3)',
+                }
+            },
+            'brown': {
+                name: 'Brown',
+                colors: {
+                    '--chatbot-primary': '#442D1C',
+                    '--chatbot-primary-hover': '#332418',
+                    '--chatbot-primary-light': '#FFEDEF',
+                    '--chatbot-modal-text': 'black',
+                    // Sfondo e superficie
+                    '--chatbot-bg': '#ffffff',
+                    '--chatbot-surface': 'white',
+                    '--chatbot-border': '#F0E4E7',
+                    // Testo
+                    '--chatbot-text-primary': '#2C1F21',
+                    '--chatbot-text-secondary': '#7A5A60',
+                    '--chatbot-text-inverse': '#ffffff',
+                    '--chatbot-footer-text': 'white',
+                    // Messaggi
+                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-text': '#484848',
+                    '--chatbot-message-bot-bg': '#FFEDEF',
+                    '--chatbot-message-bot-text': '#777777',
+                    '--chatbot-top-action-border': '#FFF',
+                    '--chatbot-quick-action-icon': '#442D1C',
+                    '--chatbot-chips-bg': '#FFF',
+                    '--chatbot-chips-text': '#442D1C',
+                    '--chatbot-experience-chips-text': '#FFF',
+                    '--chatbot-experience-chips-bg': '#442D1C',
+                    '--chatbot-level-name-text': '#442D1C',
+                    '--chatbot-send-button': '#442D1C',
+                    '--chatbot-box-shadow': '0 10px 30px rgba(68, 45, 28, 0.3)',
+                }
+            },
+            'light-yellow': {
+                name: 'Light-Yellow',
+                colors: {
+                    '--chatbot-primary': '#FFF',
+                    '--chatbot-primary-hover': '#FBEEDA',
+                    '--chatbot-text-inverse': '#000000',
+                    '--chatbot-surface': '#FBEEDA',
+                    '--chatbot-bg': '#FBEEDA',
+                    '--chatbot-primary-light': '#FFF',
+                    '--chatbot-message-user-bg': '#FFF',
+                    '--chatbot-message-bot-bg': '#FFF',
+                    '--chatbot-top-action-border': '#000000',
+                    '--chatbot-footer-text': '#000000',
+                    '--chatbot-quick-action-icon': '#000000',
+                    '--chatbot-chips-bg': '#FBEEDA',
+                    '--chatbot-chips-text': '#000000',
+                    '--chatbot-experience-chips-text': '#000000',
+                    '--chatbot-experience-chips-bg': '#FBEEDA',
+                    '--chatbot-level-name-text': '#000000',
+                    '--chatbot-send-button': '#000000',
+                    '--chatbot-box-shadow': '0 10px 30px rgba(255, 255, 255, 0.3)',
+                }
+            },
+            'rose': {
+                name: 'Rose',
+                colors: {
+                    '--chatbot-primary': '#CA9BAA',
+                    '--chatbot-primary-hover': '#B78D9B',
+                    '--chatbot-primary-light': '#FFEDEF',
+                    '--chatbot-modal-text': 'black',
+                    '--chatbot-bg': '#ffffff',
+                    '--chatbot-surface': 'white',
+                    '--chatbot-border': '#F0E4E7',
+                    '--chatbot-text-primary': '#2C1F21',
+                    '--chatbot-text-secondary': '#7A5A60',
+                    '--chatbot-text-inverse': '#ffffff',
+                    '--chatbot-footer-text': 'white',
+                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-text': '#484848',
+                    '--chatbot-message-bot-bg': '#FFEDEF',
+                    '--chatbot-message-bot-text': '#777777',
+                    '--chatbot-top-action-border': '#FFF',
+                    '--chatbot-quick-action-icon': '#CA9BAA',
+                    '--chatbot-chips-bg': '#FFF',
+                    '--chatbot-chips-text': '#CA9BAA',
+                    '--chatbot-experience-chips-text': '#FFF',
+                    '--chatbot-experience-chips-bg': '#CA9BAA',
+                    '--chatbot-level-name-text': '#CA9BAA',
+                    '--chatbot-send-button': '#CA9BAA',
+                    '--chatbot-box-shadow': '0 10px 30px rgba(202, 155, 170, 0.3)',
+                }
+            },
+            'gold': {
+                name: 'Gold',
+                colors: {
+                    '--chatbot-primary': '#B27C36',
+                    '--chatbot-primary-hover': '#9E6F31',
+                    '--chatbot-primary-light': '#FFEDEF',
+                    '--chatbot-modal-text': 'black',
+                    // Sfondo e superficie
+                    '--chatbot-bg': '#ffffff',
+                    '--chatbot-surface': 'white',
+                    '--chatbot-border': '#F0E4E7',
+                    // Testo
+                    '--chatbot-text-primary': '#2C1F21',
+                    '--chatbot-text-secondary': '#7A5A60',
+                    '--chatbot-text-inverse': '#ffffff',
+                    '--chatbot-footer-text': 'white',
+                    // Messaggi
+                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-text': '#484848',
+                    '--chatbot-message-bot-bg': '#FFEDEF',
+                    '--chatbot-message-bot-text': '#777777',
+                    '--chatbot-top-action-border': '#FFF',
+                    '--chatbot-quick-action-icon': '#B27C36',
+                    '--chatbot-chips-bg': '#FFF',
+                    '--chatbot-chips-text': '#B27C36',
+                    '--chatbot-experience-chips-text': '#FFF',
+                    '--chatbot-experience-chips-bg': '#B27C36',
+                    '--chatbot-level-name-text': '#B27C36',
+                    '--chatbot-send-button': '#B27C36',
+                    '--chatbot-box-shadow': '0 10px 30px rgba(178, 124, 54, 0.3)',
                 }
             }
         },
@@ -340,6 +490,22 @@
                                     <button class="chatbot-theme-option" data-theme="dark-wine" role="menuitem">
                                         <span class="chatbot-theme-preview chatbot-theme-preview--dark-wine"></span>
                                         <span class="chatbot-theme-name">Dark-Wine</span>
+                                    </button>
+                                    <button class="chatbot-theme-option" data-theme="brown" role="menuitem">
+                                        <span class="chatbot-theme-preview chatbot-theme-preview--brown"></span>
+                                        <span class="chatbot-theme-name">Brown</span>
+                                    </button>
+                                    <button class="chatbot-theme-option" data-theme="light-yellow" role="menuitem">
+                                        <span class="chatbot-theme-preview chatbot-theme-preview--light-yellow"></span>
+                                        <span class="chatbot-theme-name">Light-Yellow</span>
+                                    </button>
+                                    <button class="chatbot-theme-option" data-theme="rose" role="menuitem">
+                                        <span class="chatbot-theme-preview chatbot-theme-preview--rose"></span>
+                                        <span class="chatbot-theme-name">Rose</span>
+                                    </button>
+                                    <button class="chatbot-theme-option" data-theme="gold" role="menuitem">
+                                        <span class="chatbot-theme-preview chatbot-theme-preview--gold"></span>
+                                        <span class="chatbot-theme-name">Gold</span>
                                     </button>
                                 </div>
                             </div>
