@@ -2884,12 +2884,30 @@
                     if (action === 'discover' && url && url !== '#') {
                         window.open(url, '_blank');
                     } else if (action === 'chat') {
-                        // Ottieni i dati dell'esperienza dall'overlay
-                        const title = overlay.querySelector('.chatbot-experience-detail-title').textContent;
-                        const experienceId = button.closest('.chatbot-experience-detail-overlay').dataset.experienceId;
-                        const experienceIndex = button.closest('.chatbot-experience-detail-overlay').dataset.experienceIndex;
+                        // Ottieni i dati dell'esperienza dall'overlay (titolo, descrizione, immagine, prezzo, durata)
+                        const title = overlay.querySelector('.chatbot-experience-detail-title')?.textContent || 'Esperienza';
+                        const description = overlay.querySelector('.chatbot-experience-detail-description')?.textContent || '';
+                        let image = '';
+                        const imageEl = overlay.querySelector('.chatbot-experience-detail-image');
+                        if (imageEl && imageEl.style && imageEl.style.backgroundImage) {
+                            const match = imageEl.style.backgroundImage.match(/url\(["']?(.*?)["']?\)/);
+                            if (match && match[1]) image = match[1];
+                        }
+                        let duration = '';
+                        let price = '';
+                        const chips = overlay.querySelectorAll('.chatbot-experience-detail-chips .chatbot-experience-detail-chip');
+                        if (chips && chips.length) {
+                            if (chips[0]) duration = chips[0].textContent || '';
+                            if (chips[1]) price = chips[1].textContent || '';
+                        }
+                        const experienceId = button.closest('.chatbot-experience-detail-overlay')?.dataset.experienceId;
+                        const experienceIndex = button.closest('.chatbot-experience-detail-overlay')?.dataset.experienceIndex;
                         const experienceData = {
-                            title: title,
+                            title,
+                            description,
+                            image,
+                            duration,
+                            price,
                             id: experienceId,
                             index: experienceIndex !== '' ? parseInt(experienceIndex) : undefined
                         };
@@ -2960,7 +2978,14 @@
                         <div class="chatbot-tasting-messages" id="experience-chat-messages">
                             <div class="chatbot-message chatbot-message--bot">
                                 <div class="chatbot-message-content">
-                                    Ciao! 👋 Sono qui per aiutarti con domande su "${experienceData.title}". Cosa vorresti sapere?
+                                    <p style="margin-bottom: 10px; color: #333;">${ChatbotConfig.t('experienceIntro')}</p>
+                                    ${experienceData && experienceData.image ? `<div class=\"chatbot-experience-detail-image\" style=\"background-image: url('${experienceData.image}'); min-height: 180px; border-radius: 12px; margin-bottom: 12px;\"><div class=\"chatbot-experience-detail-image-overlay\"></div></div>` : ''}
+                                    <h4 class="chatbot-experience-detail-title" style="font-size: 20px; margin-bottom: 8px;">${experienceData.title || ''}</h4>
+                                    ${experienceData && experienceData.description ? `<p class=\"chatbot-experience-detail-description\" style=\"max-height: none; color: #333;\">${experienceData.description}</p>` : ''}
+                                    <div class="chatbot-experience-detail-chips" style="margin-top: 8px;">
+                                        ${experienceData && experienceData.duration ? `<div class=\"chatbot-experience-detail-chip\">${experienceData.duration}</div>` : ''}
+                                        ${experienceData && experienceData.price ? `<div class=\"chatbot-experience-detail-chip\">${experienceData.price}</div>` : ''}
+                                    </div>
                                 </div>
                                 <div class="chatbot-message-time">${new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}</div>
                             </div>
@@ -3361,7 +3386,8 @@
                 // Experience actions
                 discoverMore: 'Scopri di più',
                 chatForInfo: 'Chatta per avere info',
-                included: 'Incluso'
+                included: 'Incluso',
+                experienceIntro: 'Hai bisogno di informazioni per la seguente esperienza? Chiedimi pure!'
             },
             en: {
                 title: '{chatbotName}',
@@ -3391,7 +3417,8 @@
                 // Experience actions
                 discoverMore: 'Discover more',
                 chatForInfo: 'Chat for info',
-                included: 'Included'
+                included: 'Included',
+                experienceIntro: 'Do you need information about the following experience? Ask me anything!'
             }
         },
 

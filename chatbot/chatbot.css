@@ -1833,7 +1833,7 @@
 }
 
 .chatbot-experience-detail-description {
-  font-size: 20px;
+  font-size: 16px;
   color: var(--chatbot-text-inverse);
   line-height: 1.2;
   font-weight: 100;
