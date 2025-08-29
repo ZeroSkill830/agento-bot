@@ -947,7 +947,7 @@
   font-family: var(--chatbot-font-family);
   letter-spacing: -0.5px;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 17px;
   color: var(--chatbot-text-primary);
   line-height: 1.2;
   word-wrap: break-word;
@@ -1782,7 +1782,7 @@
 
 .chatbot-experience-detail-image {
   width: 100%;
-  height: 260px;
+  min-height: 260px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1838,6 +1838,8 @@
   line-height: 1.2;
   font-weight: 100;
   margin-bottom: var(--chatbot-spacing-lg);
+  max-height: 150px;
+  overflow-y: auto;
   /* flex: 1; */
 }
 
