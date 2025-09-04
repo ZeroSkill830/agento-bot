@@ -2089,8 +2089,8 @@
             const safeWineType = validTypes.includes(wineType) ? wineType : 'red';
 
             // Build path to selection preview for both levels for the chosen wine type
-            const beginnerSelectionSrc = ChatbotUI.getAssetURL(`assets/imgs/wine-degustation/${safeWineType}/beginner/selection.webm`);
-            const expertSelectionSrc = ChatbotUI.getAssetURL(`assets/imgs/wine-degustation/${safeWineType}/expert/selection.webm`);
+            const beginnerSelectionSrc = ChatbotUI.getAssetURL(`assets/imgs/wine-degustation/${safeWineType}/beginner/selection.mp4`);
+            const expertSelectionSrc = ChatbotUI.getAssetURL(`assets/imgs/wine-degustation/${safeWineType}/expert/selection.mp4`);
 
             this.createOverlay('level-selector', `
                 <div class="chatbot-tasting-overlay-content">
@@ -2195,7 +2195,7 @@
             const safeWineType = validTypes.includes(wineType) ? wineType : 'red';
             const safeMode = (mode === 'expert' || mode === 'beginner') ? mode : 'beginner';
             const safeStage = (currentStage || 'visual').toLowerCase();
-            const stageMediaSrc = ChatbotUI.getAssetURL(`assets/imgs/wine-degustation/${safeWineType}/${safeMode}/${safeStage}.webm`);
+            const stageMediaSrc = ChatbotUI.getAssetURL(`assets/imgs/wine-degustation/${safeWineType}/${safeMode}/${safeStage}.mp4`);
 
             this.createOverlay('stage-preview', `
                 <div class="chatbot-tasting-overlay-content">
