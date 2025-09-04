@@ -1393,6 +1393,7 @@
   height: 200px;
   object-fit: cover;
   border-radius: var(--chatbot-radius-sm);
+  background: white;
 }
 
 .chatbot-level-card::before {
