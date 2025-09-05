@@ -136,6 +136,14 @@
   fill: var(--chatbot-text-inverse);
 }
 
+/* Lottie Animation per Toggle */
+.chatbot-toggle-lottie {
+  width: 50px !important;
+  height: 50px !important;
+  display: block;
+  margin: 0 auto;
+}
+
 /* Spinner per il toggle in stato loading */
 .chatbot-toggle-spinner {
   width: 28px;
@@ -213,6 +221,11 @@
   .chatbot-toggle-icon {
     width: 20px;
     height: 20px;
+  }
+
+  .chatbot-toggle-lottie {
+    width: 36px !important;
+    height: 36px !important;
   }
 
   .chatbot-window {

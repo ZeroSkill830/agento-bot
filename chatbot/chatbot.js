@@ -424,23 +424,44 @@
         },
 
         /**
-         * 🎯 Scopo: Carica template HTML nel Shadow DOM
+         * 🎯 Scopo: Carica script Lottie nel documento principale
          * 📥 Input: Nessuno
-         * 📤 Output: HTML template caricato
+         * 📤 Output: Script Lottie caricato
          */
+        loadLottieScript() {
+            // Verifica se lo script è già stato caricato
+            if (document.querySelector('script[src*="dotlottie-wc"]')) {
+                return;
+            }
+
+            // Crea e carica lo script Lottie
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js';
+            script.type = 'module';
+            script.async = true;
+            document.head.appendChild(script);
+        },
+
         /**
          * 🎯 Scopo: Carica template HTML hardcoded
          * 📥 Input: Nessuno
          * 📤 Output: Template HTML caricato nel Shadow DOM
          */
         async loadTemplate() {
+            // Carica script Lottie nel documento principale se non già presente
+            this.loadLottieScript();
+            
             const htmlTemplate = `
                 ${!this.isEmbedded ? `
                 <!-- Pulsante Toggle Chatbot -->
                 <button class="chatbot-toggle" aria-label="${ChatbotConfig.t('toggleLabel')}" type="button">
-                    <svg class="chatbot-toggle-icon" viewBox="0 0 24 24">
-                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-                    </svg>
+                    <dotlottie-wc 
+                        src="https://lottie.host/baa34772-db5b-4904-845a-a8182cf0afdd/hFdx0QbhSU.lottie" 
+                        class="chatbot-toggle-lottie" 
+                        speed="1" 
+                        autoplay 
+                        loop>
+                    </dotlottie-wc>
                 </button>
                 ` : ''}
 
