@@ -424,20 +424,19 @@
         },
 
         /**
-         * 🎯 Scopo: Carica script Lottie nel documento principale
+         * 🎯 Scopo: Carica script Lottie Player nel documento principale
          * 📥 Input: Nessuno
-         * 📤 Output: Script Lottie caricato
+         * 📤 Output: Script Lottie Player caricato
          */
         loadLottieScript() {
             // Verifica se lo script è già stato caricato
-            if (document.querySelector('script[src*="dotlottie-wc"]')) {
+            if (document.querySelector('script[src*="lottie-player"]')) {
                 return;
             }
 
-            // Crea e carica lo script Lottie
+            // Crea e carica lo script Lottie Player
             const script = document.createElement('script');
-            script.src = 'https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js';
-            script.type = 'module';
+            script.src = 'https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js';
             script.async = true;
             document.head.appendChild(script);
         },
@@ -455,13 +454,13 @@
                 ${!this.isEmbedded ? `
                 <!-- Pulsante Toggle Chatbot -->
                 <button class="chatbot-toggle" aria-label="${ChatbotConfig.t('toggleLabel')}" type="button">
-                    <dotlottie-wc 
-                        src="https://lottie.host/baa34772-db5b-4904-845a-a8182cf0afdd/hFdx0QbhSU.lottie" 
+                    <lottie-player                        
+                        src="https://lottie.host/8c84c603-5b2e-46cd-b685-706d494ac9cd/7Mnq5pXZSN.json"
                         class="chatbot-toggle-lottie" 
-                        speed="1" 
-                        autoplay 
-                        loop>
-                    </dotlottie-wc>
+                        background="transparent"
+                        speed="1"
+                    >
+                    </lottie-player>
                 </button>
                 ` : ''}
 
@@ -878,10 +877,30 @@
 
             // Event listener per pulsante toggle (solo in modalità floating)
             if (toggle && !this.isEmbedded) {
-                toggle.addEventListener('click', () => this.toggle());
+                const playToggleLottie = (reverse) => {
+                    const lottieEl = this.shadowRoot.querySelector('.chatbot-toggle-lottie');
+                    if (!lottieEl) return;
+                    try {
+                        if (typeof lottieEl.setDirection === 'function') {
+                            lottieEl.setDirection(reverse ? -1 : 1);
+                        } else if ('direction' in lottieEl) {
+                            lottieEl.direction = reverse ? -1 : 1;
+                        }
+                        if (typeof lottieEl.play === 'function') {
+                            lottieEl.play();
+                        }
+                    } catch (_) {}
+                };
+
+                toggle.addEventListener('click', () => {
+                    // Se la chat è visibile, riproduci reverse; altrimenti forward
+                    playToggleLottie(this.isVisible === true);
+                    this.toggle();
+                });
                 toggle.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
+                        playToggleLottie(this.isVisible === true);
                         this.toggle();
                     }
                 });
@@ -889,10 +908,35 @@
 
             // Event listener per pulsante close (solo in modalità floating)
             if (closeButton && !this.isEmbedded) {
-                closeButton.addEventListener('click', () => this.toggle());
+                closeButton.addEventListener('click', () => {
+                    // Chiusura: riproduci animazione del toggle in reverse
+                    const lottieEl = this.shadowRoot.querySelector('.chatbot-toggle-lottie');
+                    try {
+                        if (lottieEl && typeof lottieEl.setDirection === 'function') {
+                            lottieEl.setDirection(-1);
+                        } else if (lottieEl) {
+                            lottieEl.direction = -1;
+                        }
+                        if (lottieEl && typeof lottieEl.play === 'function') {
+                            lottieEl.play();
+                        }
+                    } catch (_) {}
+                    this.toggle();
+                });
                 closeButton.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
+                        const lottieEl = this.shadowRoot.querySelector('.chatbot-toggle-lottie');
+                        try {
+                            if (lottieEl && typeof lottieEl.setDirection === 'function') {
+                                lottieEl.setDirection(-1);
+                            } else if (lottieEl) {
+                                lottieEl.direction = -1;
+                            }
+                            if (lottieEl && typeof lottieEl.play === 'function') {
+                                lottieEl.play();
+                            }
+                        } catch (_) {}
                         this.toggle();
                     }
                 });
