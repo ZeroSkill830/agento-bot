@@ -42,7 +42,7 @@
                     '--chatbot-text-inverse': '#ffffff',
                     '--chatbot-footer-text': 'white',
                     // Messaggi
-                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-bg': '#e7e7e7',
                     '--chatbot-message-user-text': '#484848',
                     '--chatbot-message-bot-bg': '#FFEDEF',
                     '--chatbot-message-bot-text': '#777777',
@@ -74,7 +74,7 @@
                     '--chatbot-text-inverse': '#ffffff',
                     '--chatbot-footer-text': 'white',
                     // Messaggi
-                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-bg': '#e7e7e7',
                     '--chatbot-message-user-text': '#484848',
                     '--chatbot-message-bot-bg': '#FFEDEF',
                     '--chatbot-message-bot-text': '#777777',
@@ -106,7 +106,7 @@
                     '--chatbot-text-inverse': '#ffffff',
                     '--chatbot-footer-text': 'white',
                     // Messaggi
-                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-bg': '#e7e7e7',
                     '--chatbot-message-user-text': '#484848',
                     '--chatbot-message-bot-bg': '#FFEDEF',
                     '--chatbot-message-bot-text': '#777777',
@@ -130,7 +130,7 @@
                     '--chatbot-surface': '#FBEEDA',
                     '--chatbot-bg': '#FBEEDA',
                     '--chatbot-primary-light': '#FFF',
-                    '--chatbot-message-user-bg': '#FFF',
+                    '--chatbot-message-user-bg': '#e7e7e7',
                     '--chatbot-message-bot-bg': '#FFF',
                     '--chatbot-top-action-border': '#000000',
                     '--chatbot-footer-text': '#000000',
@@ -158,7 +158,7 @@
                     '--chatbot-text-secondary': '#7A5A60',
                     '--chatbot-text-inverse': '#ffffff',
                     '--chatbot-footer-text': 'white',
-                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-bg': '#e7e7e7',
                     '--chatbot-message-user-text': '#484848',
                     '--chatbot-message-bot-bg': '#FFEDEF',
                     '--chatbot-message-bot-text': '#777777',
@@ -190,7 +190,7 @@
                     '--chatbot-text-inverse': '#ffffff',
                     '--chatbot-footer-text': 'white',
                     // Messaggi
-                    '--chatbot-message-user-bg': '#FFEDEF',
+                    '--chatbot-message-user-bg': '#e7e7e7',
                     '--chatbot-message-user-text': '#484848',
                     '--chatbot-message-bot-bg': '#FFEDEF',
                     '--chatbot-message-bot-text': '#777777',

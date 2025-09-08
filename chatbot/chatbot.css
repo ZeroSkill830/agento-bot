@@ -45,7 +45,7 @@
   --chatbot-footer-text: white;
 
   /* Messaggi */
-  --chatbot-message-user-bg: #FFEDEF;
+  --chatbot-message-user-bg: #e7e7e7;
   --chatbot-message-user-text: #484848;
   --chatbot-message-bot-bg: #FFEDEF;
   --chatbot-message-bot-text: #777777;
