@@ -454,7 +454,7 @@
                 ${!this.isEmbedded ? `
                 <!-- Pulsante Toggle Chatbot -->
                 <button class="chatbot-toggle" aria-label="${ChatbotConfig.t('toggleLabel')}" type="button">
-                    <lottie-player                        
+                    <lottie-player             
                         src="https://lottie.host/8c84c603-5b2e-46cd-b685-706d494ac9cd/7Mnq5pXZSN.json"
                         class="chatbot-toggle-lottie" 
                         background="transparent"
