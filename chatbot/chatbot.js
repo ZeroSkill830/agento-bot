@@ -319,7 +319,6 @@
     attentionPopupTimer: null,
     attentionPopupDismissed: false,
     attentionPopupHideTimer: null,
-    toggleInteractionKey: 'chatbot-toggle-interacted',
 
         /**
          * 🎯 Scopo: Inizializza Shadow DOM e carica UI
@@ -331,13 +330,6 @@
             try {
                 // Determina se siamo in modalità embedded
                 this.isEmbedded = ChatbotConfig.current.containerId ? true : false;
-                // Precarica stato interazione toggle da storage (solo se presente)
-                try {
-                    if (!this.hasUserInteractedWithToggle()) {
-                        // Se l'utente NON ha interagito in questa sessione, assicura che non sia marcato come dismesso
-                        this.attentionPopupDismissed = false;
-                    }
-                } catch (_) {}
                 
                 await this.createShadowDOM(container);
                 await this.loadTemplate();
@@ -466,7 +458,7 @@
                 <!-- Pulsante Toggle Chatbot -->
                 <button class="chatbot-toggle" aria-label="${ChatbotConfig.t('toggleLabel')}" type="button">
                     <lottie-player             
-                        src="https://lottie.host/8c84c603-5b2e-46cd-b685-706d494ac9cd/7Mnq5pXZSN.json"
+                        src="https://lottie.host/72afe060-bfd3-42de-9c72-79f85c6d747c/T6cccBvU4H.json"
                         class="chatbot-toggle-lottie" 
                         background="transparent"
                         speed="1"
@@ -580,25 +572,17 @@
                     <!-- Quick Actions (condizionali) -->
                     ${ChatbotConfig.current.showQuickActions ? `
                     <div class="chatbot-quick-actions">
-                        <button class="chatbot-quick-action" data-text="${ChatbotConfig.t('quickAction1')}" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/winery/experiences">
-                            <svg class="chatbot-quick-action-icon" viewBox="0 0 25 76" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14.7759 0.000193492C16.0409 -0.0206865 16.0757 1.65319 16.1992 2.65891C16.7891 7.43695 16.4324 12.2602 16.4167 17.0574C16.6308 17.4942 16.7526 17.9796 16.977 18.4111C18.5987 21.5101 22.3849 21.5188 23.4237 25.3624C24.6295 29.8308 23.8274 37.8208 23.85 42.6841C23.8918 51.5634 23.0983 60.6114 23.3419 69.4662C23.3646 70.3136 23.4707 72.5721 22.8078 73.1237C22.6372 73.2664 22.2736 73.2629 22.0543 73.4143C20.33 74.6062 18.583 75.1438 16.462 75.3039C13.0829 75.558 6.3143 75.6484 3.10226 74.9142C1.80248 74.6166 0.0798789 72.948 0.00505889 71.5664C-0.0784611 70.0282 0.897678 70.0857 1.0508 69.1147C1.19 68.236 0.991639 67.0998 1.06298 66.1689C1.56584 59.5117 1.37618 53.7836 1.23524 47.1994C1.09778 40.8415 0.137298 26.3699 5.42516 21.8094C6.11768 21.2108 7.55666 20.8959 8.09606 20.3043C9.74384 18.4981 9.20618 13.426 9.23402 11.0022C9.26186 8.57839 8.9156 5.81701 9.43586 3.54805C9.98396 1.15033 12.493 0.0384732 14.7759 0.0019332V0.000193492ZM13.5927 6.92191C13.3665 8.23387 12.065 7.59355 11.2803 7.82497C10.4172 8.07901 10.9775 9.35269 10.9914 9.95821C11.0628 13.0711 11.5308 18.9714 9.24794 21.2787C8.21264 22.3244 6.32996 22.6063 5.61482 23.7355C4.37768 25.6913 3.43112 30.2536 3.1562 32.5869C2.44628 38.576 3.30236 44.6573 3.33542 50.6742C3.36326 55.6993 3.2258 60.7158 2.65334 65.6661C2.5037 66.9606 2.09132 69.2452 2.6603 70.3153C3.77216 72.4103 6.07766 72.2833 8.11172 72.3459C10.6243 72.4207 14.5149 72.6139 16.9701 72.3268C18.0315 72.2032 20.3248 71.5507 20.5475 70.3362C20.812 68.8938 20.5092 66.2194 20.5475 64.596C20.5753 63.4545 21.3392 62.0904 19.5574 61.7719C18.0697 61.5057 16.5264 61.3474 15.0265 61.0829C13.9268 60.8898 10.8244 60.6531 10.1284 60.065C9.66032 59.67 8.82512 58.586 8.73986 57.9735C8.4719 56.0856 9.07568 54.0568 9.22706 52.2298C9.58898 47.8972 9.50372 43.6377 9.76994 39.3747C9.82736 38.449 10.4016 34.1912 10.7391 33.5578C12.3086 30.6016 18.684 31.2141 21.4314 30.3301C21.722 28.9033 21.7899 26.6309 21.0834 25.2754C20.4274 24.0139 17.7235 22.5262 16.5507 21.2821C12.8898 17.4037 15.1587 12.9493 14.8229 8.21995L14.3879 1.86895C14.1078 0.722293 11.9867 2.14213 11.5099 2.66065C10.7583 3.47671 10.2989 5.53513 10.9862 6.48865L13.5962 6.92365L13.5927 6.92191ZM12.0685 57.6864C12.7262 58.3528 19.1868 58.5912 20.4692 59.1237C20.6293 59.1376 20.7093 59.0419 20.8155 58.9479C21.7029 58.1493 21.3479 54.0446 21.4158 52.7622C21.7324 46.8132 22.3449 40.276 21.943 34.3269C21.9047 33.7579 21.8334 32.145 21.2974 32.0005L15.371 33.3195C14.7533 33.4952 13.1316 34.0781 12.935 34.7115C12.0946 38.8561 12.7001 43.0078 12.5557 47.2081C12.5017 48.7898 12.4165 50.843 12.3103 52.3933C12.2355 53.5035 11.3081 56.9191 12.0667 57.6882L12.0685 57.6864Z" fill="currentColor"/>
-                                <path d="M5.34338 33.3828L5.8532 33.5377C6.12812 34.9245 6.0011 36.3965 6.11246 37.8024C6.42044 41.667 7.37396 47.9118 6.3143 51.5797C6.17684 52.0582 5.83928 52.7316 5.32946 52.8621C4.62476 52.8586 3.85394 50.6019 3.83306 49.9859C3.8 49.0324 4.2959 47.5603 4.36898 46.5024C4.64912 42.483 4.4264 38.3801 4.88924 34.3207C4.931 33.9553 5.00756 33.5847 5.34338 33.3828Z" fill="currentColor"/>
-                                <path d="M5.59046 70.429C5.45126 69.2493 5.3399 68.0592 5.4182 66.8655C5.453 66.3279 5.66354 64.5531 5.80274 64.1181C6.0794 63.2516 6.62576 63.697 6.7667 64.4713C6.92504 65.3448 6.4883 69.3955 6.07592 70.1332C5.95064 70.3594 5.88626 70.4882 5.5922 70.4308L5.59046 70.429Z" fill="currentColor"/>
+                      <button class="chatbot-quick-action" data-text="${ChatbotConfig.t('quickAction1')}" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/winery/experiences">
+                            <svg class="chatbot-quick-action-icon" viewBox="0 0 122.42 397.21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path fill="currentColor" d="M104.06,115.6h0c-11.51-6.68-18.36-17.59-18.36-29.23V0h-48.97v86.37c0,11.64-6.85,22.55-18.36,29.23h0C6.85,122.27,0,133.19,0,144.83v252.39h122.42v-252.39c0-11.64-6.85-22.55-18.36-29.23Z"/>
                             </svg>
                             ${ChatbotConfig.t('quickAction1')}
                         </button>
                         <button class="chatbot-quick-action" data-text="${ChatbotConfig.t('quickAction2')}" data-api-url="https://macaw-eager-gradually.ngrok-free.app/api/wine-knowledge/wines">
-                            <svg class="chatbot-quick-action-icon" viewBox="0 0 26 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_2004_22)">
-                                    <path d="M2.84612 69.5801C5.06196 67.8765 9.93949 67.1615 12.5201 65.8682C13.6033 65.3257 14.0244 64.8416 14.0626 63.5729C14.3104 55.1584 13.8645 46.4928 14.2608 38.011C14.3126 36.8858 15.3259 35.0769 13.6528 34.8035C13.1506 34.7205 12.7386 35.0119 12.1891 34.9559C6.78688 34.391 3.28974 26.6422 2.12102 22.092C1.08967 18.0753 1.13921 12.4133 1.87332 8.41897C1.99492 7.75773 1.7945 6.54733 1.40493 5.99368C0.776662 5.10157 -0.914487 4.90208 0.634795 3.15373C2.69975 0.827067 4.7467 1.40537 7.37237 1.1207C8.52982 0.995178 9.62198 0.461705 10.8065 0.280145C14.3194 -0.260052 20.5525 -0.174876 23.4867 1.95005C24.8626 2.94527 24.9279 5.44452 25.0765 7.09201C25.5967 12.8459 26.923 21.6078 24.9662 26.9269C24.205 28.9958 21.773 32.0756 19.8905 33.3061C18.751 34.0503 16.2177 34.1624 15.8957 35.6059C15.4903 37.4148 16.0983 40.6806 16.0826 42.7405C16.0781 43.3794 15.8416 43.9308 15.8371 44.5136C15.7831 51.3142 15.8957 58.1194 15.8461 64.92L16.2042 65.4602L21.0141 67.1727C21.8811 67.6165 25.3084 70.3242 25.6372 71.0863C27.0266 74.3118 20.9016 73.8209 19.3388 73.998C15.416 74.4463 9.72781 75.3295 5.85011 74.8677C3.88423 74.6346 1.19326 73.1597 1.92962 70.7905C1.95213 70.7187 2.78757 69.6249 2.84612 69.5778V69.5801ZM13.9973 1.66538C12.054 1.72142 10.5002 2.12937 8.69196 2.43645C7.46019 2.64491 3.08032 2.71215 3.71534 4.59052C4.16571 5.04105 5.12501 5.56332 5.71274 5.74488C8.15376 6.5025 13.887 6.49129 16.346 5.79643C18.17 5.28089 19.9062 3.96738 21.9352 3.9629L22.1671 3.50116C22.1851 3.29718 22.1536 3.11338 22.0455 2.9363C21.3542 1.81108 15.389 1.62503 13.9973 1.66538ZM22.0905 6.12145C21.3024 6.25594 19.1474 7.61428 18.0912 7.98188C15.1278 9.0152 12.0923 8.92106 8.97794 8.54449C7.42416 8.35621 5.92667 7.94826 4.4562 7.43272C3.10509 8.04016 3.69733 9.66747 3.69282 10.6694C3.6658 16.3986 3.87748 23.3562 7.19222 28.2538C9.08603 31.049 12.8557 33.8643 16.3528 32.033C17.1072 31.6385 17.9674 31.1924 18.7015 30.7845C24.0316 27.8078 23.8312 21.6616 23.7321 16.2731L22.8382 6.17748C22.6062 6.01162 22.3427 6.07886 22.0883 6.12145H22.0905ZM13.5943 67.7219C13.1259 67.7219 12.653 67.6658 12.1868 67.7824C10.8335 68.1186 7.51198 69.477 6.23292 70.1472C5.41099 70.5775 4.31884 70.9451 4.92234 71.9852C5.10249 72.2967 5.69923 72.3954 6.04602 72.4357C9.17836 72.7899 15.2246 72.5702 18.4132 72.1847C18.9492 72.1197 22.1919 71.5481 22.3743 71.4203C23.0003 70.9855 21.7302 70.2637 21.3227 70.0059C20.3814 69.4119 17.0216 67.6927 16.0668 68.2822C15.5286 68.614 15.3732 70.6111 13.9613 70.174C13.3015 69.9701 13.6866 68.2934 13.5943 67.7263V67.7219Z" fill="currentColor"/>
-                                    <path d="M15.3352 13.7556C16.6683 13.5583 20.9243 14.3361 21.9241 15.1565C22.5569 15.6765 21.798 16.7793 21.717 17.4159C21.6494 17.9337 21.762 18.4694 21.6967 18.967C21.3341 21.7689 19.9988 29.1546 17.4024 30.607C15.074 31.9093 10.1852 29.0223 9.04347 26.8593C8.64715 26.1061 8.57509 25.0168 8.29585 24.4654C8.0459 23.9723 6.55291 23.45 6.05525 22.661C4.69738 20.5047 5.39095 17.472 7.4379 15.9836C9.48709 14.4908 11.1445 14.6903 13.4211 14.3182C14.0719 14.2128 14.7542 13.843 15.3329 13.7578L15.3352 13.7556Z" fill="currentColor"/>
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_2004_22">
-                                        <rect width="26" height="75" fill="white"/>
-                                    </clipPath>
-                                </defs>
+                            <svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240.68 397.21" class="chatbot-quick-action-icon">
+                              <g id="Layer_1-2" data-name="Layer 1">
+                                <path fill="currentColor" d="M240.68,55.09c0-19.85-4.81-38.58-13.33-55.09H13.33C4.81,16.51,0,35.24,0,55.09c0,64.55,50.82,117.22,114.63,120.2v188.9c0,25.62-53,22.58-53,22.58v10.44h117.44v-10.44s-53,3.04-53-22.58v-188.9c63.81-2.98,114.63-55.66,114.63-120.2Z"/>
+                              </g>
                             </svg>
                             ${ChatbotConfig.t('quickAction2')}
                         </button>
@@ -918,8 +902,6 @@
                 };
 
                 toggle.addEventListener('click', () => {
-                    // Marca interazione utente: non mostrare più il popup
-                    this.markUserInteractedWithToggle();
                     // Se la chat è visibile, riproduci reverse; altrimenti forward
                     playToggleLottie(this.isVisible === true);
                     this.toggle();
@@ -927,7 +909,6 @@
                 toggle.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        this.markUserInteractedWithToggle();
                         playToggleLottie(this.isVisible === true);
                         this.toggle();
                     }
@@ -940,8 +921,6 @@
                     if (!(e.target && e.target.classList && e.target.classList.contains('chatbot-attention-close'))) {
                         this.showAttentionPopup(false);
                         if (!this.isVisible) {
-                            // Conta come interazione col toggle
-                            this.markUserInteractedWithToggle();
                             const lottieEl = this.shadowRoot.querySelector('.chatbot-toggle-lottie');
                             try {
                                 if (lottieEl && typeof lottieEl.setDirection === 'function') {
@@ -1311,7 +1290,6 @@
             if (this.isVisible) return;
             if (this.attentionPopupDismissed) return;
             if (!ChatbotConfig.current.attentionPopupEnabled) return;
-            if (this.hasUserInteractedWithToggle()) return;
 
             this.clearAttentionPopupTimer();
             const delay = Math.max(0, Number(ChatbotConfig.current.attentionPopupDelayMs) || 5000);
@@ -1358,24 +1336,6 @@
                 clearTimeout(this.attentionPopupTimer);
                 this.attentionPopupTimer = null;
             }
-        },
-
-        /**
-         * 🎯 Scopo: Verifica se l'utente ha già cliccato il toggle
-         */
-        hasUserInteractedWithToggle() {
-            // Usa solo variabile in memoria per questa sessione
-            return this.attentionPopupDismissed === true;
-        },
-
-        /**
-         * 🎯 Scopo: Marca che l'utente ha cliccato il toggle e disabilita popup
-         */
-        markUserInteractedWithToggle() {
-            // Solo variabile in memoria; nessun storage
-            this.attentionPopupDismissed = true;
-            this.showAttentionPopup(false);
-            this.clearAttentionPopupTimer();
         }
     };
 
@@ -1823,15 +1783,8 @@
                                 </svg>
                                 ${wine.vintage}</div>` : ''}
                             ${wine.region ? `<div class="chatbot-wine-chip">
-                                <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_25_32914_${index}_region)">
-                                        <path d="M12 6.15908C12 9.56124 6 20.0023 6 20.0023C6 20.0023 0 9.56124 0 6.15908C0 2.75692 2.68571 0 6 0C9.31429 0 12 2.75692 12 6.15908Z" fill="currentColor"/>
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_25_32914_${index}_region">
-                                            <rect width="12" height="20" fill="white"/>
-                                        </clipPath>
-                                    </defs>
+                                <svg width="12" height="20" viewBox="0 0 225.73 397.21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                  <path fill="currentColor" d="M112.87,0C50.53,0,0,50.53,0,112.87s112.87,284.35,112.87,284.35c0,0,112.87-222.01,112.87-284.35S175.2,0,112.87,0ZM112.87,167.72c-35.92,0-65.04-29.12-65.04-65.04s29.12-65.04,65.04-65.04,65.04,29.12,65.04,65.04-29.12,65.04-65.04,65.04Z"/>
                                 </svg>
                                 ${wine.region}</div>` : ''}
                             ${wine.type ? `<div class="chatbot-wine-chip">
@@ -1856,24 +1809,26 @@
                                 </svg>
                                 ${wine.type}</div>` : ''}
                             ${wine.category ? `<div class="chatbot-wine-chip">
-                                <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_25_32898_${index}_category)">
-                                        <path d="M2.90303 5.6883C4.50632 5.6883 5.80605 4.41493 5.80605 2.84415C5.80605 1.27337 4.50632 0 2.90303 0C1.29973 0 0 1.27337 0 2.84415C0 4.41493 1.29973 5.6883 2.90303 5.6883Z" fill="currentColor"/>
-                                        <path d="M8.30122 5.6883C9.90452 5.6883 11.2042 4.41493 11.2042 2.84415C11.2042 1.27337 9.90452 0 8.30122 0C6.69792 0 5.39819 1.27337 5.39819 2.84415C5.39819 4.41493 6.69792 5.6883 8.30122 5.6883Z" fill="currentColor"/>
-                                        <path d="M13.6988 5.6883C15.3021 5.6883 16.6018 4.41493 16.6018 2.84415C16.6018 1.27337 15.3021 0 13.6988 0C12.0955 0 10.7958 1.27337 10.7958 2.84415C10.7958 4.41493 12.0955 5.6883 13.6988 5.6883Z" fill="currentColor"/>
-                                        <path d="M19.097 5.6883C20.7003 5.6883 22 4.41493 22 2.84415C22 1.27337 20.7003 0 19.097 0C17.4937 0 16.194 1.27337 16.194 2.84415C16.194 4.41493 17.4937 5.6883 19.097 5.6883Z" fill="currentColor"/>
-                                        <path d="M5.60176 10.5438C7.20505 10.5438 8.50478 9.2704 8.50478 7.69962C8.50478 6.12884 7.20505 4.85547 5.60176 4.85547C3.99846 4.85547 2.69873 6.12884 2.69873 7.69962C2.69873 9.2704 3.99846 10.5438 5.60176 10.5438Z" fill="currentColor"/>
-                                        <path d="M11 10.5438C12.6032 10.5438 13.903 9.2704 13.903 7.69962C13.903 6.12884 12.6032 4.85547 11 4.85547C9.39665 4.85547 8.09692 6.12884 8.09692 7.69962C8.09692 9.2704 9.39665 10.5438 11 10.5438Z" fill="currentColor"/>
-                                        <path d="M16.3981 10.5438C18.0014 10.5438 19.3012 9.2704 19.3012 7.69962C19.3012 6.12884 18.0014 4.85547 16.3981 4.85547C14.7948 4.85547 13.4951 6.12884 13.4951 7.69962C13.4951 9.2704 14.7948 10.5438 16.3981 10.5438Z" fill="currentColor"/>
-                                        <path d="M8.30122 15.5867C9.90452 15.5867 11.2042 14.3134 11.2042 12.7426C11.2042 11.1718 9.90452 9.89844 8.30122 9.89844C6.69792 9.89844 5.39819 11.1718 5.39819 12.7426C5.39819 14.3134 6.69792 15.5867 8.30122 15.5867Z" fill="currentColor"/>
-                                        <path d="M13.6988 15.5867C15.3021 15.5867 16.6018 14.3134 16.6018 12.7426C16.6018 11.1718 15.3021 9.89844 13.6988 9.89844C12.0955 9.89844 10.7958 11.1718 10.7958 12.7426C10.7958 14.3134 12.0955 15.5867 13.6988 15.5867Z" fill="currentColor"/>
-                                        <path d="M11 20.0008C12.6032 20.0008 13.903 18.7274 13.903 17.1566C13.903 15.5859 12.6032 14.3125 11 14.3125C9.39665 14.3125 8.09692 15.5859 8.09692 17.1566C8.09692 18.7274 9.39665 20.0008 11 20.0008Z" fill="currentColor"/>
+                                <svg width="22" height="20" viewBox="0 0 315.6 397.21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                  <g>
+                                    <g>
+                                      <circle fill="currentColor" cx="39.45" cy="152.88" r="39.45"/>
+                                      <circle fill="currentColor" cx="118.35" cy="152.88" r="39.45"/>
+                                      <circle fill="currentColor" cx="197.25" cy="152.88" r="39.45"/>
+                                      <circle fill="currentColor" cx="276.15" cy="152.88" r="39.45"/>
                                     </g>
-                                    <defs>
-                                        <clipPath id="clip0_25_32898_${index}_category">
-                                            <rect width="22" height="20" fill="white"/>
-                                        </clipPath>
-                                    </defs>
+                                    <g>
+                                      <circle fill="currentColor" cx="78.9" cy="220.92" r="39.45"/>
+                                      <circle fill="currentColor" cx="157.8" cy="220.92" r="39.45"/>
+                                      <circle fill="currentColor" cx="236.7" cy="220.92" r="39.45"/>
+                                    </g>
+                                    <g>
+                                      <circle fill="currentColor" cx="118.35" cy="289.34" r="39.45"/>
+                                      <circle fill="currentColor" cx="197.25" cy="289.34" r="39.45"/>
+                                    </g>
+                                    <circle fill="currentColor" cx="157.8" cy="357.76" r="39.45"/>
+                                    <path fill="currentColor" d="M241.77,0H73.83v18.89h43.24c16.47,0,30.27,12.47,31.93,28.86l8.8,86.74,8.8-86.74c1.66-16.39,15.46-28.86,31.93-28.86h43.24V0Z"/>
+                                  </g>
                                 </svg>
                                 ${wine.category}</div>` : ''}
                         </div>
