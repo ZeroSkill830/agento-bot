@@ -316,6 +316,10 @@
     shadowRoot: null,
     isVisible: false,
     isInitializing: true,
+    attentionPopupTimer: null,
+    attentionPopupDismissed: false,
+    attentionPopupHideTimer: null,
+    toggleInteractionKey: 'chatbot-toggle-interacted',
 
         /**
          * 🎯 Scopo: Inizializza Shadow DOM e carica UI
@@ -327,6 +331,13 @@
             try {
                 // Determina se siamo in modalità embedded
                 this.isEmbedded = ChatbotConfig.current.containerId ? true : false;
+                // Precarica stato interazione toggle da storage (solo se presente)
+                try {
+                    if (!this.hasUserInteractedWithToggle()) {
+                        // Se l'utente NON ha interagito in questa sessione, assicura che non sia marcato come dismesso
+                        this.attentionPopupDismissed = false;
+                    }
+                } catch (_) {}
                 
                 await this.createShadowDOM(container);
                 await this.loadTemplate();
@@ -462,6 +473,13 @@
                     >
                     </lottie-player>
                 </button>
+                <!-- Attention Popup (mostrato quando la chat è chiusa) -->
+                <div class="chatbot-attention-popup" aria-live="polite" role="status" hidden>
+                    <div class="chatbot-attention-content">
+                        <span class="chatbot-attention-text">${ChatbotConfig.current.attentionPopupText || ''}</span>
+                        <button class="chatbot-attention-close" aria-label="${ChatbotConfig.t('close')}">×</button>
+                    </div>
+                </div>
                 ` : ''}
 
                 <!-- Finestra Chatbot -->
@@ -814,6 +832,9 @@
             
             // Aggiunge classe per animazione
             window.classList.add('chatbot-window--visible');
+            // Nascondi popup attenzione e cancella timer all'apertura
+            this.showAttentionPopup(false);
+            this.clearAttentionPopupTimer();
             
             // Focus management per accessibilità
             setTimeout(() => {
@@ -851,6 +872,8 @@
             
             // Rimuove classe per animazione
             window.classList.remove('chatbot-window--visible');
+            // Ripianifica popup attenzione alla chiusura
+            this.scheduleAttentionPopup();
             
             // Non dare focus durante l'inizializzazione
             // toggle.focus();
@@ -874,6 +897,8 @@
             const input = this.shadowRoot.querySelector('.chatbot-input');
             const sendButton = this.shadowRoot.querySelector('.chatbot-send-button');
             const quickActions = this.shadowRoot.querySelectorAll('.chatbot-quick-action');
+            const attentionPopup = this.shadowRoot.querySelector('.chatbot-attention-popup');
+            const attentionClose = this.shadowRoot.querySelector('.chatbot-attention-close');
 
             // Event listener per pulsante toggle (solo in modalità floating)
             if (toggle && !this.isEmbedded) {
@@ -893,6 +918,8 @@
                 };
 
                 toggle.addEventListener('click', () => {
+                    // Marca interazione utente: non mostrare più il popup
+                    this.markUserInteractedWithToggle();
                     // Se la chat è visibile, riproduci reverse; altrimenti forward
                     playToggleLottie(this.isVisible === true);
                     this.toggle();
@@ -900,9 +927,43 @@
                 toggle.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
+                        this.markUserInteractedWithToggle();
                         playToggleLottie(this.isVisible === true);
                         this.toggle();
                     }
+                });
+            }
+
+            // Attention popup interactions (solo modalità floating)
+            if (attentionPopup && !this.isEmbedded) {
+                attentionPopup.addEventListener('click', (e) => {
+                    if (!(e.target && e.target.classList && e.target.classList.contains('chatbot-attention-close'))) {
+                        this.showAttentionPopup(false);
+                        if (!this.isVisible) {
+                            // Conta come interazione col toggle
+                            this.markUserInteractedWithToggle();
+                            const lottieEl = this.shadowRoot.querySelector('.chatbot-toggle-lottie');
+                            try {
+                                if (lottieEl && typeof lottieEl.setDirection === 'function') {
+                                    lottieEl.setDirection(1);
+                                } else if (lottieEl) {
+                                    lottieEl.direction = 1;
+                                }
+                                if (lottieEl && typeof lottieEl.play === 'function') {
+                                    lottieEl.play();
+                                }
+                            } catch (_) {}
+                            this.toggle();
+                        }
+                    }
+                });
+            }
+            if (attentionClose && !this.isEmbedded) {
+                attentionClose.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.attentionPopupDismissed = true;
+                    this.showAttentionPopup(false);
+                    this.clearAttentionPopupTimer();
                 });
             }
 
@@ -1117,6 +1178,11 @@
             this.shadowRoot.addEventListener('click', () => {
                 closeAllDropdowns();
             });
+
+            // Pianifica il popup di attenzione dopo il render iniziale (solo floating)
+            if (!this.isEmbedded) {
+                this.scheduleAttentionPopup();
+            }
         },
 
         /**
@@ -1234,6 +1300,82 @@
             } else {
                 window.classList.remove('chatbot-window--mobile');
             }
+        },
+
+        /**
+         * 🎯 Scopo: Pianifica la visualizzazione del popup di attenzione
+         */
+        scheduleAttentionPopup() {
+            if (this.isEmbedded) return;
+            if (!this.shadowRoot) return;
+            if (this.isVisible) return;
+            if (this.attentionPopupDismissed) return;
+            if (!ChatbotConfig.current.attentionPopupEnabled) return;
+            if (this.hasUserInteractedWithToggle()) return;
+
+            this.clearAttentionPopupTimer();
+            const delay = Math.max(0, Number(ChatbotConfig.current.attentionPopupDelayMs) || 5000);
+            this.attentionPopupTimer = setTimeout(() => {
+                this.showAttentionPopup(true);
+            }, delay);
+        },
+
+        /**
+         * 🎯 Scopo: Mostra/Nasconde il popup di attenzione
+         */
+        showAttentionPopup(visible) {
+            const popup = this.shadowRoot?.querySelector('.chatbot-attention-popup');
+            const textEl = this.shadowRoot?.querySelector('.chatbot-attention-text');
+            if (!popup) return;
+            if (textEl) {
+                textEl.textContent = ChatbotConfig.current.attentionPopupText || '';
+            }
+            // Clear any pending hide timer to avoid flicker
+            if (this.attentionPopupHideTimer) {
+                clearTimeout(this.attentionPopupHideTimer);
+                this.attentionPopupHideTimer = null;
+            }
+            if (visible) {
+                popup.removeAttribute('hidden');
+                // Force reflow to ensure transition runs when adding class
+                void popup.offsetWidth;
+                popup.classList.add('chatbot-attention-popup--visible');
+            } else {
+                popup.classList.remove('chatbot-attention-popup--visible');
+                // Wait for CSS transition to complete before hiding completely
+                this.attentionPopupHideTimer = setTimeout(() => {
+                    popup.setAttribute('hidden', '');
+                    this.attentionPopupHideTimer = null;
+                }, 300);
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Cancella il timer del popup di attenzione
+         */
+        clearAttentionPopupTimer() {
+            if (this.attentionPopupTimer) {
+                clearTimeout(this.attentionPopupTimer);
+                this.attentionPopupTimer = null;
+            }
+        },
+
+        /**
+         * 🎯 Scopo: Verifica se l'utente ha già cliccato il toggle
+         */
+        hasUserInteractedWithToggle() {
+            // Usa solo variabile in memoria per questa sessione
+            return this.attentionPopupDismissed === true;
+        },
+
+        /**
+         * 🎯 Scopo: Marca che l'utente ha cliccato il toggle e disabilita popup
+         */
+        markUserInteractedWithToggle() {
+            // Solo variabile in memoria; nessun storage
+            this.attentionPopupDismissed = true;
+            this.showAttentionPopup(false);
+            this.clearAttentionPopupTimer();
         }
     };
 
@@ -3414,7 +3556,11 @@
             welcomeMessage: 'Ciao! 👋 Sono il tuo assistente virtuale. Come posso aiutarti oggi?',
             chatbotName: null, // Sarà automaticamente impostato in base alla lingua
             showQuickActions: true, // Flag per mostrare/nascondere le quick actions
-            containerId: null // ID del container per modalità embedded (null = modalità floating)
+            containerId: null, // ID del container per modalità embedded (null = modalità floating)
+            // Attention popup config
+            attentionPopupEnabled: true,
+            attentionPopupDelayMs: 5000,
+            attentionPopupText: 'Ciao sono il Chatbot dell’Azienda Agraria San Gregorio, come posso aiutarti?'
         },
 
         current: {},
