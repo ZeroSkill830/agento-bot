@@ -1306,7 +1306,8 @@
             const textEl = this.shadowRoot?.querySelector('.chatbot-attention-text');
             if (!popup) return;
             if (textEl) {
-                textEl.textContent = ChatbotConfig.current.attentionPopupText || '';
+                // Permetti HTML configurabile direttamente in attentionPopupText
+                textEl.innerHTML = ChatbotConfig.current.attentionPopupText || '';
             }
             // Clear any pending hide timer to avoid flicker
             if (this.attentionPopupHideTimer) {
@@ -3515,7 +3516,7 @@
             // Attention popup config
             attentionPopupEnabled: true,
             attentionPopupDelayMs: 5000,
-            attentionPopupText: 'Ciao sono il Chatbot dell’Azienda Agraria San Gregorio, come posso aiutarti?'
+            attentionPopupText: 'Ciao 👋 <br> sono il Chatbot dell\'Azienda Agraria San Gregorio, come posso aiutarti?'
         },
 
         current: {},

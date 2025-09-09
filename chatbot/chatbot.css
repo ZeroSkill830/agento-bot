@@ -130,8 +130,8 @@
   border-radius: 20px 20px 6px;
   display: flex;
   gap: 8px;
-  background: var(--chatbot-primary);
-  color: var(--chatbot-text-inverse);
+  background: rgba(255, 255, 255, 0.14);
+  color: black;
   box-shadow: var(--chatbot-shadow-lg);
   padding: 20px 16px;
   align-items: flex-start;
@@ -139,6 +139,9 @@
   transform: translateY(8px);
   opacity: 0;
   transition: var(--chatbot-transition-bounce);
+  border: 1px solid var(--chatbot-primary);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
 }
 .chatbot-attention-popup {
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -157,12 +160,13 @@
   font-family: var(--chatbot-font-family);
   font-size: 14px;
   line-height: 1.2;
+  font-weight: 300;
 }
 
 .chatbot-attention-close {
   background: transparent;
   border: none;
-  color: var(--chatbot-text-inverse);
+  color: black;
   cursor: pointer;
   width: 24px;
   font-size: 20px;
